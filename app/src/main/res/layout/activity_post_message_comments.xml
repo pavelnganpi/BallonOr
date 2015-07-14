@@ -3,16 +3,17 @@
                 xmlns:fab="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:context=".MainActivity$PlaceholderFragment">
+                tools:context="com.paveynganpi.ballonor.ui.PostMessageCommentsActivity">
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/PostMessageRecyclerView"
-        android:scrollbars="vertical"/>
+        android:id="@+id/PostMessageCommentsRecyclerView"
+        android:scrollbars="vertical"
+        android:paddingTop="30dp"/>
 
     <com.melnykov.fab.FloatingActionButton
-        android:id="@+id/teamTwoFloatingButton"
+        android:id="@+id/PostMessageCommentsFloatingButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
@@ -25,5 +26,13 @@
         android:layout_alignParentRight="true"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="20dp"/>
+
+    <TextView
+        android:id="@+id/empty_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:visibility="gone"
+        android:text="No Comments, Write a comment..." />
 
 </RelativeLayout>

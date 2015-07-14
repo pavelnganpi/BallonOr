@@ -9,6 +9,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.parse.ParseAnalytics;
 import com.parse.ParseUser;
@@ -17,6 +18,9 @@ import com.paveynganpi.ballonor.adapter.SectionsPagerAdapter;
 
 
 public class MainActivity extends ActionBarActivity implements ActionBar.TabListener {
+//    private TextView mPostMessageCommentsCounter;
+//    private TextView mPostMessagelikesCounter;
+      protected TextView mPostMessageLikeLabel;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -48,7 +52,6 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         }
 
         ParseAnalytics.trackAppOpened(getIntent());
-
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.

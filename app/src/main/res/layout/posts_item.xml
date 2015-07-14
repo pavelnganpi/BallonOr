@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:id="@+id/root"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/white">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/profileImageView"
+        android:src="@drawable/ic_action_content_new"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="3dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/screenNameLabel"
+        tools:text="screen name"
+        android:textStyle="bold"
+        android:layout_marginLeft="9dp"
+        android:layout_marginStart="9dp"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/profileImageView"
+        android:layout_toEndOf="@+id/profileImageView"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="profile name"
+        android:id="@+id/profileNameLable"
+        android:paddingLeft="4dp"
+        android:textColor="#D3D3D3"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/screenNameLabel"
+        android:layout_toEndOf="@+id/screenNameLabel"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Note that, if you specify exact dimensions for the CardView, because of the shadows, its content area will be different between platforms before L and after L. By using api version specific resource values, you can avoid these changes."
+        android:id="@+id/postMessageLabel"
+        android:layout_centerVertical="true"
+        android:textSize="15sp"
+        android:fontFamily="Helvetica Neue"
+        android:lineSpacingExtra="3.5sp"
+        android:layout_below="@+id/screenNameLabel"
+        android:layout_alignLeft="@+id/screenNameLabel"
+        android:layout_alignStart="@+id/screenNameLabel"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="COMMENT"
+        android:id="@+id/postMessageCommentLabel"
+        android:layout_alignTop="@+id/postMessagelikesCounter"
+        android:layout_toRightOf="@+id/profileNameLable"
+        android:layout_toEndOf="@+id/profileNameLable"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="LIKE"
+        android:id="@+id/postMessageLikeLabel"
+        android:clickable="true"
+        android:layout_marginTop="25dp"
+        android:textColor="@drawable/post_message_like_label"
+        android:layout_below="@+id/postMessageLabel"
+        android:layout_toRightOf="@+id/screenNameLabel"
+        android:layout_toEndOf="@+id/screenNameLabel"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="9hrs"
+        android:id="@+id/postMessageTimeLabel"
+        android:layout_marginRight="3dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="false"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/postMessageCommentsCounter"
+        android:layout_alignTop="@+id/postMessageCommentLabel"
+        android:layout_toRightOf="@+id/postMessageCommentLabel"
+        android:layout_marginLeft="5dp"
+        android:textColor="@color/primary"
+
+        android:layout_toEndOf="@+id/postMessageCommentLabel"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/postMessagelikesCounter"
+        android:textColor="@color/primary"
+        android:layout_alignTop="@+id/postMessageLikeLabel"
+        android:layout_toRightOf="@id/postMessageLikeLabel"
+        android:layout_marginLeft="5dp"
+        android:layout_centerHorizontal="true"/>
+</RelativeLayout>

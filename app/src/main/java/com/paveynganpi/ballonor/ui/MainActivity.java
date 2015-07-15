@@ -44,6 +44,11 @@ public class MainActivity extends AppCompatActivity {
 //        final ActionBar actionBar = getSupportActionBar();
 //        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        if(currentUser == null){
+            navigateToLogin();
+        }
+
         mToolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(mToolbar);
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -52,11 +57,6 @@ public class MainActivity extends AppCompatActivity {
         mViewPager.setAdapter(new SectionsPagerAdapter(this, getSupportFragmentManager()));
         mTabs = (SlidingTabLayout) findViewById(R.id.tabs);
         mTabs.setViewPager(mViewPager);
-
-        ParseUser currentUser = ParseUser.getCurrentUser();
-        if(currentUser == null){
-            navigateToLogin();
-        }
 
         ParseAnalytics.trackAppOpened(getIntent());
 

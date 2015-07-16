@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -45,13 +46,21 @@ public class MainActivity extends AppCompatActivity {
 //        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
         ParseUser currentUser = ParseUser.getCurrentUser();
-        if(currentUser == null){
+        if (currentUser == null) {
             navigateToLogin();
         }
 
         mToolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(mToolbar);
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+        NavigationDrawerFragment navigationDrawerFragment =
+                (NavigationDrawerFragment) getSupportFragmentManager()
+                        .findFragmentById(R.id.fragment_navigation_drawer);
+
+        navigationDrawerFragment.setUp((DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
+
 
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(new SectionsPagerAdapter(this, getSupportFragmentManager()));

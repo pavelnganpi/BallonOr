@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
                 (NavigationDrawerFragment) getSupportFragmentManager()
                         .findFragmentById(R.id.fragment_navigation_drawer);
 
-        navigationDrawerFragment.setUp((DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
+        navigationDrawerFragment.setUpDrawer(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
 
 
         mViewPager = (ViewPager) findViewById(R.id.pager);

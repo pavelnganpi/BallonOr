@@ -38,6 +38,7 @@ public class RealMadridfcFragment extends android.support.v4.app.Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_realmadridfc, container, false);
         ButterKnife.inject(this, rootView);
+
         return rootView;
     }
 

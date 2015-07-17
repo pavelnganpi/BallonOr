@@ -38,7 +38,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
             case 2:
                 return new ArsenalfcFragment();
         }
-        return null;
+        return  null;
     }
 
     @Override

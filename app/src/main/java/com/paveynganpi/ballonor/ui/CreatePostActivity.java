@@ -2,8 +2,7 @@ package com.paveynganpi.ballonor.ui;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,7 +22,7 @@ import com.paveynganpi.ballonor.utils.ParseConstants;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class CreatePostActivity extends ActionBarActivity {
+public class CreatePostActivity extends AppCompatActivity {
 
     @InjectView(R.id.createPostTextField) EditText mCreatePostTextField;
     @InjectView(R.id.createPostButton) Button mCreatePostButton;
@@ -35,9 +34,6 @@ public class CreatePostActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_post);
         ButterKnife.inject(this);
-
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.hide();
 
         teamName  = getIntent().getStringExtra("teamName");
     }

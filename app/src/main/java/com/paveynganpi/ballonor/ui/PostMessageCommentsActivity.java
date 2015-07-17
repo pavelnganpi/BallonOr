@@ -2,11 +2,11 @@ package com.paveynganpi.ballonor.ui;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,7 +31,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class PostMessageCommentsActivity extends ActionBarActivity {
+public class PostMessageCommentsActivity extends AppCompatActivity {
     @InjectView(R.id.empty_view) TextView mEmptyView;
     @InjectView(R.id.PostMessageCommentsRecyclerView) RecyclerView mRecyclerView;
     protected List<ParseObject> postMessageComments;
@@ -41,6 +41,7 @@ public class PostMessageCommentsActivity extends ActionBarActivity {
     private FloatingActionButton fab;
     PostMessageCommentsAdapter postMessageCommentsAdapter;
     boolean setAdaper = false;
+    private Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +49,9 @@ public class PostMessageCommentsActivity extends ActionBarActivity {
         setContentView(R.layout.activity_post_message_comments);
         ButterKnife.inject(this);
 
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.hide();
+        mToolbar = (Toolbar) findViewById(R.id.comments_app_bar);
+        setSupportActionBar(mToolbar);
+        mToolbar.setTitle("Comments");;
 
         mCurrentUser = ParseUser.getCurrentUser();
         postMessageObjectId  = getIntent().getStringExtra(ParseConstants.KEY_POST_MESSAGE_OBJECT_ID);

@@ -5,12 +5,15 @@
                 android:layout_height="match_parent"
                 tools:context="com.paveynganpi.ballonor.ui.PostMessageCommentsActivity">
 
+    <include layout="@layout/app_bar"
+             android:id="@+id/comments_app_bar"/>
+
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/PostMessageCommentsRecyclerView"
         android:scrollbars="vertical"
-        android:paddingTop="30dp"/>
+        android:layout_below="@id/comments_app_bar"/>
 
     <com.melnykov.fab.FloatingActionButton
         android:id="@+id/PostMessageCommentsFloatingButton"
@@ -18,9 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
         android:src="@drawable/ic_action_content_new"
-        fab:fab_colorNormal="@color/primary"
-        fab:fab_colorPressed="@color/accent_pressed"
-        fab:fab_colorRipple="@color/ripple"
+
         android:layout_alignParentEnd="false"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"

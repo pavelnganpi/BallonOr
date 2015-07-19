@@ -145,6 +145,7 @@ public class NavigationDrawerFragment extends Fragment {
            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                mTeamsListView.setItemChecked(position, true);
                ((MainActivity) getActivity()).onDrawerItemClicked(mTeams.get(position));
+               //RealMadridfcFragment.setTeam(mTeams.get(position));
 //               Intent intent = new Intent(getActivity(), MainActivity.class);
 //               startActivity(intent);
                mDrawerLayout.closeDrawer(GravityCompat.START);

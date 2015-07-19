@@ -40,10 +40,12 @@ public class PostMessageAdapter extends RecyclerView.Adapter<PostMessageAdapter.
     private ParseUser mCurrentUser;
     private String mCurrentUserFullName;
     private Twitter mCurrentTwitterUser;
+    private String mTeam;
 
-    public PostMessageAdapter(Context context, List<ParseObject> messages) {
+    public PostMessageAdapter(Context context, List<ParseObject> messages, String team) {
         this.mContext = context;
         this.messages = messages;
+        mTeam = team;
     }
 
     @Override
@@ -100,7 +102,7 @@ public class PostMessageAdapter extends RecyclerView.Adapter<PostMessageAdapter.
         public void bindPostMessages(final ParseObject message) {
             mScreenNameLabel.setText(mCurrentTwitterUser.getScreenName().toString());
             mProfileNameLable.setText(mCurrentUserFullName);
-            mPostMessageLabel.setText(message.getString("Chelseafc"));
+            mPostMessageLabel.setText(message.getString(mTeam));
 
             //number oflikes
             mPostMessageNumberOfLikes = (message.get(ParseConstants.KEY_POST_MESSAGE_LIKES_COUNT) == null)

@@ -14,6 +14,7 @@ public class BallonDorApplication extends Application {
     public void onCreate() {
         super.onCreate(); //doing since overing from the parent, so we want o inherit from the base class too
         // Enable Local Datastore.
+        Parse.enableLocalDatastore(this);
         Parse.initialize(this, "Skm8cEztx4rcXdhIGrHPjic7mVVS3xrhMr6Jhuvy", "4FBSGsODwvCMXq9XmGBcbdggfShPaUPAxVPxp5uM");
         //facebook initialization
         //ParseFacebookUtils.initialize(this);

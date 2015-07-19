@@ -30,14 +30,19 @@ import butterknife.InjectView;
  */
 public class RealMadridfcFragment extends android.support.v4.app.Fragment {
     @InjectView(R.id.PostMessageRecyclerView) RecyclerView mRecyclerView;
+    @InjectView(R.id.empty_view) TextView mEmptyView;
     private FloatingActionButton fab;
     private  RecyclerView.LayoutManager layoutManager;
     protected TextView mPostMessageLikeLabel;
+    private static String mTeam;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_realmadridfc, container, false);
         ButterKnife.inject(this, rootView);
+
+        Bundle bundle = this.getArguments();
+        mTeam = bundle.getString("TeamName");
 
         return rootView;
     }
@@ -53,7 +58,7 @@ public class RealMadridfcFragment extends android.support.v4.app.Fragment {
             public void onClick(View v) {
 
                 Intent intent = new Intent(getActivity(), CreatePostActivity.class);
-                intent.putExtra("teamName", "Chelseafc");
+                intent.putExtra("teamName", mTeam);
                 startActivity(intent);
             }
         });
@@ -76,7 +81,8 @@ public class RealMadridfcFragment extends android.support.v4.app.Fragment {
     public void retrievePosts() {
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Teams");
-        query.whereExists("Chelseafc");
+        query.whereExists(mTeam);
+        //Log.d("teamName", mTeam);
         query.addDescendingOrder(ParseConstants.KEY_CREATED_AT);
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
@@ -85,10 +91,10 @@ public class RealMadridfcFragment extends android.support.v4.app.Fragment {
                     String[] postMessages = new String[list.size()];
                     int i = 0;
                     for (ParseObject postMessage : list) {
-                        postMessages[i] = postMessage.getString("Chelseafc");
+                        postMessages[i] = postMessage.getString(mTeam);
                         i++;
                     }
-                    PostMessageAdapter postMessageAdapter = new PostMessageAdapter(getActivity(), list);
+                    PostMessageAdapter postMessageAdapter = new PostMessageAdapter(getActivity(), list, mTeam);
                     mRecyclerView.setAdapter(postMessageAdapter);
                 } else {
                     Log.d("parse query", "error with parseQuery");
@@ -97,6 +103,9 @@ public class RealMadridfcFragment extends android.support.v4.app.Fragment {
         });
 
 
+    }
+    public static void setTeam(String team){
+        mTeam = team;
     }
 
     @Override

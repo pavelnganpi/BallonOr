@@ -5,14 +5,23 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.paveynganpi.ballonor.R;
+import com.paveynganpi.ballonor.utils.TeamsConstants;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 
 
 /**
@@ -22,12 +31,16 @@ public class NavigationDrawerFragment extends Fragment {
 
     private static final String PREF_FILE_NAME = "testpref";
     private static final String KEY_USER_LEARNED_DRAWER = "user_learned_drawer";
+    private static final String KEY_TEAM_NAME = "team_name";
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
 
     private boolean mUserLearnedDrawer;
     private boolean mFromSavedInstanceState;
     private View containerView;
+    private ArrayAdapter<String> mTeamsAdapter;
+    private ListView mTeamsListView;
+    public ArrayList<String> mTeams;
 
 
     public NavigationDrawerFragment() {
@@ -47,8 +60,11 @@ public class NavigationDrawerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
+        View view = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
+        mTeamsListView = (ListView) view.findViewById(R.id.teamsListView);
+        return view;
     }
 
     public void setUpDrawer(int fragmentView, DrawerLayout drawerLayout, Toolbar toolbar) {
@@ -104,5 +120,39 @@ public class NavigationDrawerFragment extends Fragment {
         return sharedPreferences.getString(preferenceName, defaultValue);
     }
 
+    public void addDrawerTeams(){
+
+        mTeams = new ArrayList<>();
+
+        Arrays.sort(TeamsConstants.eplTeams);
+        Arrays.sort(TeamsConstants.laLigaTeams);
+
+        for(int i =0; i<TeamsConstants.eplTeams.length; i++){
+            mTeams.add(TeamsConstants.eplTeams[i]);
+        }
+        for(int i =0; i<TeamsConstants.laLigaTeams.length; i++){
+            mTeams.add(TeamsConstants.laLigaTeams[i]);
+        }
+
+        mTeamsAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, mTeams);
+        mTeamsListView.setAdapter(mTeamsAdapter);
+        HashMap<String,String> teamsConvert = new HashMap<>();
+
+
+        //set onClickListerner
+       mTeamsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+           @Override
+           public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+               mTeamsListView.setItemChecked(position, true);
+               ((MainActivity) getActivity()).onDrawerItemClicked(mTeams.get(position));
+               //RealMadridfcFragment.setTeam(mTeams.get(position));
+//               Intent intent = new Intent(getActivity(), MainActivity.class);
+//               startActivity(intent);
+               mDrawerLayout.closeDrawer(GravityCompat.START);
+
+           }
+       });
+
+    }
 
 }

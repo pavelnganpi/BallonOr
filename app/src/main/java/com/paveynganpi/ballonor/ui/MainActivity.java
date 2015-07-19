@@ -7,6 +7,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     private Toolbar mToolbar;
     private SlidingTabLayout mTabs;
+    protected String mDrawerItemTeam;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,10 +62,18 @@ public class MainActivity extends AppCompatActivity {
                         .findFragmentById(R.id.fragment_navigation_drawer);
 
         navigationDrawerFragment.setUpDrawer(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
+        navigationDrawerFragment.addDrawerTeams();
 
 
         mViewPager = (ViewPager) findViewById(R.id.pager);
-        mViewPager.setAdapter(new SectionsPagerAdapter(this, getSupportFragmentManager()));
+        if(mDrawerItemTeam == null){
+            Log.d("drawerItemTeam", "mDrawerItemTeam is null");
+            mViewPager.setAdapter(new SectionsPagerAdapter(this, getSupportFragmentManager(), "Chelseafc"));
+        }
+        else{
+            Log.d("drawerItemTeam", "mDrawerItemTeam is "+ mDrawerItemTeam);
+            mViewPager.setAdapter(new SectionsPagerAdapter(this, getSupportFragmentManager(), mDrawerItemTeam));
+        }
         mTabs = (SlidingTabLayout) findViewById(R.id.tabs);
         mTabs.setViewPager(mViewPager);
 
@@ -74,6 +84,14 @@ public class MainActivity extends AppCompatActivity {
     private void navigateToLogin() {
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
+    }
+
+    public void onDrawerItemClicked(String team){
+        Log.d("drawerItemTeam", "onDrawerItemClickes is called");
+        mDrawerItemTeam = team;
+        mViewPager.setCurrentItem(0);
+        mViewPager.setAdapter(new SectionsPagerAdapter(this, getSupportFragmentManager(), team));
+        mTabs.setViewPager(mViewPager);
     }
 
 

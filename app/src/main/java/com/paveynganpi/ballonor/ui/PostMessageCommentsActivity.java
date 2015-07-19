@@ -42,6 +42,7 @@ public class PostMessageCommentsActivity extends AppCompatActivity {
     PostMessageCommentsAdapter postMessageCommentsAdapter;
     boolean setAdaper = false;
     private Toolbar mToolbar;
+    protected String mTeam;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +56,7 @@ public class PostMessageCommentsActivity extends AppCompatActivity {
 
         mCurrentUser = ParseUser.getCurrentUser();
         postMessageObjectId  = getIntent().getStringExtra(ParseConstants.KEY_POST_MESSAGE_OBJECT_ID);
+        mTeam = getIntent().getStringExtra("TeamName");
         layoutManager = new LinearLayoutManager(PostMessageCommentsActivity.this);
 
         fab = (FloatingActionButton)findViewById(R.id.PostMessageCommentsFloatingButton);
@@ -80,7 +82,7 @@ public class PostMessageCommentsActivity extends AppCompatActivity {
                         } else {
                             //create comment and save to parse
                             ParseObject comment = new ParseObject(ParseConstants.KEY_PARSE_OBJECT_COMMENTS);
-                            comment.put(ParseConstants.KEY_CHELSEAFC_TABLE, input.getText().toString().trim());
+                            comment.put(mTeam, input.getText().toString().trim());
                             comment.put(ParseConstants.KEY_TWITTER_FULL_NAME, mCurrentUser.getString(ParseConstants.KEY_TWITTER_FULL_NAME));
                             comment.put(ParseConstants.KEY_USERNAME, mCurrentUser.getUsername());
                             comment.put(ParseConstants.KEY_PROFILE_IMAGE_URL, mCurrentUser.getString(ParseConstants.KEY_PROFILE_IMAGE_URL));
@@ -143,7 +145,7 @@ public class PostMessageCommentsActivity extends AppCompatActivity {
 
                     if (mRecyclerView.getAdapter() == null) {
                         postMessageCommentsAdapter =
-                                new PostMessageCommentsAdapter(PostMessageCommentsActivity.this, comments);
+                                new PostMessageCommentsAdapter(PostMessageCommentsActivity.this, comments, mTeam);
                         if (postMessageCommentsAdapter.getItemCount() == 0) {
                             mEmptyView.setVisibility(View.VISIBLE);
                         } else {

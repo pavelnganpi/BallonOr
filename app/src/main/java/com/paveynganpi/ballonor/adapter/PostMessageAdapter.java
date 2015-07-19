@@ -218,6 +218,7 @@ public class PostMessageAdapter extends RecyclerView.Adapter<PostMessageAdapter.
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, PostMessageCommentsActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra(ParseConstants.KEY_POST_MESSAGE_OBJECT_ID, message.getObjectId());
+                    intent.putExtra("TeamName", mTeam);
                     mContext. startActivity(intent);
                 }
             });

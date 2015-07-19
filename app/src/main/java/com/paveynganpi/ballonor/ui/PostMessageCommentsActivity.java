@@ -2,6 +2,7 @@ package com.paveynganpi.ballonor.ui;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -34,6 +35,8 @@ import butterknife.InjectView;
 public class PostMessageCommentsActivity extends AppCompatActivity {
     @InjectView(R.id.empty_view) TextView mEmptyView;
     @InjectView(R.id.PostMessageCommentsRecyclerView) RecyclerView mRecyclerView;
+    @InjectView(R.id.swipeRefreshLayout) SwipeRefreshLayout mSwipeRefreshLayout;
+
     protected List<ParseObject> postMessageComments;
     protected String postMessageObjectId;
     protected RecyclerView.LayoutManager layoutManager;
@@ -52,7 +55,14 @@ public class PostMessageCommentsActivity extends AppCompatActivity {
 
         mToolbar = (Toolbar) findViewById(R.id.comments_app_bar);
         setSupportActionBar(mToolbar);
-        mToolbar.setTitle("Comments");;
+        mToolbar.setTitle("Comments");
+
+        mSwipeRefreshLayout.setOnRefreshListener(mOnRefreshListener);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary,
+                R.color.colorAccent,
+                R.color.colorPrimaryLight,
+                R.color.colorPrimary);
+
 
         mCurrentUser = ParseUser.getCurrentUser();
         postMessageObjectId  = getIntent().getStringExtra(ParseConstants.KEY_POST_MESSAGE_OBJECT_ID);
@@ -143,6 +153,10 @@ public class PostMessageCommentsActivity extends AppCompatActivity {
             public void done(List<ParseObject> comments, ParseException e) {
                 if (e == null) {
 
+                    if (mSwipeRefreshLayout.isRefreshing()) {
+                        mSwipeRefreshLayout.setRefreshing(false);
+                    }
+
                     if (mRecyclerView.getAdapter() == null) {
                         postMessageCommentsAdapter =
                                 new PostMessageCommentsAdapter(PostMessageCommentsActivity.this, comments, mTeam);
@@ -172,9 +186,12 @@ public class PostMessageCommentsActivity extends AppCompatActivity {
 
     }
 
-    public void setPostMessageCommentsAdapter(List<ParseObject> list){
-
-    }
+    protected SwipeRefreshLayout.OnRefreshListener mOnRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
+        @Override
+        public void onRefresh() {
+            retrieveComments();
+        }
+    };
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

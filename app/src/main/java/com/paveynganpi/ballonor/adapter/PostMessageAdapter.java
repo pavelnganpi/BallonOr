@@ -113,10 +113,6 @@ public class PostMessageAdapter extends RecyclerView.Adapter<PostMessageAdapter.
             mPostMessageLabel.setText(message.getString(mTeam));
 
             //number oflikes
-//            mPostMessageLikesMap = (message.get(ParseConstants.KEY_POST_MESSAGE_LIKES_COUNT) == null)
-//                    ? 0 : message.getInt(ParseConstants.KEY_POST_MESSAGE_LIKES_COUNT);
-//            mPostMessagelikesCounter.setText(mPostMessageLikesMap + "");
-
             mPostMessageLikesMap =  ((message.getMap("likes") != null) ? message.getMap("likes") : new HashMap<String, Object>());
             mPostMessagelikesCounter.setText(mPostMessageLikesMap.size() + "");
             if(mPostMessageLikesMap.containsKey(mCurrentUser.getObjectId())){
@@ -142,8 +138,6 @@ public class PostMessageAdapter extends RecyclerView.Adapter<PostMessageAdapter.
 
                 }
             });
-
-//            mPostMessageCommentsCounter.setText(mPostMessageComments.size() + "");
 
             //Todo: delete the default image url after login is perfect
             mSenderProfileImageUrl = (message.getString(ParseConstants.KEY_SENDER_PROFILE_IMAGE_URL)) == null
@@ -190,21 +184,6 @@ public class PostMessageAdapter extends RecyclerView.Adapter<PostMessageAdapter.
             mPostMessageLikeLabel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    if (!v.isSelected()) {
-//                        Log.d("like buttob", v.isSelected() + "");
-//                        int likes = (message.get(ParseConstants.KEY_POST_MESSAGE_LIKES_COUNT) == null)
-//                                ? 0 : message.getInt(ParseConstants.KEY_POST_MESSAGE_LIKES_COUNT);
-//                        mPostMessagelikesCounter.setText((likes+1) + "");
-//                        message.put(ParseConstants.KEY_POST_MESSAGE_LIKES_COUNT, likes+1);
-//                        v.setSelected(true);
-//                    } else if (v.isSelected()){
-//                        Log.d("like buttob", v.isSelected() + "");
-//                        int likes = (message.get(ParseConstants.KEY_POST_MESSAGE_LIKES_COUNT) == null)
-//                                ? 0 : message.getInt(ParseConstants.KEY_POST_MESSAGE_LIKES_COUNT);
-//                        mPostMessagelikesCounter.setText((likes-1) + "");
-//                        message.put(ParseConstants.KEY_POST_MESSAGE_LIKES_COUNT, likes-1);
-//                        v.setSelected(false);
-//                    }
                     if(!mPostMessageLikeLabel.isSelected()){
                         Log.d("like buttob", mPostMessageLikeLabel.isSelected() + "");
                         mPostMessageLikesMap.put(mCurrentUser.getObjectId(), mCurrentUser);

@@ -2,6 +2,7 @@ package com.paveynganpi.ballonor.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -31,11 +32,13 @@ import butterknife.InjectView;
 public class TeamFragment extends android.support.v4.app.Fragment {
     @InjectView(R.id.PostMessageRecyclerView) RecyclerView mRecyclerView;
     @InjectView(R.id.empty_view) TextView mEmptyView;
+    @InjectView(R.id.swipeRefreshLayout) SwipeRefreshLayout mSwipeRefreshLayout;
     private FloatingActionButton fab;
     private  RecyclerView.LayoutManager layoutManager;
     protected TextView mPostMessageLikeLabel;
     private static String mTeam;
     protected PostMessageAdapter postMessageAdapter;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -44,6 +47,12 @@ public class TeamFragment extends android.support.v4.app.Fragment {
 
         Bundle bundle = this.getArguments();
         mTeam = bundle.getString("TeamName");
+
+        mSwipeRefreshLayout.setOnRefreshListener(mOnRefreshListener);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary,
+                R.color.colorAccent,
+                R.color.colorPrimaryLight,
+                R.color.colorPrimary);
 
         return rootView;
     }
@@ -87,6 +96,11 @@ public class TeamFragment extends android.support.v4.app.Fragment {
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> list, ParseException e) {
+
+                if (mSwipeRefreshLayout.isRefreshing()) {
+                    mSwipeRefreshLayout.setRefreshing(false);
+                }
+
                 if (e == null) {
 
                     setPostMessageAdapter(list);
@@ -97,6 +111,13 @@ public class TeamFragment extends android.support.v4.app.Fragment {
             }
         });
     }
+
+    protected SwipeRefreshLayout.OnRefreshListener mOnRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
+        @Override
+        public void onRefresh() {
+            retrievePosts();
+        }
+    };
 
     public void setPostMessageAdapter(List<ParseObject> list){
         if (mRecyclerView.getAdapter() == null) {

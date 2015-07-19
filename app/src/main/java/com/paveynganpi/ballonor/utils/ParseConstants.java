@@ -32,7 +32,8 @@ public final class ParseConstants {
     public static final String KEY_TWITTER_SCREEN_NAME = "twitterScreenName";
     public static final String KEY_CHELSEAFC_TABLE = "chelsea";
     public static final String KEY_POST_MESSAGE_OBJECT_ID = "postMessageObjectId";
-
+    public static final String KEY_TEAMS_PARSE_CLASS = "Teams";
+    public static final String KEY_OBJECT_ID = "objectId";
 
     public static final String TYPE_IMAGE = "image";
     public static final String TYPE_VIDEO = "video";

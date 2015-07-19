@@ -127,10 +127,10 @@ public class NavigationDrawerFragment extends Fragment {
         Arrays.sort(TeamsConstants.eplTeams);
         Arrays.sort(TeamsConstants.laLigaTeams);
 
-        for(int i =0; i<TeamsConstants.eplTeams.length; i++){
+        for(int i =0; i< TeamsConstants.eplTeams.length; i++){
             mTeams.add(TeamsConstants.eplTeams[i]);
         }
-        for(int i =0; i<TeamsConstants.laLigaTeams.length; i++){
+        for(int i =0; i< TeamsConstants.laLigaTeams.length; i++){
             mTeams.add(TeamsConstants.laLigaTeams[i]);
         }
 

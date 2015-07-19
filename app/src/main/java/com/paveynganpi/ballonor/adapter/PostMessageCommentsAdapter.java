@@ -23,10 +23,12 @@ import java.util.List;
 public class PostMessageCommentsAdapter  extends RecyclerView.Adapter<PostMessageCommentsAdapter.PostMessageCommentsViewHolder> {
     private Context mContext;
     private List<ParseObject> mComments;
+    protected String mTeam;
 
-    public PostMessageCommentsAdapter(Context context, List<ParseObject> comments) {
+    public PostMessageCommentsAdapter(Context context, List<ParseObject> comments, String team) {
         this.mContext = context;
         this.mComments = comments;
+        this.mTeam = team;
     }
 
     @Override
@@ -69,7 +71,7 @@ public class PostMessageCommentsAdapter  extends RecyclerView.Adapter<PostMessag
         public void bindPostMessages(final ParseObject comment) {
             mCommenterScreenNameLabel.setText(comment.getString(ParseConstants.KEY_USERNAME));
             mCommenterProfileNameLabel.setText(comment.getString(ParseConstants.KEY_TWITTER_FULL_NAME));
-            mCommentsLabel.setText(comment.getString(ParseConstants.KEY_CHELSEAFC_TABLE));
+            mCommentsLabel.setText(comment.getString(mTeam));
 
             String commenterProfileImageUrl = comment.getString(ParseConstants.KEY_PROFILE_IMAGE_URL);
             Picasso.with(mContext)

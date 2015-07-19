@@ -2,6 +2,7 @@ package com.paveynganpi.ballonor.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -28,21 +29,30 @@ import butterknife.InjectView;
 /**
  * Created by paveynganpi on 6/20/15.
  */
-public class RealMadridfcFragment extends android.support.v4.app.Fragment {
+public class TeamFragment extends android.support.v4.app.Fragment {
     @InjectView(R.id.PostMessageRecyclerView) RecyclerView mRecyclerView;
     @InjectView(R.id.empty_view) TextView mEmptyView;
+    @InjectView(R.id.swipeRefreshLayout) SwipeRefreshLayout mSwipeRefreshLayout;
     private FloatingActionButton fab;
     private  RecyclerView.LayoutManager layoutManager;
     protected TextView mPostMessageLikeLabel;
     private static String mTeam;
+    protected PostMessageAdapter postMessageAdapter;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_realmadridfc, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_team, container, false);
         ButterKnife.inject(this, rootView);
 
         Bundle bundle = this.getArguments();
         mTeam = bundle.getString("TeamName");
+
+        mSwipeRefreshLayout.setOnRefreshListener(mOnRefreshListener);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary,
+                R.color.colorAccent,
+                R.color.colorPrimaryLight,
+                R.color.colorPrimary);
 
         return rootView;
     }
@@ -82,30 +92,53 @@ public class RealMadridfcFragment extends android.support.v4.app.Fragment {
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Teams");
         query.whereExists(mTeam);
-        //Log.d("teamName", mTeam);
         query.addDescendingOrder(ParseConstants.KEY_CREATED_AT);
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> list, ParseException e) {
+
+                if (mSwipeRefreshLayout.isRefreshing()) {
+                    mSwipeRefreshLayout.setRefreshing(false);
+                }
+
                 if (e == null) {
-                    String[] postMessages = new String[list.size()];
-                    int i = 0;
-                    for (ParseObject postMessage : list) {
-                        postMessages[i] = postMessage.getString(mTeam);
-                        i++;
-                    }
-                    PostMessageAdapter postMessageAdapter = new PostMessageAdapter(getActivity(), list, mTeam);
-                    mRecyclerView.setAdapter(postMessageAdapter);
+
+                    setPostMessageAdapter(list);
+
                 } else {
                     Log.d("parse query", "error with parseQuery");
                 }
             }
         });
-
-
     }
-    public static void setTeam(String team){
-        mTeam = team;
+
+    protected SwipeRefreshLayout.OnRefreshListener mOnRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
+        @Override
+        public void onRefresh() {
+            retrievePosts();
+        }
+    };
+
+    public void setPostMessageAdapter(List<ParseObject> list){
+        if (mRecyclerView.getAdapter() == null) {
+            postMessageAdapter =
+                    new PostMessageAdapter(getActivity(),list, mTeam);
+            if (postMessageAdapter.getItemCount() == 0) {
+                mEmptyView.setVisibility(View.VISIBLE);
+            } else {
+                mEmptyView.setVisibility(View.GONE);
+            }
+            mRecyclerView.setAdapter(postMessageAdapter);
+        } else {
+            //if it exists, no need to recreate it,
+            //just set the data on the recyclerView
+            if (mRecyclerView.getAdapter().getItemCount() == 0) {
+                mEmptyView.setVisibility(View.VISIBLE);
+            } else {
+                mEmptyView.setVisibility(View.GONE);
+            }
+            ((PostMessageAdapter) mRecyclerView.getAdapter()).refill(list);
+        }
     }
 
     @Override

@@ -29,7 +29,9 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by paveynganpi on 6/26/15.
@@ -68,6 +70,11 @@ public class PostMessageAdapter extends RecyclerView.Adapter<PostMessageAdapter.
         return messages.size();
     }
 
+    public void refill(List<ParseObject> messages){
+        this.messages = messages;
+        notifyDataSetChanged();
+    }
+
     public class PostMessageViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public ImageView mProfileImageView;
         public TextView mScreenNameLabel;
@@ -80,8 +87,9 @@ public class PostMessageAdapter extends RecyclerView.Adapter<PostMessageAdapter.
         TextView mPostMessagelikesCounter;
         View parent;
         String mSenderProfileImageUrl;
-        int mPostMessageNumberOfLikes;
+        Map<String, Object> mPostMessageLikesMap;
         List<ParseObject> mPostMessageComments;
+        protected HashMap<String, String> finalMap;
 
 
         public PostMessageViewHolder(View itemView) {
@@ -105,9 +113,14 @@ public class PostMessageAdapter extends RecyclerView.Adapter<PostMessageAdapter.
             mPostMessageLabel.setText(message.getString(mTeam));
 
             //number oflikes
-            mPostMessageNumberOfLikes = (message.get(ParseConstants.KEY_POST_MESSAGE_LIKES_COUNT) == null)
-                    ? 0 : message.getInt(ParseConstants.KEY_POST_MESSAGE_LIKES_COUNT);
-            mPostMessagelikesCounter.setText(mPostMessageNumberOfLikes + "");
+            mPostMessageLikesMap =  ((message.getMap("likes") != null) ? message.getMap("likes") : new HashMap<String, Object>());
+            mPostMessagelikesCounter.setText(mPostMessageLikesMap.size() + "");
+            if(mPostMessageLikesMap.containsKey(mCurrentUser.getObjectId())){
+                mPostMessageLikeLabel.setSelected(true);
+            }
+            else{
+                mPostMessageLikeLabel.setSelected(false);
+            }
 
             //number of comments
             ParseQuery<ParseObject> query = ParseQuery.getQuery(ParseConstants.KEY_PARSE_OBJECT_COMMENTS);
@@ -125,8 +138,6 @@ public class PostMessageAdapter extends RecyclerView.Adapter<PostMessageAdapter.
 
                 }
             });
-
-//            mPostMessageCommentsCounter.setText(mPostMessageComments.size() + "");
 
             //Todo: delete the default image url after login is perfect
             mSenderProfileImageUrl = (message.getString(ParseConstants.KEY_SENDER_PROFILE_IMAGE_URL)) == null
@@ -173,21 +184,25 @@ public class PostMessageAdapter extends RecyclerView.Adapter<PostMessageAdapter.
             mPostMessageLikeLabel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (!v.isSelected()) {
-                        Log.d("like buttob", v.isSelected() + "");
-                        int likes = (message.get(ParseConstants.KEY_POST_MESSAGE_LIKES_COUNT) == null)
-                                ? 0 : message.getInt(ParseConstants.KEY_POST_MESSAGE_LIKES_COUNT);
-                        mPostMessagelikesCounter.setText((likes+1) + "");
-                        message.put(ParseConstants.KEY_POST_MESSAGE_LIKES_COUNT, likes+1);
-                        v.setSelected(true);
-                    } else if (v.isSelected()){
-                        Log.d("like buttob", v.isSelected() + "");
-                        int likes = (message.get(ParseConstants.KEY_POST_MESSAGE_LIKES_COUNT) == null)
-                                ? 0 : message.getInt(ParseConstants.KEY_POST_MESSAGE_LIKES_COUNT);
-                        mPostMessagelikesCounter.setText((likes-1) + "");
-                        message.put(ParseConstants.KEY_POST_MESSAGE_LIKES_COUNT, likes-1);
-                        v.setSelected(false);
+                    if(!mPostMessageLikeLabel.isSelected()){
+                        Log.d("like buttob", mPostMessageLikeLabel.isSelected() + "");
+                        mPostMessageLikesMap.put(mCurrentUser.getObjectId(), mCurrentUser);
+                        int likes = mPostMessageLikesMap.size();
+                        mPostMessagelikesCounter.setText((likes) + "");
+                        message.put("likes", mPostMessageLikesMap);
+                        message.put(ParseConstants.KEY_POST_MESSAGE_LIKES_COUNT, mPostMessageLikesMap.size());
+                        mPostMessageLikeLabel.setSelected(true);
                     }
+                    else if (mPostMessageLikeLabel.isSelected()){
+                        Log.d("like buttob", mPostMessageLikeLabel.isSelected() + "");
+                        mPostMessageLikesMap.remove(mCurrentUser.getObjectId());
+                        int likes = mPostMessageLikesMap.size();
+                        mPostMessagelikesCounter.setText((likes) + "");
+                        message.put("likes", mPostMessageLikesMap);
+                        message.put(ParseConstants.KEY_POST_MESSAGE_LIKES_COUNT, mPostMessageLikesMap.size());
+                        mPostMessageLikeLabel.setSelected(false);
+                    }
+
                     message.saveInBackground(new SaveCallback() {
                         @Override
                         public void done(ParseException e) {
@@ -213,6 +228,7 @@ public class PostMessageAdapter extends RecyclerView.Adapter<PostMessageAdapter.
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, PostMessageCommentsActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra(ParseConstants.KEY_POST_MESSAGE_OBJECT_ID, message.getObjectId());
+                    intent.putExtra("TeamName", mTeam);
                     mContext. startActivity(intent);
                 }
             });

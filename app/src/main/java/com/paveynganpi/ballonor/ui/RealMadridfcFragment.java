@@ -35,6 +35,7 @@ public class RealMadridfcFragment extends android.support.v4.app.Fragment {
     private  RecyclerView.LayoutManager layoutManager;
     protected TextView mPostMessageLikeLabel;
     private static String mTeam;
+    protected PostMessageAdapter postMessageAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -88,14 +89,29 @@ public class RealMadridfcFragment extends android.support.v4.app.Fragment {
             @Override
             public void done(List<ParseObject> list, ParseException e) {
                 if (e == null) {
-                    String[] postMessages = new String[list.size()];
-                    int i = 0;
-                    for (ParseObject postMessage : list) {
-                        postMessages[i] = postMessage.getString(mTeam);
-                        i++;
+//                    PostMessageAdapter postMessageAdapter = new PostMessageAdapter(getActivity(), list, mTeam);
+//                    mRecyclerView.setAdapter(postMessageAdapter);
+
+                    if (mRecyclerView.getAdapter() == null) {
+                        postMessageAdapter =
+                                new PostMessageAdapter(getActivity(),list, mTeam);
+                        if (postMessageAdapter.getItemCount() == 0) {
+                            mEmptyView.setVisibility(View.VISIBLE);
+                        } else {
+                            mEmptyView.setVisibility(View.GONE);
+                        }
+                        mRecyclerView.setAdapter(postMessageAdapter);
+                    } else {
+                        //if it exists, no need to recreate it,
+                        //just set the data on the recyclerView
+                        if (mRecyclerView.getAdapter().getItemCount() == 0) {
+                            mEmptyView.setVisibility(View.VISIBLE);
+                        } else {
+                            mEmptyView.setVisibility(View.GONE);
+                        }
+                        ((PostMessageAdapter) mRecyclerView.getAdapter()).refill(list);
                     }
-                    PostMessageAdapter postMessageAdapter = new PostMessageAdapter(getActivity(), list, mTeam);
-                    mRecyclerView.setAdapter(postMessageAdapter);
+
                 } else {
                     Log.d("parse query", "error with parseQuery");
                 }

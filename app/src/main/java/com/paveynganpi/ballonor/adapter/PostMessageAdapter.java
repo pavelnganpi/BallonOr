@@ -68,6 +68,11 @@ public class PostMessageAdapter extends RecyclerView.Adapter<PostMessageAdapter.
         return messages.size();
     }
 
+    public void refill(List<ParseObject> messages){
+        this.messages = messages;
+        notifyDataSetChanged();
+    }
+
     public class PostMessageViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public ImageView mProfileImageView;
         public TextView mScreenNameLabel;

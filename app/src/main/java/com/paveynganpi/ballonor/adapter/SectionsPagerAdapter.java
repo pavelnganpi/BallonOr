@@ -8,7 +8,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.paveynganpi.ballonor.ui.ArsenalfcFragment;
 import com.paveynganpi.ballonor.ui.ChelseafcFragment;
-import com.paveynganpi.ballonor.ui.RealMadridfcFragment;
+import com.paveynganpi.ballonor.ui.TeamFragment;
 
 import java.util.Locale;
 
@@ -27,7 +27,6 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
         mTeam = team;
     }
 
-
     @Override
     public Fragment getItem(int position) {
         // getItem is called to instantiate the fragment for the given page.
@@ -36,18 +35,12 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
         String team = toCamelCase(mTeam);
         Bundle args = new Bundle();
         args.putString("TeamName", team);
-        RealMadridfcFragment realMadridfcFragment = new RealMadridfcFragment();
-        realMadridfcFragment.setArguments(args);
+        TeamFragment teamFragment = new TeamFragment();
+        teamFragment.setArguments(args);
 
         switch (position){
             case 0:
-                if(team.equals("chelseafc") || team.equals("chelseaFC")){
-                    //sendToTeamFragment(mTeam);
-                    return realMadridfcFragment;
-                }
-                else {
-                    return realMadridfcFragment;
-                }
+                return teamFragment;
             case 1:
                 return new ArsenalfcFragment();
         }
@@ -75,13 +68,5 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
     public String toCamelCase(String str){
         return Character.toLowerCase(
                 str.charAt(0)) + str.substring(1).replaceAll("\\s","");
-    }
-
-    public void sendToTeamFragment(String team){
-        Bundle bundle = new Bundle();
-        String myMessage = "Stackoverflow is cool!";
-        bundle.putString("teamName", team );
-        RealMadridfcFragment fragInfo = new RealMadridfcFragment();
-        fragInfo.setArguments(bundle);
     }
 }

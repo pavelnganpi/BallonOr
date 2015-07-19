@@ -28,7 +28,7 @@ import butterknife.InjectView;
 /**
  * Created by paveynganpi on 6/20/15.
  */
-public class RealMadridfcFragment extends android.support.v4.app.Fragment {
+public class TeamFragment extends android.support.v4.app.Fragment {
     @InjectView(R.id.PostMessageRecyclerView) RecyclerView mRecyclerView;
     @InjectView(R.id.empty_view) TextView mEmptyView;
     private FloatingActionButton fab;
@@ -39,7 +39,7 @@ public class RealMadridfcFragment extends android.support.v4.app.Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_realmadridfc, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_team, container, false);
         ButterKnife.inject(this, rootView);
 
         Bundle bundle = this.getArguments();
@@ -83,45 +83,41 @@ public class RealMadridfcFragment extends android.support.v4.app.Fragment {
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Teams");
         query.whereExists(mTeam);
-        //Log.d("teamName", mTeam);
         query.addDescendingOrder(ParseConstants.KEY_CREATED_AT);
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> list, ParseException e) {
                 if (e == null) {
-//                    PostMessageAdapter postMessageAdapter = new PostMessageAdapter(getActivity(), list, mTeam);
-//                    mRecyclerView.setAdapter(postMessageAdapter);
 
-                    if (mRecyclerView.getAdapter() == null) {
-                        postMessageAdapter =
-                                new PostMessageAdapter(getActivity(),list, mTeam);
-                        if (postMessageAdapter.getItemCount() == 0) {
-                            mEmptyView.setVisibility(View.VISIBLE);
-                        } else {
-                            mEmptyView.setVisibility(View.GONE);
-                        }
-                        mRecyclerView.setAdapter(postMessageAdapter);
-                    } else {
-                        //if it exists, no need to recreate it,
-                        //just set the data on the recyclerView
-                        if (mRecyclerView.getAdapter().getItemCount() == 0) {
-                            mEmptyView.setVisibility(View.VISIBLE);
-                        } else {
-                            mEmptyView.setVisibility(View.GONE);
-                        }
-                        ((PostMessageAdapter) mRecyclerView.getAdapter()).refill(list);
-                    }
+                    setPostMessageAdapter(list);
 
                 } else {
                     Log.d("parse query", "error with parseQuery");
                 }
             }
         });
-
-
     }
-    public static void setTeam(String team){
-        mTeam = team;
+
+    public void setPostMessageAdapter(List<ParseObject> list){
+        if (mRecyclerView.getAdapter() == null) {
+            postMessageAdapter =
+                    new PostMessageAdapter(getActivity(),list, mTeam);
+            if (postMessageAdapter.getItemCount() == 0) {
+                mEmptyView.setVisibility(View.VISIBLE);
+            } else {
+                mEmptyView.setVisibility(View.GONE);
+            }
+            mRecyclerView.setAdapter(postMessageAdapter);
+        } else {
+            //if it exists, no need to recreate it,
+            //just set the data on the recyclerView
+            if (mRecyclerView.getAdapter().getItemCount() == 0) {
+                mEmptyView.setVisibility(View.VISIBLE);
+            } else {
+                mEmptyView.setVisibility(View.GONE);
+            }
+            ((PostMessageAdapter) mRecyclerView.getAdapter()).refill(list);
+        }
     }
 
     @Override

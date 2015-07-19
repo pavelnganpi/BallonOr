@@ -170,6 +170,10 @@ public class PostMessageCommentsActivity extends AppCompatActivity {
 
     }
 
+    public void setPostMessageCommentsAdapter(List<ParseObject> list){
+
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will

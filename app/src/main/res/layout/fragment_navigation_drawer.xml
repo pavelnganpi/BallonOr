@@ -6,12 +6,39 @@
                 android:background="#EEE"
                 tools:context="com.paveynganpi.ballonor.ui.NavigationDrawerFragment">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Favourite teams"
+        android:id="@+id/favouriteTextView"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="4dp"
+        />
+    <TextView
+        android:id="@android:id/empty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="You have no favourite teams yet. Please add atleast a team"/>
+
 
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/teamsListView"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"/>
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/favouriteTextView"/>
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Team"
+        android:id="@+id/addTeamButton"
+        android:layout_alignRight="@+id/favouriteTextView"
+        android:layout_alignEnd="@+id/favouriteTextView"
+        android:layout_marginRight="41dp"
+        android:layout_marginEnd="41dp"
+        android:layout_above="@+id/teamsListView"/>
 </RelativeLayout>

@@ -10,12 +10,14 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="menu_logout_lable">Logout</string>
-    <string name="title_activity_create_post">CreatePostActivity</string>
-    <string name="title_activity_post_message_comments">PostMessageCommentsActivity</string>
+    <string name="title_activity_create_post">Post a status</string>
+    <string name="title_activity_post_message_comments">Comments</string>
 
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_leagues">Leagues</string>
+    <string name="title_activity_league_teams">Teams</string>
 </resources>

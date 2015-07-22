@@ -156,9 +156,7 @@ public class NavigationDrawerFragment extends Fragment {
             mTeams.add(TeamsConstants.laLigaTeams[i]);
         }
 
-        mTeams = mCurrentUser.get(ParseConstants.KEY_FAVOURITE_TEAMS) != null
-            ? (ArrayList<String>) mCurrentUser.get(ParseConstants.KEY_FAVOURITE_TEAMS) : new ArrayList<String>();
-
+        mTeams = getFavouriteTeams();
         //sort teams
         Collections.sort(mTeams);
 
@@ -181,6 +179,11 @@ public class NavigationDrawerFragment extends Fragment {
             }
         });
 
+    }
+
+    public ArrayList<String> getFavouriteTeams(){
+        return mCurrentUser.get(ParseConstants.KEY_FAVOURITE_TEAMS) != null
+                ? (ArrayList<String>) mCurrentUser.get(ParseConstants.KEY_FAVOURITE_TEAMS) : new ArrayList<String>();
     }
 
     @Override

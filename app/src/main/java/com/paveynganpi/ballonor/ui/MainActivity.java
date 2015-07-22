@@ -17,6 +17,8 @@ import com.paveynganpi.ballonor.R;
 import com.paveynganpi.ballonor.adapter.SectionsPagerAdapter;
 import com.paveynganpi.ballonor.utils.SlidingTabLayout;
 
+import java.util.ArrayList;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -37,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar mToolbar;
     private SlidingTabLayout mTabs;
     protected String mDrawerItemTeam;
+    protected ParseUser mCurrentUser;
+    protected ArrayList<String> favouriteTeams;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +51,8 @@ public class MainActivity extends AppCompatActivity {
 //        final ActionBar actionBar = getSupportActionBar();
 //        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-        ParseUser currentUser = ParseUser.getCurrentUser();
-        if (currentUser == null) {
+        mCurrentUser = ParseUser.getCurrentUser();
+        if (mCurrentUser == null) {
             navigateToLogin();
         }
 
@@ -63,12 +67,16 @@ public class MainActivity extends AppCompatActivity {
 
         navigationDrawerFragment.setUpDrawer(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
         navigationDrawerFragment.addDrawerTeams();
+        favouriteTeams = navigationDrawerFragment.getFavouriteTeams();
 
 
         mViewPager = (ViewPager) findViewById(R.id.pager);
         if(mDrawerItemTeam == null){
             Log.d("drawerItemTeam", "mDrawerItemTeam is null");
-            mViewPager.setAdapter(new SectionsPagerAdapter(this, getSupportFragmentManager(), "Chelseafc"));
+            if(favouriteTeams.isEmpty())
+                mViewPager.setAdapter(new SectionsPagerAdapter(this, getSupportFragmentManager(), "Chelseafc"));
+            else
+                mViewPager.setAdapter(new SectionsPagerAdapter(this, getSupportFragmentManager(), favouriteTeams.get(0)));
         }
         else{
             Log.d("drawerItemTeam", "mDrawerItemTeam is "+ mDrawerItemTeam);

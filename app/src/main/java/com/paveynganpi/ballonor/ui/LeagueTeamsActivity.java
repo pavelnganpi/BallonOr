@@ -6,13 +6,13 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -108,7 +108,6 @@ public class LeagueTeamsActivity extends AppCompatActivity {
 
             for(int i =0; i< mListView.getCount(); i++){
                 if(mListView.isItemChecked(i)){
-                    Log.d("countCheck ",  mLeagueTeams[i]);
                     favouriteTeams.add(mLeagueTeams[i]);
                 }
                 else{
@@ -125,19 +124,18 @@ public class LeagueTeamsActivity extends AppCompatActivity {
                 }
             }
 
-            userFavouriteTeams.addAll(favouriteTeams);
-
             mCurrentUser.put(ParseConstants.KEY_FAVOURITE_TEAMS, userFavouriteTeams);
+            mCurrentUser.addAllUnique(ParseConstants.KEY_FAVOURITE_TEAMS, favouriteTeams);
+
 
             mCurrentUser.saveInBackground(new SaveCallback() {
                 @Override
                 public void done(ParseException e) {
-                    if(e == null){
+                    if (e == null) {
                         //success
-                        Intent intent = new Intent(LeagueTeamsActivity.this, MainActivity.class);
-                        startActivity(intent);
-                    }
-                    else{
+                        Toast.makeText(LeagueTeamsActivity.this, "Successfully updated your favorites teams", Toast.LENGTH_SHORT).show();
+
+                    } else {
                         AlertDialog.Builder builder = new AlertDialog.Builder(LeagueTeamsActivity.this);
                         builder.setMessage("Sorry, Please try again");
                         builder.setTitle("Opps , error saving favourite teams");
@@ -149,6 +147,10 @@ public class LeagueTeamsActivity extends AppCompatActivity {
                     }
                 }
             });
+            Intent intent = new Intent(LeagueTeamsActivity.this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
 
             return true;
         }

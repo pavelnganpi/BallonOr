@@ -40,7 +40,10 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 
         switch (position){
             case 0:
-                return teamFragment;
+                if(team.equals("chelseafc"))
+                    return new ChelseafcFragment();
+                else
+                    return teamFragment;
             case 1:
                 return new ArsenalfcFragment();
         }

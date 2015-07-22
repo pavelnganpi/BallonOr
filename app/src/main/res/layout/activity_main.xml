@@ -40,5 +40,10 @@
         android:name="com.paveynganpi.ballonor.ui.NavigationDrawerFragment"
         app:layout="@layout/fragment_navigation_drawer"
         tools:layout="@layout/fragment_navigation_drawer"/>
+    <!--<TextView-->
+        <!--android:id="@android:id/empty"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="You have no favourite teams yet. Please add atleast a team"/>-->
 
 </android.support.v4.widget.DrawerLayout>

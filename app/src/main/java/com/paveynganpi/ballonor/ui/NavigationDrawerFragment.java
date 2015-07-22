@@ -18,11 +18,14 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
+import com.parse.ParseUser;
 import com.paveynganpi.ballonor.R;
+import com.paveynganpi.ballonor.utils.ParseConstants;
 import com.paveynganpi.ballonor.utils.TeamsConstants;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 
 import butterknife.ButterKnife;
@@ -47,6 +50,7 @@ public class NavigationDrawerFragment extends Fragment {
     private ArrayAdapter<String> mTeamsAdapter;
     private ListView mTeamsListView;
     public ArrayList<String> mTeams;
+    protected ParseUser mCurrentUser;
 
 
     public NavigationDrawerFragment() {
@@ -71,6 +75,8 @@ public class NavigationDrawerFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
         mTeamsListView = (ListView) view.findViewById(R.id.teamsListView);
         ButterKnife.inject(this, view);
+
+        mCurrentUser = ParseUser.getCurrentUser();
 
         mAddTeamButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -149,6 +155,12 @@ public class NavigationDrawerFragment extends Fragment {
         for (int i = 0; i < TeamsConstants.laLigaTeams.length; i++) {
             mTeams.add(TeamsConstants.laLigaTeams[i]);
         }
+
+        mTeams = mCurrentUser.get(ParseConstants.KEY_FAVOURITE_TEAMS) != null
+            ? (ArrayList<String>) mCurrentUser.get(ParseConstants.KEY_FAVOURITE_TEAMS) : new ArrayList<String>();
+
+        //sort teams
+        Collections.sort(mTeams);
 
         mTeamsAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, mTeams);
         mTeamsListView.setAdapter(mTeamsAdapter);

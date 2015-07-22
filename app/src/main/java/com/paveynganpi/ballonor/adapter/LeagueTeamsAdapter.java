@@ -1,71 +1,83 @@
 package com.paveynganpi.ballonor.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.paveynganpi.ballonor.R;
 import com.paveynganpi.ballonor.utils.TeamsConstants;
 import com.squareup.picasso.Picasso;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 /**
  * Created by paveynganpi on 7/20/15.
  */
-public class LeagueTeamsAdapter extends RecyclerView.Adapter<LeagueTeamsAdapter.LeagueTeamsViewHolder> {
+public class LeagueTeamsAdapter extends ArrayAdapter<String> {
     protected Context mContext;
-    protected String[] mLeageTeamsNames;
+    protected String[] mLeagueTeamsNames;
 
-    public LeagueTeamsAdapter(Context context, String league){
+    public LeagueTeamsAdapter(Context context, String league) {
+        super(context, R.layout.league_teams_item, TeamsConstants.getTeam(league));
         this.mContext = context;
-        mLeageTeamsNames = TeamsConstants.getTeam(league);
+        mLeagueTeamsNames = TeamsConstants.getTeam(league);
     }
 
     @Override
-    public LeagueTeamsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view  = LayoutInflater.from(parent.getContext()).inflate(R.layout.league_teams_item, parent, false);
-        return new LeagueTeamsViewHolder(view);
-    }
+    public View getView(int position, View convertView, ViewGroup parent) {
+        ViewHolder viewHolder;
 
-    @Override
-    public void onBindViewHolder(LeagueTeamsViewHolder leagueTeamsViewHolder, int position) {
-        leagueTeamsViewHolder.bindLeagueTeams(mLeageTeamsNames[position], position);
+        if (convertView == null) {
 
-    }
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.league_teams_item, null);
+            viewHolder = new ViewHolder(convertView);
+            convertView.setTag(viewHolder);
 
-    @Override
-    public int getItemCount() {
-        return mLeageTeamsNames.length;
-    }
-
-    public class LeagueTeamsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        public ImageView mLeagueTeamsImageView;
-        public TextView mLeagueTeamsTextView;
-        public int mPosition;
-
-        public LeagueTeamsViewHolder(View itemView) {
-            super(itemView);
-            mLeagueTeamsImageView = (ImageView) itemView.findViewById(R.id.leagueTeamsImageView);
-            mLeagueTeamsTextView = (TextView) itemView.findViewById(R.id.leagueTeamsTextView);
-
-            itemView.setOnClickListener(this);
+        } else {
+            viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        public void bindLeagueTeams(String team, int position){
-            mLeagueTeamsTextView.setText(team);
-            mPosition = position;
-            Picasso.with(mContext)
-                    .load(TeamsConstants.getTeamImageUrl())
-                    .resize(110, 110)
-                    .into(mLeagueTeamsImageView);
+        String team = mLeagueTeamsNames[position];
+
+        viewHolder.mLeagueTeamsTextView.setText(team);
+        Picasso.with(mContext)
+                .load(TeamsConstants.getTeamImageUrl())
+                .resize(110, 110)
+                .into(viewHolder.mLeagueTeamsImageView);
+
+        ListView listView = (ListView)parent;
+        if(listView.isItemChecked(position)){
+            viewHolder.mLeagueTeamsCheckbox.setChecked(true);
+        }
+        else{
+            viewHolder.mLeagueTeamsCheckbox.setChecked(false);
         }
 
-        @Override
-        public void onClick(View v) {
 
+        return convertView;
+
+    }
+
+    /**
+     * This class contains all butterknife-injected Views & Layouts from layout file 'league_teams_item.xml'
+     * for easy to all layout elements.
+     *
+     * @author ButterKnifeZelezny, plugin for Android Studio by Avast Developers (http://github.com/avast)
+     */
+    static class ViewHolder {
+        @InjectView(R.id.leagueTeamsImageView) ImageView mLeagueTeamsImageView;
+        @InjectView(R.id.leagueTeamsTextView) TextView mLeagueTeamsTextView;
+        @InjectView(R.id.leagueTeamsCheckbox) CheckBox mLeagueTeamsCheckbox;
+
+        ViewHolder(View view) {
+            ButterKnife.inject(this, view);
         }
     }
 }

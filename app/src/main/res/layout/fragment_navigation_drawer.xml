@@ -15,12 +15,6 @@
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="4dp"
         />
-    <TextView
-        android:id="@android:id/empty"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="You have no favourite teams yet. Please add atleast a team"/>
-
 
     <ListView
         android:layout_width="wrap_content"

@@ -14,6 +14,8 @@ import com.paveynganpi.ballonor.R;
 import com.paveynganpi.ballonor.utils.TeamsConstants;
 import com.squareup.picasso.Picasso;
 
+import java.util.Arrays;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
@@ -28,6 +30,7 @@ public class LeagueTeamsAdapter extends ArrayAdapter<String> {
         super(context, R.layout.league_teams_item, TeamsConstants.getTeam(league));
         this.mContext = context;
         mLeagueTeamsNames = TeamsConstants.getTeam(league);
+        Arrays.sort(mLeagueTeamsNames);
     }
 
     @Override

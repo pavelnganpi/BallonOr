@@ -2,6 +2,7 @@ package com.paveynganpi.ballonor.ui;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,14 +15,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 
+import com.parse.ParseUser;
 import com.paveynganpi.ballonor.R;
+import com.paveynganpi.ballonor.utils.ParseConstants;
 import com.paveynganpi.ballonor.utils.TeamsConstants;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 
 /**
@@ -32,6 +40,7 @@ public class NavigationDrawerFragment extends Fragment {
     private static final String PREF_FILE_NAME = "testpref";
     private static final String KEY_USER_LEARNED_DRAWER = "user_learned_drawer";
     private static final String KEY_TEAM_NAME = "team_name";
+    @InjectView(R.id.addTeamButton) Button mAddTeamButton;
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
 
@@ -41,6 +50,7 @@ public class NavigationDrawerFragment extends Fragment {
     private ArrayAdapter<String> mTeamsAdapter;
     private ListView mTeamsListView;
     public ArrayList<String> mTeams;
+    protected ParseUser mCurrentUser;
 
 
     public NavigationDrawerFragment() {
@@ -64,6 +74,18 @@ public class NavigationDrawerFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
         mTeamsListView = (ListView) view.findViewById(R.id.teamsListView);
+        ButterKnife.inject(this, view);
+
+        mCurrentUser = ParseUser.getCurrentUser();
+
+        mAddTeamButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), LeaguesActivity.class);
+                startActivity(intent);
+            }
+        });
+
         return view;
     }
 
@@ -120,39 +142,53 @@ public class NavigationDrawerFragment extends Fragment {
         return sharedPreferences.getString(preferenceName, defaultValue);
     }
 
-    public void addDrawerTeams(){
+    public void addDrawerTeams() {
 
         mTeams = new ArrayList<>();
 
         Arrays.sort(TeamsConstants.eplTeams);
         Arrays.sort(TeamsConstants.laLigaTeams);
 
-        for(int i =0; i< TeamsConstants.eplTeams.length; i++){
+        for (int i = 0; i < TeamsConstants.eplTeams.length; i++) {
             mTeams.add(TeamsConstants.eplTeams[i]);
         }
-        for(int i =0; i< TeamsConstants.laLigaTeams.length; i++){
+        for (int i = 0; i < TeamsConstants.laLigaTeams.length; i++) {
             mTeams.add(TeamsConstants.laLigaTeams[i]);
         }
 
+        mTeams = getFavouriteTeams();
+        //sort teams
+        Collections.sort(mTeams);
+
         mTeamsAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, mTeams);
         mTeamsListView.setAdapter(mTeamsAdapter);
-        HashMap<String,String> teamsConvert = new HashMap<>();
+        HashMap<String, String> teamsConvert = new HashMap<>();
 
 
         //set onClickListerner
-       mTeamsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-           @Override
-           public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-               mTeamsListView.setItemChecked(position, true);
-               ((MainActivity) getActivity()).onDrawerItemClicked(mTeams.get(position));
-               //RealMadridfcFragment.setTeam(mTeams.get(position));
+        mTeamsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mTeamsListView.setItemChecked(position, true);
+                ((MainActivity) getActivity()).onDrawerItemClicked(mTeams.get(position));
+                //RealMadridfcFragment.setTeam(mTeams.get(position));
 //               Intent intent = new Intent(getActivity(), MainActivity.class);
 //               startActivity(intent);
-               mDrawerLayout.closeDrawer(GravityCompat.START);
+                mDrawerLayout.closeDrawer(GravityCompat.START);
 
-           }
-       });
+            }
+        });
 
     }
 
+    public ArrayList<String> getFavouriteTeams(){
+        return mCurrentUser.get(ParseConstants.KEY_FAVOURITE_TEAMS) != null
+                ? (ArrayList<String>) mCurrentUser.get(ParseConstants.KEY_FAVOURITE_TEAMS) : new ArrayList<String>();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.reset(this);
+    }
 }

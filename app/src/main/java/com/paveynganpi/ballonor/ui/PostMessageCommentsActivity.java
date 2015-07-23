@@ -53,10 +53,6 @@ public class PostMessageCommentsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_post_message_comments);
         ButterKnife.inject(this);
 
-        mToolbar = (Toolbar) findViewById(R.id.comments_app_bar);
-        setSupportActionBar(mToolbar);
-        mToolbar.setTitle("Comments");
-
         mSwipeRefreshLayout.setOnRefreshListener(mOnRefreshListener);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary,
                 R.color.colorAccent,

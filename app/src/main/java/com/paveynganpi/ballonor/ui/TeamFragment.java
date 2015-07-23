@@ -48,6 +48,10 @@ public class TeamFragment extends android.support.v4.app.Fragment {
         Bundle bundle = this.getArguments();
         mTeam = bundle.getString("TeamName");
 
+        if(mTeam.equals("Chelseafc")){
+            fab.setVisibility(View.INVISIBLE);
+        }
+
         mSwipeRefreshLayout.setOnRefreshListener(mOnRefreshListener);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary,
                 R.color.colorAccent,

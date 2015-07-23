@@ -34,12 +34,24 @@
         </activity>
         <activity
             android:name=".ui.PostMessageCommentsActivity"
+            android:label="@string/title_activity_post_message_comments"
             android:parentActivityName=".ui.MainActivity"
-            android:label="@string/title_activity_post_message_comments">
+            android:screenOrientation="portrait" >
+
             <!-- The meta-data element is needed for versions lower than 4.1 -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.MainActivity" />
+        </activity>
+        <activity
+            android:name=".ui.LeaguesActivity"
+            android:label="@string/title_activity_leagues"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".ui.LeagueTeamsActivity"
+            android:label="@string/title_activity_league_teams"
+            android:screenOrientation="portrait" >
         </activity>
     </application>
 

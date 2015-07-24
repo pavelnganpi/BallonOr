@@ -4,7 +4,7 @@
       tools:context="com.paveynganpi.ballonor.ui.LeagueTeamsActivity">
     <item
         android:id="@+id/action_done"
-        android:icon="@drawable/abc_ic_menu_share_mtrl_alpha"
+        android:icon="@drawable/ic_done"
         android:orderInCategory="100"
         android:title="Done"
         android:visible="true"

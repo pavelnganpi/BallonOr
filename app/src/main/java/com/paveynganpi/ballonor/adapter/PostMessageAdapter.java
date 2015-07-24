@@ -110,7 +110,7 @@ public class PostMessageAdapter extends RecyclerView.Adapter<PostMessageAdapter.
         public void bindPostMessages(final ParseObject message) {
             mScreenNameLabel.setText(mCurrentTwitterUser.getScreenName().toString());
             mProfileNameLable.setText(mCurrentUserFullName);
-            mPostMessageLabel.setText(message.getString(mTeam));
+            mPostMessageLabel.setText(message.getString(ParseConstants.KEY_POST_MESSAGE_COLUMN));
 
             //number oflikes
             mPostMessageLikesMap =  ((message.getMap("likes") != null) ? message.getMap("likes") : new HashMap<String, Object>());
@@ -226,9 +226,12 @@ public class PostMessageAdapter extends RecyclerView.Adapter<PostMessageAdapter.
             mPostMessageCommentLabel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    //ParseUser parseUser = (ParseUser) message.get(ParseConstants.KEY_SENDER_ID);
                     Intent intent = new Intent(mContext, PostMessageCommentsActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra(ParseConstants.KEY_POST_MESSAGE_OBJECT_ID, message.getObjectId());
                     intent.putExtra("TeamName", mTeam);
+
+                    intent.putExtra(ParseConstants.KEY_SENDER_ID, message.getString(ParseConstants.KEY_SENDER_ID));
                     mContext. startActivity(intent);
                 }
             });

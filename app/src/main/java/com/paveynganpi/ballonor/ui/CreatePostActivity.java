@@ -28,12 +28,15 @@ public class CreatePostActivity extends AppCompatActivity {
     @InjectView(R.id.createPostButton) Button mCreatePostButton;
     public static final String TAG = CreatePostActivity.class.getSimpleName();
     public static String teamName;
+    protected ParseUser mCurrentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_post);
         ButterKnife.inject(this);
+
+        mCurrentUser = ParseUser.getCurrentUser();
 
         teamName  = getIntent().getStringExtra("teamName");
     }
@@ -62,9 +65,11 @@ public class CreatePostActivity extends AppCompatActivity {
     }
 
     public ParseObject createPost(EditText postMessage){
+        String objectId = mCurrentUser.getObjectId();
         ParseObject teams = new ParseObject("Teams");
-        teams.put(teamName, postMessage.getText().toString().trim());
-        teams.put(ParseConstants.KEY_SENDER_ID, ParseUser.getCurrentUser());
+        teams.put(ParseConstants.KEY_TEAM_COLUMN, teamName);
+        teams.put(ParseConstants.KEY_POST_MESSAGE_COLUMN, postMessage.getText().toString().trim());
+        teams.put(ParseConstants.KEY_SENDER_ID, objectId);
         teams.put("screenName", ParseTwitterUtils.getTwitter().getScreenName());
         teams.put(ParseConstants.KEY_SENDER_PROFILE_IMAGE_URL, ParseUser.getCurrentUser().getString(ParseConstants.KEY_PROFILE_IMAGE_URL));
 

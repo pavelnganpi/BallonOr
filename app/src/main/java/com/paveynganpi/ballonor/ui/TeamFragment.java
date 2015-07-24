@@ -95,7 +95,7 @@ public class TeamFragment extends android.support.v4.app.Fragment {
     public void retrievePosts() {
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Teams");
-        query.whereExists(mTeam);
+        query.whereEqualTo(ParseConstants.KEY_TEAM_COLUMN, mTeam);
         query.addDescendingOrder(ParseConstants.KEY_CREATED_AT);
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override

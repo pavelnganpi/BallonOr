@@ -117,12 +117,22 @@ public class MainActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_logout) {
-            ParseUser.logOut();
-            //move to login screen
-            navigateToLogin();
+        switch (id){
+            case R.id.action_settings:
+                ParseUser.logOut();
+                //move to login screen
+                navigateToLogin();
+            case R.id.action_profile:
+                Intent intent = new Intent(MainActivity.this, UserProfileActivity.class);
+                startActivity(intent);
         }
+
+        //noinspection SimplifiableIfStatement
+//        if (id == R.id.action_logout) {
+//            ParseUser.logOut();
+//            //move to login screen
+//            navigateToLogin();
+//        }
 
         return super.onOptionsItemSelected(item);
     }

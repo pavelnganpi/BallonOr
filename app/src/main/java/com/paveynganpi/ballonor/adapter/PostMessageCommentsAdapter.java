@@ -71,7 +71,7 @@ public class PostMessageCommentsAdapter  extends RecyclerView.Adapter<PostMessag
         public void bindPostMessages(final ParseObject comment) {
             mCommenterScreenNameLabel.setText(comment.getString(ParseConstants.KEY_USERNAME));
             mCommenterProfileNameLabel.setText(comment.getString(ParseConstants.KEY_TWITTER_FULL_NAME));
-            mCommentsLabel.setText(comment.getString(mTeam));
+            mCommentsLabel.setText(comment.getString(ParseConstants.KEY_COMMENTS_COLUMN));
 
             String commenterProfileImageUrl = comment.getString(ParseConstants.KEY_PROFILE_IMAGE_URL);
             Picasso.with(mContext)

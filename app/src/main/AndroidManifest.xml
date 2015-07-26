@@ -53,6 +53,10 @@
             android:label="@string/title_activity_league_teams"
             android:screenOrientation="portrait" >
         </activity>
+        <activity
+            android:name=".ui.UserProfileActivity"
+            android:label="@string/title_activity_user_profile" >
+        </activity>
     </application>
 
 </manifest>

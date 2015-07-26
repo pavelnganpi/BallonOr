@@ -27,11 +27,15 @@ public final class ParseConstants {
     public static final String KEY_FOLLOW_RELATION = "FollowRelation";
     public static final String KEY_POST_MESSAGE_LIKES_COUNT = "likesCount";
     public static final String KEY_POST_MESSAGE_COMMENTS = "comments";
+    public static final String KEY_COMMENTS_COLUMN = "comments";
     public static final String KEY_PARSE_OBJECT_COMMENTS = "Comments";
     public static final String KEY_COMMENT = "comment";
     public static final String KEY_TWITTER_SCREEN_NAME = "twitterScreenName";
     public static final String KEY_CHELSEAFC_TABLE = "chelsea";
     public static final String KEY_POST_MESSAGE_OBJECT_ID = "postMessageObjectId";
+    public static final String KEY_POST_MESSAGE_COLUMN = "postMessage";
+    public static final String KEY_POST_MESSAGE_CREATOR_ID = "postMessageCreatorId";
+    public static final String KEY_TEAM_COLUMN = "team";
     public static final String KEY_TEAMS_PARSE_CLASS = "Teams";
     public static final String KEY_OBJECT_ID = "objectId";
     public static final String KEY_FAVOURITE_TEAMS = "favouriteTeams";

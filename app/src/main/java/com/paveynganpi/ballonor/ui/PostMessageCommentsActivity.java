@@ -147,6 +147,10 @@ public class PostMessageCommentsActivity extends AppCompatActivity {
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery(ParseConstants.KEY_PARSE_OBJECT_COMMENTS);
         query.whereEqualTo(ParseConstants.KEY_POST_MESSAGE_OBJECT_ID, postMessageObjectId);
+        if(postMessageCreatorId != null){
+            query.whereEqualTo(ParseConstants.KEY_POST_MESSAGE_CREATOR_ID, postMessageCreatorId);
+        }
+        Log.d("postMessageCreatorId", postMessageCreatorId +"");
         query.whereEqualTo(ParseConstants.KEY_TEAM_COLUMN, mTeam);
         query.addAscendingOrder(ParseConstants.KEY_CREATED_AT);
         query.findInBackground(new FindCallback<ParseObject>() {

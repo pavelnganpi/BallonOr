@@ -34,126 +34,123 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by paveynganpi on 6/26/15.
+ * Created by paveynganpi on 7/24/15.
  */
-public class PostMessageAdapter extends RecyclerView.Adapter<PostMessageAdapter.PostMessageViewHolder> {
-    private Context mContext;
-    private List<ParseObject> messages;
+public class AllPostsAdapter extends RecyclerView.Adapter<AllPostsAdapter.AllPostsViewHolder> {
+    protected Context mContext;
+    protected List<ParseObject> mAllPosts;
     private ParseUser mCurrentUser;
     private String mCurrentUserFullName;
     private Twitter mCurrentTwitterUser;
-    private String mTeam;
 
-    public PostMessageAdapter(Context context, List<ParseObject> messages, String team) {
-        this.mContext = context;
-        this.messages = messages;
-        mTeam = team;
+    public AllPostsAdapter(Context context, List<ParseObject> allPosts) {
+        mContext = context;
+        mAllPosts = allPosts;
     }
 
     @Override
-    public PostMessageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.posts_item, parent, false);
+    public AllPostsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(mContext).inflate(R.layout.all_posts_item, parent, false);
         mCurrentUser = ParseUser.getCurrentUser();
         mCurrentUserFullName = mCurrentUser.getString(ParseConstants.KEY_TWITTER_FULL_NAME);
         mCurrentTwitterUser = ParseTwitterUtils.getTwitter();
-        PostMessageViewHolder postMessageViewHolder = new PostMessageViewHolder(view);
-        return postMessageViewHolder;
+        return new AllPostsViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(PostMessageViewHolder postMessageViewHolder, int position) {
-        postMessageViewHolder.bindPostMessages(messages.get(position));
+    public void onBindViewHolder(AllPostsViewHolder allPostsViewHolder, int position) {
+        allPostsViewHolder.bindAllPosts(mAllPosts.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return messages.size();
+        return mAllPosts.size();
     }
 
-    public void refill(List<ParseObject> messages){
-        this.messages = messages;
+    public void refill(List<ParseObject> allPosts) {
+        this.mAllPosts = allPosts;
         notifyDataSetChanged();
     }
 
-    public class PostMessageViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public ImageView mProfileImageView;
-        public TextView mScreenNameLabel;
-        public TextView mProfileNameLable;
-        public TextView mPostMessageLabel;
-        public TextView mPostMessageLikeLabel;
-        protected TextView mPostMessageTimeLabel;
-        TextView mPostMessageCommentLabel;
-        TextView mPostMessageCommentsCounter;
-        TextView mPostMessagelikesCounter;
-        View parent;
+    public class AllPostsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         String mSenderProfileImageUrl;
         Map<String, Object> mPostMessageLikesMap;
         List<ParseObject> mPostMessageComments;
-        protected HashMap<String, String> finalMap;
+        View parent;
+        protected ImageView mAllPostsProfileImageView;
+        protected TextView mScreenNameLabel;
+        protected TextView mProfileNameLable;
+        protected TextView mAllPostsMessageLabel;
+        protected TextView mAllPostsMessageCommentLabel;
+        protected TextView mAllPostsMessageLikeLabel;
+        protected TextView mAllPostsMessageTimeLabel;
+        protected TextView mAllPostsCommentsCounter;
+        protected TextView mAllPostsMessagelikesCounter;
 
-
-        public PostMessageViewHolder(View itemView) {
+        public AllPostsViewHolder(View itemView) {
             super(itemView);
-            mProfileImageView = (ImageView) itemView.findViewById(R.id.allPostsProfileImageView);
+            parent = itemView.findViewById(R.id.root);
+            mAllPostsProfileImageView = (ImageView) itemView.findViewById(R.id.allPostsProfileImageView);
             mScreenNameLabel = (TextView) itemView.findViewById(R.id.screenNameLabel);
             mProfileNameLable = (TextView) itemView.findViewById(R.id.profileNameLable);
-            mPostMessageLabel = (TextView) itemView.findViewById(R.id.allPostsMessageLabel);
-            mPostMessageLikeLabel = (TextView) itemView.findViewById(R.id.allPostsMessageLikeLabel);
-            mPostMessagelikesCounter = (TextView) itemView.findViewById(R.id.allPostsMessagelikesCounter);
-            mPostMessageCommentLabel = (TextView) itemView.findViewById(R.id.allPostsMessageCommentLabel);
-            mPostMessageCommentsCounter = (TextView) itemView.findViewById(R.id.allPostsCommentsCounter);
-            mPostMessageTimeLabel = (TextView) itemView.findViewById(R.id.allPostsMessageTimeLabel);
-            parent = itemView.findViewById(R.id.root);
+            mAllPostsMessageLabel = (TextView) itemView.findViewById(R.id.allPostsMessageLabel);
+            mAllPostsMessageTimeLabel = (TextView) itemView.findViewById(R.id.allPostsMessageTimeLabel);
+            mAllPostsMessageCommentLabel = (TextView) itemView.findViewById(R.id.allPostsMessageCommentLabel);
+            mAllPostsCommentsCounter = (TextView) itemView.findViewById(R.id.allPostsCommentsCounter);
+            mAllPostsMessagelikesCounter = (TextView) itemView.findViewById(R.id.allPostsMessagelikesCounter);
+            mAllPostsMessageLikeLabel = (TextView) itemView.findViewById(R.id.allPostsMessageLikeLabel);
+
             itemView.setOnClickListener(this);
         }
 
-        public void bindPostMessages(final ParseObject message) {
-            mScreenNameLabel.setText(mCurrentTwitterUser.getScreenName().toString());
+        public void bindAllPosts(final ParseObject post){
+
+            mScreenNameLabel.setText(mCurrentTwitterUser.getScreenName());
             mProfileNameLable.setText(mCurrentUserFullName);
-            mPostMessageLabel.setText(message.getString(ParseConstants.KEY_POST_MESSAGE_COLUMN));
+            mAllPostsMessageLabel.setText(post.getString(ParseConstants.KEY_POST_MESSAGE_COLUMN));
 
             //number oflikes
-            mPostMessageLikesMap =  ((message.getMap("likes") != null) ? message.getMap("likes") : new HashMap<String, Object>());
-            mPostMessagelikesCounter.setText(mPostMessageLikesMap.size() + "");
+            mPostMessageLikesMap =  ((post.getMap("likes") != null) ? post.getMap("likes") : new HashMap<String, Object>());
+            mAllPostsMessagelikesCounter.setText(mPostMessageLikesMap.size() + "");
             if(mPostMessageLikesMap.containsKey(mCurrentUser.getObjectId())){
-                mPostMessageLikeLabel.setSelected(true);
+                mAllPostsMessageLikeLabel.setSelected(true);
             }
             else{
-                mPostMessageLikeLabel.setSelected(false);
+                mAllPostsMessageLikeLabel.setSelected(false);
             }
 
             //number of comments
             ParseQuery<ParseObject> query = ParseQuery.getQuery(ParseConstants.KEY_PARSE_OBJECT_COMMENTS);
-            query.whereEqualTo(ParseConstants.KEY_POST_MESSAGE_OBJECT_ID, message.getObjectId());
+            query.whereEqualTo(ParseConstants.KEY_POST_MESSAGE_CREATOR_ID, post.getObjectId());
             query.findInBackground(new FindCallback<ParseObject>() {
                 @Override
                 public void done(List<ParseObject> comments, ParseException e) {
-
+                    Log.d("AllPostsMessageComment", comments.size() +"");
                     if (e == null) {
                         mPostMessageComments = (comments != null) ? comments : new ArrayList<ParseObject>();
-                        mPostMessageCommentsCounter.setText(mPostMessageComments.size() + "");
+                        mAllPostsCommentsCounter.setText(mPostMessageComments.size() + "");
                     } else {
-                        Log.d("PostMessageComment", "error querying comments");
+                        Log.d("AllPostsMessageComment", "error querying comments");
                     }
 
                 }
             });
 
             //Todo: delete the default image url after login is perfect
-            mSenderProfileImageUrl = (message.getString(ParseConstants.KEY_SENDER_PROFILE_IMAGE_URL)) == null
+            mSenderProfileImageUrl = (post.getString(ParseConstants.KEY_SENDER_PROFILE_IMAGE_URL)) == null
                     ? "http://pbs.twimg.com/profile_images/2284174872/7df3h38zabcvjylnyfe3.png"
-                    : message.getString(ParseConstants.KEY_SENDER_PROFILE_IMAGE_URL);
+                    : post.getString(ParseConstants.KEY_SENDER_PROFILE_IMAGE_URL);
 
             Picasso.with(mContext)
                     .load(mSenderProfileImageUrl)
                     .resize(180, 180)
-                    .into(mProfileImageView);
+                    .into(mAllPostsProfileImageView);
 
-            Date createdAt = message.getCreatedAt();//get the date the message was created from parse backend
+            Date createdAt = post.getCreatedAt();//get the date the message was created from parse backend
             long now = new Date().getTime();//get current date
             String convertedDate = DateUtils.getRelativeTimeSpanString(
                     createdAt.getTime(), now, DateUtils.SECOND_IN_MILLIS).toString();
-            mPostMessageTimeLabel.setText(convertedDate); //sets the converted date into the message_item.xml view
+            mAllPostsMessageTimeLabel.setText(convertedDate); //sets the converted date into the message_item.xml view
 
             //code for setting touch delegate. Creates an area around LIKE label
             //for responding to click events arounf LIKE label
@@ -162,7 +159,7 @@ public class PostMessageAdapter extends RecyclerView.Adapter<PostMessageAdapter.
                     // Post in the parent's message queue to make sure the parent
                     // lays out its children before we call getHitRect()
                     Rect delegateArea = new Rect();
-                    TextView delegate = mPostMessageLikeLabel;
+                    TextView delegate = mAllPostsMessageLikeLabel;
                     delegate.getHitRect(delegateArea);
                     delegateArea.top -= 100;
                     delegateArea.bottom += 100;
@@ -181,35 +178,33 @@ public class PostMessageAdapter extends RecyclerView.Adapter<PostMessageAdapter.
 
                 ;
             });
-            mPostMessageLikeLabel.setOnClickListener(new View.OnClickListener() {
+            mAllPostsMessageLikeLabel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(!mPostMessageLikeLabel.isSelected()){
-                        Log.d("like buttob", mPostMessageLikeLabel.isSelected() + "");
+                    if (!mAllPostsMessageLikeLabel.isSelected()) {
+                        Log.d("like buttob", mAllPostsMessageLikeLabel.isSelected() + "");
                         mPostMessageLikesMap.put(mCurrentUser.getObjectId(), mCurrentUser);
                         int likes = mPostMessageLikesMap.size();
-                        mPostMessagelikesCounter.setText((likes) + "");
-                        message.put("likes", mPostMessageLikesMap);
-                        message.put(ParseConstants.KEY_POST_MESSAGE_LIKES_COUNT, mPostMessageLikesMap.size());
-                        mPostMessageLikeLabel.setSelected(true);
-                    }
-                    else if (mPostMessageLikeLabel.isSelected()){
-                        Log.d("like buttob", mPostMessageLikeLabel.isSelected() + "");
+                        mAllPostsMessagelikesCounter.setText((likes) + "");
+                        post.put("likes", mPostMessageLikesMap);
+                        post.put(ParseConstants.KEY_POST_MESSAGE_LIKES_COUNT, mPostMessageLikesMap.size());
+                        mAllPostsMessageLikeLabel.setSelected(true);
+                    } else if (mAllPostsMessageLikeLabel.isSelected()) {
+                        Log.d("like buttob", mAllPostsMessageLikeLabel.isSelected() + "");
                         mPostMessageLikesMap.remove(mCurrentUser.getObjectId());
                         int likes = mPostMessageLikesMap.size();
-                        mPostMessagelikesCounter.setText((likes) + "");
-                        message.put("likes", mPostMessageLikesMap);
-                        message.put(ParseConstants.KEY_POST_MESSAGE_LIKES_COUNT, mPostMessageLikesMap.size());
-                        mPostMessageLikeLabel.setSelected(false);
+                        mAllPostsMessagelikesCounter.setText((likes) + "");
+                        post.put("likes", mPostMessageLikesMap);
+                        post.put(ParseConstants.KEY_POST_MESSAGE_LIKES_COUNT, mPostMessageLikesMap.size());
+                        mAllPostsMessageLikeLabel.setSelected(false);
                     }
 
-                    message.saveInBackground(new SaveCallback() {
+                    post.saveInBackground(new SaveCallback() {
                         @Override
                         public void done(ParseException e) {
-                            if(e == null){
+                            if (e == null) {
                                 //success
-                            }
-                            else{
+                            } else {
                                 //error
                                 AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                                 builder.setMessage("Sorry, an error occured, Please try again")
@@ -223,23 +218,23 @@ public class PostMessageAdapter extends RecyclerView.Adapter<PostMessageAdapter.
                 }
             });
 
-            mPostMessageCommentLabel.setOnClickListener(new View.OnClickListener() {
+            mAllPostsMessageCommentLabel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     //ParseUser parseUser = (ParseUser) message.get(ParseConstants.KEY_SENDER_ID);
                     Intent intent = new Intent(mContext, PostMessageCommentsActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.putExtra(ParseConstants.KEY_POST_MESSAGE_OBJECT_ID, message.getObjectId());
-                    intent.putExtra("TeamName", mTeam);
+                    intent.putExtra(ParseConstants.KEY_POST_MESSAGE_OBJECT_ID, post.getObjectId());
+                    intent.putExtra("TeamName", post.getString(ParseConstants.KEY_TEAM_COLUMN));
 
-                    intent.putExtra(ParseConstants.KEY_SENDER_ID, message.getString(ParseConstants.KEY_SENDER_ID));
-                    mContext. startActivity(intent);
+                    intent.putExtra(ParseConstants.KEY_SENDER_ID, post.getString(ParseConstants.KEY_SENDER_ID));
+                    mContext.startActivity(intent);
                 }
             });
+
         }
 
         @Override
         public void onClick(View v) {
-            //Toast.makeText(mContext, ParseTwitterUtils.getTwitter().getScreenName().toString(), Toast.LENGTH_SHORT).show();
 
         }
     }

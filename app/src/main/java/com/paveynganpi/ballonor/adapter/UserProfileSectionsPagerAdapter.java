@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.paveynganpi.ballonor.ui.UserAllPostsFragment;
-import com.paveynganpi.ballonor.ui.UserFavouritesFragment;
+import com.paveynganpi.ballonor.ui.UserFavouritePostsFragment;
 
 import java.util.Locale;
 
@@ -27,7 +27,7 @@ public class UserProfileSectionsPagerAdapter extends FragmentStatePagerAdapter {
             case 0:
                 return new UserAllPostsFragment();
             case 1:
-                return new UserFavouritesFragment();
+                return new UserFavouritePostsFragment();
         }
 
         return null;

@@ -192,6 +192,9 @@ public class PostMessageAdapter extends RecyclerView.Adapter<PostMessageAdapter.
                         message.put("likes", mPostMessageLikesMap);
                         message.put(ParseConstants.KEY_POST_MESSAGE_LIKES_COUNT, mPostMessageLikesMap.size());
                         mPostMessageLikeLabel.setSelected(true);
+
+                        //add post objectId to likedPosts table
+                        mCurrentUser.add("likedPosts", message.getObjectId());
                     }
                     else if (mPostMessageLikeLabel.isSelected()){
                         Log.d("like buttob", mPostMessageLikeLabel.isSelected() + "");
@@ -201,6 +204,12 @@ public class PostMessageAdapter extends RecyclerView.Adapter<PostMessageAdapter.
                         message.put("likes", mPostMessageLikesMap);
                         message.put(ParseConstants.KEY_POST_MESSAGE_LIKES_COUNT, mPostMessageLikesMap.size());
                         mPostMessageLikeLabel.setSelected(false);
+
+                        //remove post objectId from likedPosts table
+                        ArrayList<String> likedPosts = (ArrayList<String>) mCurrentUser.get("likedPosts");
+                        likedPosts.remove(message.getObjectId());
+                        mCurrentUser.put("likedPosts", likedPosts);
+
                     }
 
                     message.saveInBackground(new SaveCallback() {
@@ -213,6 +222,23 @@ public class PostMessageAdapter extends RecyclerView.Adapter<PostMessageAdapter.
                                 //error
                                 AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                                 builder.setMessage("Sorry, an error occured, Please try again")
+                                        .setTitle("Opps, Error")
+                                        .setPositiveButton(android.R.string.ok, null);
+                                AlertDialog dialog = builder.create();
+                                dialog.show();
+                            }
+                        }
+                    });
+
+                    mCurrentUser.saveEventually(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if(e == null){
+                                //success
+                            }
+                            else{
+                                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                                builder.setMessage("Sorry, an error occured liking this post, Please try again")
                                         .setTitle("Opps, Error")
                                         .setPositiveButton(android.R.string.ok, null);
                                 AlertDialog dialog = builder.create();

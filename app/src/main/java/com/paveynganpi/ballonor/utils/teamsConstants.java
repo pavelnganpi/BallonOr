@@ -37,6 +37,7 @@ public class TeamsConstants {
         else if(teamName.equals(LeaguesConstants.getLeagueNames()[2])){
             return serieATeams;
         }
+
         else if(teamName.equals(LeaguesConstants.getLeagueNames()[3])){
             return ligue1Teams;
         }

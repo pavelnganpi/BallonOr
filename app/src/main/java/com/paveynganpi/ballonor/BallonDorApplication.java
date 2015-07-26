@@ -3,6 +3,7 @@ package com.paveynganpi.ballonor;
 import android.app.Application;
 
 import com.parse.Parse;
+import com.parse.ParseInstallation;
 import com.parse.ParseTwitterUtils;
 
 /**
@@ -16,6 +17,7 @@ public class BallonDorApplication extends Application {
         // Enable Local Datastore.
         Parse.enableLocalDatastore(this);
         Parse.initialize(this, "Skm8cEztx4rcXdhIGrHPjic7mVVS3xrhMr6Jhuvy", "4FBSGsODwvCMXq9XmGBcbdggfShPaUPAxVPxp5uM");
+        ParseInstallation.getCurrentInstallation().saveInBackground();
         //facebook initialization
         //ParseFacebookUtils.initialize(this);
 

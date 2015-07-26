@@ -1,6 +1,7 @@
 package com.paveynganpi.ballonor.ui;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,21 +26,22 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class UserAllPostsFragment extends android.support.v4.app.Fragment {
+public class UserFavouritePostsFragment extends Fragment {
+
     @InjectView(R.id.allPostsRecyclerView) RecyclerView mRecyclerView;
-    @InjectView(R.id.empty_view) TextView mEmptyView;
     @InjectView(R.id.allPostsSwipeRefreshLayout) SwipeRefreshLayout mSwipeRefreshLayout;
+    @InjectView(R.id.empty_view) TextView mEmptyView;
     protected   RecyclerView.LayoutManager layoutManager;
     protected ParseUser mCurrentUser;
     protected AllPostsAdapter mAllPostsAdapter;
-    List<ParseObject> posts = new ArrayList<>();
-    //protected RecyclerView mRecyclerView;
-
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_user_all_posts, container, false);
-        ButterKnife.inject(this, rootView);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_user_all_posts, container, false);
+        ButterKnife.inject(this, view);
+
         mCurrentUser = ParseUser.getCurrentUser();
 
         mSwipeRefreshLayout.setOnRefreshListener(mOnRefreshListener);
@@ -48,17 +50,7 @@ public class UserAllPostsFragment extends android.support.v4.app.Fragment {
                 R.color.colorPrimaryLight,
                 R.color.colorPrimary);
 
-        return rootView;
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+        return view;
     }
 
     @Override
@@ -73,8 +65,9 @@ public class UserAllPostsFragment extends android.support.v4.app.Fragment {
 
     public void retrievePosts() {
 
+        ArrayList<String> likedPosts = (ArrayList<String>) mCurrentUser.get("likedPosts");
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Teams");
-        query.whereEqualTo(ParseConstants.KEY_SENDER_ID, mCurrentUser.getObjectId());
+        query.whereContainedIn(ParseConstants.KEY_OBJECT_ID, likedPosts);
         query.addDescendingOrder(ParseConstants.KEY_CREATED_AT);
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override

@@ -64,7 +64,7 @@ public class PostMessageCommentsActivity extends AppCompatActivity {
         mCurrentUser = ParseUser.getCurrentUser();
         postMessageObjectId  = getIntent().getStringExtra(ParseConstants.KEY_POST_MESSAGE_OBJECT_ID);
         mTeam = getIntent().getStringExtra("TeamName");
-        postMessageCreatorId = getIntent().getStringExtra(ParseConstants.KEY_SENDER_ID);
+        //postMessageCreatorId = getIntent().getStringExtra(ParseConstants.KEY_SENDER_ID);
         layoutManager = new LinearLayoutManager(PostMessageCommentsActivity.this);
 
         fab = (FloatingActionButton)findViewById(R.id.PostMessageCommentsFloatingButton);
@@ -92,7 +92,7 @@ public class PostMessageCommentsActivity extends AppCompatActivity {
                             ParseObject comment = new ParseObject(ParseConstants.KEY_PARSE_OBJECT_COMMENTS);
                             comment.put(ParseConstants.KEY_COMMENTS_COLUMN, input.getText().toString().trim());
                             comment.put(ParseConstants.KEY_TEAM_COLUMN, mTeam);
-                            comment.put(ParseConstants.KEY_POST_MESSAGE_CREATOR_ID, postMessageCreatorId);
+                            comment.put(ParseConstants.KEY_POST_MESSAGE_CREATOR_ID, mCurrentUser.getObjectId());
                             comment.put(ParseConstants.KEY_TWITTER_FULL_NAME, mCurrentUser.getString(ParseConstants.KEY_TWITTER_FULL_NAME));
                             comment.put(ParseConstants.KEY_USERNAME, mCurrentUser.getUsername());
                             comment.put(ParseConstants.KEY_PROFILE_IMAGE_URL, mCurrentUser.getString(ParseConstants.KEY_PROFILE_IMAGE_URL));
@@ -147,10 +147,6 @@ public class PostMessageCommentsActivity extends AppCompatActivity {
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery(ParseConstants.KEY_PARSE_OBJECT_COMMENTS);
         query.whereEqualTo(ParseConstants.KEY_POST_MESSAGE_OBJECT_ID, postMessageObjectId);
-        if(postMessageCreatorId != null){
-            query.whereEqualTo(ParseConstants.KEY_POST_MESSAGE_CREATOR_ID, postMessageCreatorId);
-        }
-        Log.d("postMessageCreatorId", postMessageCreatorId +"");
         query.whereEqualTo(ParseConstants.KEY_TEAM_COLUMN, mTeam);
         query.addAscendingOrder(ParseConstants.KEY_CREATED_AT);
         query.findInBackground(new FindCallback<ParseObject>() {

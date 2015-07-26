@@ -121,7 +121,8 @@ public class AllPostsAdapter extends RecyclerView.Adapter<AllPostsAdapter.AllPos
 
             //number of comments
             ParseQuery<ParseObject> query = ParseQuery.getQuery(ParseConstants.KEY_PARSE_OBJECT_COMMENTS);
-            query.whereEqualTo(ParseConstants.KEY_POST_MESSAGE_CREATOR_ID, post.getObjectId());
+            query.whereEqualTo(ParseConstants.KEY_POST_MESSAGE_OBJECT_ID, post.getObjectId());
+            query.whereEqualTo(ParseConstants.KEY_TEAM_COLUMN, post.getString(ParseConstants.KEY_TEAM_COLUMN));
             query.findInBackground(new FindCallback<ParseObject>() {
                 @Override
                 public void done(List<ParseObject> comments, ParseException e) {
@@ -221,12 +222,11 @@ public class AllPostsAdapter extends RecyclerView.Adapter<AllPostsAdapter.AllPos
             mAllPostsMessageCommentLabel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //ParseUser parseUser = (ParseUser) message.get(ParseConstants.KEY_SENDER_ID);
                     Intent intent = new Intent(mContext, PostMessageCommentsActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra(ParseConstants.KEY_POST_MESSAGE_OBJECT_ID, post.getObjectId());
                     intent.putExtra("TeamName", post.getString(ParseConstants.KEY_TEAM_COLUMN));
 
-                    intent.putExtra(ParseConstants.KEY_SENDER_ID, post.getString(ParseConstants.KEY_SENDER_ID));
+                    //intent.putExtra(ParseConstants.KEY_SENDER_ID, post.getString(ParseConstants.KEY_SENDER_ID));
                     mContext.startActivity(intent);
                 }
             });

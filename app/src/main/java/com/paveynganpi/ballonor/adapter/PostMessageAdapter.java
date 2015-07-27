@@ -16,7 +16,9 @@ import android.widget.TextView;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseInstallation;
 import com.parse.ParseObject;
+import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.ParseTwitterUtils;
 import com.parse.ParseUser;
@@ -195,6 +197,7 @@ public class PostMessageAdapter extends RecyclerView.Adapter<PostMessageAdapter.
 
                         //add post objectId to likedPosts table
                         mCurrentUser.add("likedPosts", message.getObjectId());
+                        sendPushNotifications(message);
                     }
                     else if (mPostMessageLikeLabel.isSelected()){
                         Log.d("like buttob", mPostMessageLikeLabel.isSelected() + "");
@@ -268,5 +271,17 @@ public class PostMessageAdapter extends RecyclerView.Adapter<PostMessageAdapter.
             //Toast.makeText(mContext, ParseTwitterUtils.getTwitter().getScreenName().toString(), Toast.LENGTH_SHORT).show();
 
         }
+
+        protected void sendPushNotifications(ParseObject liker) {
+            ParseQuery<ParseInstallation> query = ParseInstallation.getQuery();
+            query.whereEqualTo(ParseConstants.KEY_USER_ID, liker.getString(ParseConstants.KEY_SENDER_ID));
+
+            //send push notification
+            ParsePush push = new ParsePush();
+            push.setQuery(query);
+            push.setMessage(liker.getString(ParseConstants.KEY_TWITTER_SCREEN_NAME) + " liked your post");
+            push.sendInBackground();
+        }
     }
+
 }

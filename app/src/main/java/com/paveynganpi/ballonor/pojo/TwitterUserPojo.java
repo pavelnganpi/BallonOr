@@ -2,11 +2,12 @@ package com.paveynganpi.ballonor.pojo;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.parse.ParsePushBroadcastReceiver;
 
 /**
  * Created by paveynganpi on 6/21/15.
  */
-public class TwitterUserPojo {
+public class TwitterUserPojo  extends ParsePushBroadcastReceiver {
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonProperty("name")
     public String name;

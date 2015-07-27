@@ -5,6 +5,8 @@ import android.app.Application;
 import com.parse.Parse;
 import com.parse.ParseInstallation;
 import com.parse.ParseTwitterUtils;
+import com.parse.ParseUser;
+import com.paveynganpi.ballonor.utils.ParseConstants;
 
 /**
  * Created by paveynganpi on 6/20/15.
@@ -23,5 +25,10 @@ public class BallonDorApplication extends Application {
 
         //twitter initialization
         ParseTwitterUtils.initialize("rwzNdxb3SZ6UZBpuWq2HkyUu6", "bhP9OAvAnkyc13FLSrdrs7ixfcIYIeMeD1v0TqO8a7hJtmjvcp");
+    }
+    public static void updateParseInstallation(ParseUser parseUser){
+        ParseInstallation parseInstallation = ParseInstallation.getCurrentInstallation();
+        parseInstallation.put(ParseConstants.KEY_USER_ID, parseUser.getObjectId());
+        parseInstallation.saveInBackground();
     }
 }

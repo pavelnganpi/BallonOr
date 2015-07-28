@@ -70,7 +70,7 @@ public class CreatePostActivity extends AppCompatActivity {
         teams.put(ParseConstants.KEY_TEAM_COLUMN, teamName);
         teams.put(ParseConstants.KEY_POST_MESSAGE_COLUMN, postMessage.getText().toString().trim());
         teams.put(ParseConstants.KEY_SENDER_ID, objectId);
-        teams.put("screenName", ParseTwitterUtils.getTwitter().getScreenName());
+        teams.put(ParseConstants.KEY_SCREEN_NAME_COLUMN, ParseTwitterUtils.getTwitter().getScreenName());
         teams.put(ParseConstants.KEY_SENDER_PROFILE_IMAGE_URL, ParseUser.getCurrentUser().getString(ParseConstants.KEY_PROFILE_IMAGE_URL));
 
         return teams;

@@ -259,6 +259,8 @@ public class PostMessageAdapter extends RecyclerView.Adapter<PostMessageAdapter.
                     Intent intent = new Intent(mContext, PostMessageCommentsActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra(ParseConstants.KEY_POST_MESSAGE_OBJECT_ID, message.getObjectId());
                     intent.putExtra("TeamName", mTeam);
+                    intent.putExtra(ParseConstants.KEY_SENDER_ID, message.getString(ParseConstants.KEY_SENDER_ID));
+                    intent.putExtra(ParseConstants.KEY_SCREEN_NAME_COLUMN, message.getString(ParseConstants.KEY_SCREEN_NAME_COLUMN));
 
                     intent.putExtra(ParseConstants.KEY_SENDER_ID, message.getString(ParseConstants.KEY_SENDER_ID));
                     mContext. startActivity(intent);
@@ -279,7 +281,7 @@ public class PostMessageAdapter extends RecyclerView.Adapter<PostMessageAdapter.
             //send push notification
             ParsePush push = new ParsePush();
             push.setQuery(query);
-            push.setMessage(liker.getString(ParseConstants.KEY_TWITTER_SCREEN_NAME) + " liked your post");
+            push.setMessage(liker.getString(ParseConstants.KEY_SCREEN_NAME_COLUMN) + " liked your post");
             push.sendInBackground();
         }
     }

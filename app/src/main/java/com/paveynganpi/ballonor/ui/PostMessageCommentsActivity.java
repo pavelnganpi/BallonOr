@@ -19,7 +19,9 @@ import android.widget.Toast;
 import com.melnykov.fab.FloatingActionButton;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseInstallation;
 import com.parse.ParseObject;
+import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -47,6 +49,7 @@ public class PostMessageCommentsActivity extends AppCompatActivity {
     private Toolbar mToolbar;
     protected String mTeam;
     protected String postMessageCreatorId;
+    protected String mScreenName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +67,8 @@ public class PostMessageCommentsActivity extends AppCompatActivity {
         mCurrentUser = ParseUser.getCurrentUser();
         postMessageObjectId  = getIntent().getStringExtra(ParseConstants.KEY_POST_MESSAGE_OBJECT_ID);
         mTeam = getIntent().getStringExtra("TeamName");
-        //postMessageCreatorId = getIntent().getStringExtra(ParseConstants.KEY_SENDER_ID);
+        postMessageCreatorId = getIntent().getStringExtra(ParseConstants.KEY_SENDER_ID);
+        mScreenName = getIntent().getStringExtra(ParseConstants.KEY_SCREEN_NAME_COLUMN);
         layoutManager = new LinearLayoutManager(PostMessageCommentsActivity.this);
 
         fab = (FloatingActionButton)findViewById(R.id.PostMessageCommentsFloatingButton);
@@ -103,6 +107,7 @@ public class PostMessageCommentsActivity extends AppCompatActivity {
                                 public void done(ParseException e) {
                                     if (e == null) {
                                         Toast.makeText(PostMessageCommentsActivity.this, "Comment Success", Toast.LENGTH_LONG).show();
+                                        sendPushNotifications(mScreenName, postMessageCreatorId);
                                     } else {
                                         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(PostMessageCommentsActivity.this);
                                         builder.setMessage("Sorry, an error occured, Please try again")
@@ -185,6 +190,17 @@ public class PostMessageCommentsActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    protected void sendPushNotifications(String screenName, String postMessageCreatorId) {
+        ParseQuery<ParseInstallation> query = ParseInstallation.getQuery();
+        query.whereEqualTo(ParseConstants.KEY_USER_ID, postMessageCreatorId);
+
+        //send push notification
+        ParsePush push = new ParsePush();
+        push.setQuery(query);
+        push.setMessage(screenName + " commented on your post");
+        push.sendInBackground();
     }
 
     protected SwipeRefreshLayout.OnRefreshListener mOnRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {

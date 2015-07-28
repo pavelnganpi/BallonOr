@@ -39,6 +39,7 @@ public final class ParseConstants {
     public static final String KEY_TEAMS_PARSE_CLASS = "Teams";
     public static final String KEY_OBJECT_ID = "objectId";
     public static final String KEY_FAVOURITE_TEAMS = "favouriteTeams";
+    public static final String KEY_SCREEN_NAME_COLUMN = "screenName";
 
     public static final String TYPE_IMAGE = "image";
     public static final String TYPE_VIDEO = "video";

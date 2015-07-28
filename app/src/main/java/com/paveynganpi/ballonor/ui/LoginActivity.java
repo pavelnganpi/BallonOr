@@ -19,6 +19,7 @@ import com.parse.ParseTwitterUtils;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.parse.twitter.Twitter;
+import com.paveynganpi.ballonor.BallonDorApplication;
 import com.paveynganpi.ballonor.R;
 import com.paveynganpi.ballonor.pojo.TwitterUserPojo;
 import com.paveynganpi.ballonor.utils.ParseConstants;
@@ -63,7 +64,7 @@ public class LoginActivity extends ActionBarActivity {
                             AlertDialog dialog = builder.create();//create a dialog
                             dialog.show();//show the dialog
                         } else if (user.isNew()) {
-                            mParseCurrentUser = ParseUser.getCurrentUser();
+                            BallonDorApplication.updateParseInstallation(mParseCurrentUser);
 
                             GetTwitterUserDataTask getTwitterUserDataTask = new GetTwitterUserDataTask();
                             getTwitterUserDataTask.execute();
@@ -88,8 +89,10 @@ public class LoginActivity extends ActionBarActivity {
                             });
 
                             //move to mainActicvity on successfull signup
+                            BallonDorApplication.updateParseInstallation(mParseCurrentUser);
                             startMainActivity();
                         } else {
+                            BallonDorApplication.updateParseInstallation(ParseUser.getCurrentUser());
                             startMainActivity();
                         }
                     }

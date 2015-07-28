@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         switch (id){
-            case R.id.action_settings:
+            case R.id.action_logout:
                 ParseUser.logOut();
                 //move to login screen
                 navigateToLogin();

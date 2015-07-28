@@ -12,4 +12,11 @@
           android:icon="@drawable/ic_user_profile"
           app:showAsAction="always"
           />
+
+    <item
+        android:id="@+id/action_notification"
+        android:title="notifications"
+        android:icon="@drawable/ic_notifications"
+        app:showAsAction="always"
+        />
 </menu>

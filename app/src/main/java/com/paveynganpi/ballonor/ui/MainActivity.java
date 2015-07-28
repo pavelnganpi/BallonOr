@@ -59,6 +59,8 @@ public class MainActivity extends AppCompatActivity {
         mToolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setIcon(R.drawable.ic_launcher);
+        getSupportActionBar().setTitle("");
 
 
         NavigationDrawerFragment navigationDrawerFragment =

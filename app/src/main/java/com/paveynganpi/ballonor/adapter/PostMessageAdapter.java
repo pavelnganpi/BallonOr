@@ -285,33 +285,13 @@ public class PostMessageAdapter extends RecyclerView.Adapter<PostMessageAdapter.
             push.setQuery(query);
             push.setMessage(liker.getString(ParseConstants.KEY_SCREEN_NAME_COLUMN) + " liked your post");
 
-            ParseQuery<ParseObject> commentsQuery = ParseQuery.getQuery(ParseConstants.KEY_COMMENTS_CLASS);
-            commentsQuery.whereEqualTo(ParseConstants.KEY_POST_MESSAGE_OBJECT_ID, liker.getObjectId());
-            commentsQuery.orderByDescending(ParseConstants.KEY_CREATED_AT);
-            commentsQuery.findInBackground(new FindCallback<ParseObject>() {
+            notifications.saveInBackground(new SaveCallback() {
                 @Override
-                public void done(List<ParseObject> list, ParseException e) {
+                public void done(ParseException e) {
                     if (e == null) {
                         //success
+                        push.sendInBackground();
 
-                        ArrayList<String> comments = new ArrayList<String>();
-                        for (ParseObject object : list) {
-                            comments.add(object.getString(ParseConstants.KEY_COMMENTS_COLUMN));
-                        }
-
-                        notifications.put(ParseConstants.KEY_COMMENTS_COLUMN, comments);
-                        notifications.saveInBackground(new SaveCallback() {
-                            @Override
-                            public void done(ParseException e) {
-                                if (e == null) {
-                                    //success
-                                    push.sendInBackground();
-
-                                } else {
-                                    //error
-                                }
-                            }
-                        });
                     } else {
                         //error
                     }
@@ -334,6 +314,7 @@ public class PostMessageAdapter extends RecyclerView.Adapter<PostMessageAdapter.
         notifications.put(ParseConstants.KEY_POST_MESSAGE_COLUMN, postMessage.getString(ParseConstants.KEY_POST_MESSAGE_COLUMN));
         notifications.put(ParseConstants.KEY_POST_MESSAGE_OBJECT_ID, postMessage.getObjectId());
         notifications.put("likesPostMessage", likes);
+        notifications.put(ParseConstants.KEY_POST_MESSAGE_CREATED_AT, postMessage.getCreatedAt());
 
 
         return notifications;

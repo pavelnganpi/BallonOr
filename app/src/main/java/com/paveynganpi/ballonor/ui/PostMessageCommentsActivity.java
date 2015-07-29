@@ -29,7 +29,9 @@ import com.paveynganpi.ballonor.R;
 import com.paveynganpi.ballonor.adapter.PostMessageCommentsAdapter;
 import com.paveynganpi.ballonor.utils.ParseConstants;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -107,7 +109,7 @@ public class PostMessageCommentsActivity extends AppCompatActivity {
                                 public void done(ParseException e) {
                                     if (e == null) {
                                         Toast.makeText(PostMessageCommentsActivity.this, "Comment Success", Toast.LENGTH_LONG).show();
-                                        sendPushNotifications(mScreenName, postMessageCreatorId);
+                                        sendPushNotifications(mScreenName, postMessageCreatorId, input.getText().toString().trim());
                                     } else {
                                         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(PostMessageCommentsActivity.this);
                                         builder.setMessage("Sorry, an error occured, Please try again")
@@ -192,15 +194,45 @@ public class PostMessageCommentsActivity extends AppCompatActivity {
 
     }
 
-    protected void sendPushNotifications(String screenName, String postMessageCreatorId) {
+    protected void sendPushNotifications(String screenName, String postMessageCreatorId, final String postMessage) {
+
+        final ParseObject notifications = saveToNotifications(postMessage);
         ParseQuery<ParseInstallation> query = ParseInstallation.getQuery();
         query.whereEqualTo(ParseConstants.KEY_USER_ID, postMessageCreatorId);
 
         //send push notification
-        ParsePush push = new ParsePush();
+        final ParsePush push = new ParsePush();
         push.setQuery(query);
         push.setMessage(screenName + " commented on your post");
-        push.sendInBackground();
+
+        ParseQuery<ParseObject> teamsQuery = ParseQuery.getQuery(ParseConstants.KEY_TEAMS_PARSE_CLASS);
+        teamsQuery.whereEqualTo(ParseConstants.KEY_OBJECT_ID, postMessageObjectId);
+        teamsQuery.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> list, ParseException e) {
+                if (e == null) {
+                    //success
+                    Map<String, Object> likes = ((list.get(0).getMap("likes") != null) ? list.get(0).getMap("likes") : new HashMap<String, Object>());
+                    notifications.put("likesPostMessage", likes);
+                    notifications.put(ParseConstants.KEY_POST_MESSAGE_COLUMN, list.get(0).getString(ParseConstants.KEY_POST_MESSAGE_COLUMN));
+                    notifications.put(ParseConstants.KEY_POST_MESSAGE_CREATED_AT, list.get(0).getCreatedAt());
+                    notifications.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if (e == null) {
+                                //success
+                                push.sendInBackground();
+                            }
+                            else{
+                                //error
+                            }
+                        }
+                    });
+                } else {
+                    //error
+                }
+            }
+        });
     }
 
     protected SwipeRefreshLayout.OnRefreshListener mOnRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
@@ -209,6 +241,21 @@ public class PostMessageCommentsActivity extends AppCompatActivity {
             retrieveComments();
         }
     };
+
+    public ParseObject saveToNotifications(String postMessage){
+
+        ParseObject notifications = new ParseObject(ParseConstants.KEY_NOTIFICATIONS_CLASS);
+        notifications.put(ParseConstants.KEY_SENDER_ID, mCurrentUser.getObjectId());
+        notifications.put(ParseConstants.KEY_SENDER_FULL_NAME, mCurrentUser.getString(ParseConstants.KEY_TWITTER_FULL_NAME));
+        notifications.put(ParseConstants.KEY_SENDER_SCREEN_NAME, mCurrentUser.getString(ParseConstants.KEY_TWITTER_FULL_NAME));
+        notifications.put(ParseConstants.KEY_SENDER_PROFILE_IMAGE_URL, mCurrentUser.getString(ParseConstants.KEY_PROFILE_IMAGE_URL));
+        notifications.put(ParseConstants.KEY_RECIPIENT_ID, postMessageCreatorId);
+        notifications.put(ParseConstants.KEY_NOTIFICATION_TYPE, "comment");
+        notifications.put(ParseConstants.KEY_POST_MESSAGE_OBJECT_ID, postMessageObjectId);
+
+
+        return notifications;
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

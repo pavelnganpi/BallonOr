@@ -38,6 +38,7 @@ public final class ParseConstants {
     public static final String KEY_POST_MESSAGE_COLUMN = "postMessage";
     public static final String KEY_POST_MESSAGE_CREATOR_ID = "postMessageCreatorId";
     public static final String KEY_TEAM_COLUMN = "team";
+    public static final String KEY_POST_MESSAGE_CREATED_AT = "postCreatedTime";
 
     public static final String KEY_TEAMS_PARSE_CLASS = "Teams";
     public static final String KEY_NOTIFICATIONS_CLASS = "Notifications";

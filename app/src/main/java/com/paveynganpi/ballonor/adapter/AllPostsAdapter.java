@@ -120,7 +120,7 @@ public class AllPostsAdapter extends RecyclerView.Adapter<AllPostsAdapter.AllPos
             }
 
             //number of comments
-            ParseQuery<ParseObject> query = ParseQuery.getQuery(ParseConstants.KEY_PARSE_OBJECT_COMMENTS);
+            ParseQuery<ParseObject> query = ParseQuery.getQuery(ParseConstants.KEY_COMMENTS_CLASS);
             query.whereEqualTo(ParseConstants.KEY_POST_MESSAGE_OBJECT_ID, post.getObjectId());
             query.whereEqualTo(ParseConstants.KEY_TEAM_COLUMN, post.getString(ParseConstants.KEY_TEAM_COLUMN));
             query.findInBackground(new FindCallback<ParseObject>() {

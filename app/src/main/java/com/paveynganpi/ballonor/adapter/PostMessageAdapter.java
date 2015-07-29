@@ -125,7 +125,7 @@ public class PostMessageAdapter extends RecyclerView.Adapter<PostMessageAdapter.
             }
 
             //number of comments
-            ParseQuery<ParseObject> query = ParseQuery.getQuery(ParseConstants.KEY_PARSE_OBJECT_COMMENTS);
+            ParseQuery<ParseObject> query = ParseQuery.getQuery(ParseConstants.KEY_COMMENTS_CLASS);
             query.whereEqualTo(ParseConstants.KEY_POST_MESSAGE_OBJECT_ID, message.getObjectId());
             query.findInBackground(new FindCallback<ParseObject>() {
                 @Override
@@ -275,15 +275,68 @@ public class PostMessageAdapter extends RecyclerView.Adapter<PostMessageAdapter.
         }
 
         protected void sendPushNotifications(ParseObject liker) {
+            final ParseObject notifications = saveToNotifications(liker);
+
             ParseQuery<ParseInstallation> query = ParseInstallation.getQuery();
             query.whereEqualTo(ParseConstants.KEY_USER_ID, liker.getString(ParseConstants.KEY_SENDER_ID));
 
             //send push notification
-            ParsePush push = new ParsePush();
+            final ParsePush push = new ParsePush();
             push.setQuery(query);
             push.setMessage(liker.getString(ParseConstants.KEY_SCREEN_NAME_COLUMN) + " liked your post");
-            push.sendInBackground();
+
+            ParseQuery<ParseObject> commentsQuery = ParseQuery.getQuery(ParseConstants.KEY_COMMENTS_CLASS);
+            commentsQuery.whereEqualTo(ParseConstants.KEY_POST_MESSAGE_OBJECT_ID, liker.getObjectId());
+            commentsQuery.orderByDescending(ParseConstants.KEY_CREATED_AT);
+            commentsQuery.findInBackground(new FindCallback<ParseObject>() {
+                @Override
+                public void done(List<ParseObject> list, ParseException e) {
+                    if (e == null) {
+                        //success
+
+                        ArrayList<String> comments = new ArrayList<String>();
+                        for (ParseObject object : list) {
+                            comments.add(object.getString(ParseConstants.KEY_COMMENTS_COLUMN));
+                        }
+
+                        notifications.put(ParseConstants.KEY_COMMENTS_COLUMN, comments);
+                        notifications.saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                if (e == null) {
+                                    //success
+                                    push.sendInBackground();
+
+                                } else {
+                                    //error
+                                }
+                            }
+                        });
+                    } else {
+                        //error
+                    }
+                }
+            });
+
         }
+    }
+
+    public ParseObject saveToNotifications(ParseObject postMessage){
+
+        Map<String, Object> likes = ((postMessage.getMap("likes") != null) ? postMessage.getMap("likes") : new HashMap<String, Object>());
+        ParseObject notifications = new ParseObject(ParseConstants.KEY_NOTIFICATIONS_CLASS);
+        notifications.put(ParseConstants.KEY_SENDER_ID, mCurrentUser.getObjectId());
+        notifications.put(ParseConstants.KEY_SENDER_FULL_NAME, postMessage.getString(ParseConstants.KEY_SCREEN_NAME_COLUMN));
+        notifications.put(ParseConstants.KEY_SENDER_SCREEN_NAME, postMessage.getString(ParseConstants.KEY_SCREEN_NAME_COLUMN));
+        notifications.put(ParseConstants.KEY_SENDER_PROFILE_IMAGE_URL, postMessage.getString(ParseConstants.KEY_SENDER_PROFILE_IMAGE_URL));
+        notifications.put(ParseConstants.KEY_RECIPIENT_ID, postMessage.getString(ParseConstants.KEY_SENDER_ID));
+        notifications.put(ParseConstants.KEY_NOTIFICATION_TYPE, "like");
+        notifications.put(ParseConstants.KEY_POST_MESSAGE_COLUMN, postMessage.getString(ParseConstants.KEY_POST_MESSAGE_COLUMN));
+        notifications.put(ParseConstants.KEY_POST_MESSAGE_OBJECT_ID, postMessage.getObjectId());
+        notifications.put("likesPostMessage", likes);
+
+
+        return notifications;
     }
 
 }

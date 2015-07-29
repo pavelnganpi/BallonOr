@@ -21,4 +21,5 @@
     <string name="title_activity_leagues">Select League</string>
     <string name="title_activity_league_teams">Select Teams</string>
     <string name="title_activity_user_profile">UserProfileActivity</string>
+    <string name="title_activity_notifications">NotificationsActivity</string>
 </resources>

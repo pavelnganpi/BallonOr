@@ -93,7 +93,7 @@ public class PostMessageCommentsActivity extends AppCompatActivity {
                             Toast.makeText(PostMessageCommentsActivity.this, "You have to comment something", Toast.LENGTH_LONG).show();
                         } else {
                             //create comment and save to parse
-                            ParseObject comment = new ParseObject(ParseConstants.KEY_PARSE_OBJECT_COMMENTS);
+                            ParseObject comment = new ParseObject(ParseConstants.KEY_COMMENTS_CLASS);
                             comment.put(ParseConstants.KEY_COMMENTS_COLUMN, input.getText().toString().trim());
                             comment.put(ParseConstants.KEY_TEAM_COLUMN, mTeam);
                             comment.put(ParseConstants.KEY_POST_MESSAGE_CREATOR_ID, mCurrentUser.getObjectId());
@@ -150,7 +150,7 @@ public class PostMessageCommentsActivity extends AppCompatActivity {
 
     public void retrieveComments(){
 
-        ParseQuery<ParseObject> query = ParseQuery.getQuery(ParseConstants.KEY_PARSE_OBJECT_COMMENTS);
+        ParseQuery<ParseObject> query = ParseQuery.getQuery(ParseConstants.KEY_COMMENTS_CLASS);
         query.whereEqualTo(ParseConstants.KEY_POST_MESSAGE_OBJECT_ID, postMessageObjectId);
         query.whereEqualTo(ParseConstants.KEY_TEAM_COLUMN, mTeam);
         query.addAscendingOrder(ParseConstants.KEY_CREATED_AT);

@@ -19,7 +19,6 @@ import com.paveynganpi.ballonor.adapter.AllPostsAdapter;
 import com.paveynganpi.ballonor.utils.DividerItemDecoration;
 import com.paveynganpi.ballonor.utils.ParseConstants;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -32,15 +31,14 @@ public class UserAllPostsFragment extends android.support.v4.app.Fragment {
     protected   RecyclerView.LayoutManager layoutManager;
     protected ParseUser mCurrentUser;
     protected AllPostsAdapter mAllPostsAdapter;
-    List<ParseObject> posts = new ArrayList<>();
-    //protected RecyclerView mRecyclerView;
-
+    protected String mUserId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_user_all_posts, container, false);
         ButterKnife.inject(this, rootView);
         mCurrentUser = ParseUser.getCurrentUser();
+        mUserId = getActivity().getIntent().getStringExtra(ParseConstants.KEY_USER_ID);
 
         mSwipeRefreshLayout.setOnRefreshListener(mOnRefreshListener);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary,
@@ -74,7 +72,7 @@ public class UserAllPostsFragment extends android.support.v4.app.Fragment {
     public void retrievePosts() {
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Teams");
-        query.whereEqualTo(ParseConstants.KEY_SENDER_ID, mCurrentUser.getObjectId());
+        query.whereEqualTo(ParseConstants.KEY_SENDER_ID, mUserId);
         query.addDescendingOrder(ParseConstants.KEY_CREATED_AT);
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override

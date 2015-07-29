@@ -15,6 +15,7 @@ import com.parse.ParseAnalytics;
 import com.parse.ParseUser;
 import com.paveynganpi.ballonor.R;
 import com.paveynganpi.ballonor.adapter.SectionsPagerAdapter;
+import com.paveynganpi.ballonor.utils.ParseConstants;
 import com.paveynganpi.ballonor.utils.SlidingTabLayout;
 
 import java.util.ArrayList;
@@ -126,6 +127,7 @@ public class MainActivity extends AppCompatActivity {
                 navigateToLogin();
             case R.id.action_profile:
                 Intent intent = new Intent(MainActivity.this, UserProfileActivity.class);
+                intent.putExtra(ParseConstants.KEY_USER_ID, mCurrentUser.getObjectId());
                 startActivity(intent);
         }
 

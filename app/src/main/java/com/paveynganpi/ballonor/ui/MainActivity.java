@@ -126,8 +126,13 @@ public class MainActivity extends AppCompatActivity {
                 //move to login screen
                 navigateToLogin();
             case R.id.action_profile:
+                Bundle bundle = new Bundle();
+                ArrayList<String> likedPosts = (ArrayList<String>) mCurrentUser.get("likedPosts");
+                bundle.putStringArrayList("userLikedPostsLists",likedPosts);
                 Intent intent = new Intent(MainActivity.this, UserProfileActivity.class);
                 intent.putExtra(ParseConstants.KEY_USER_ID, mCurrentUser.getObjectId());
+                intent.putExtras(bundle);
+
                 startActivity(intent);
         }
 

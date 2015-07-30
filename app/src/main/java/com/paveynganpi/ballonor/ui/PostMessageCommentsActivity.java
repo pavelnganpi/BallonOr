@@ -252,6 +252,7 @@ public class PostMessageCommentsActivity extends AppCompatActivity {
         notifications.put(ParseConstants.KEY_RECIPIENT_ID, postMessageCreatorId);
         notifications.put(ParseConstants.KEY_NOTIFICATION_TYPE, "comment");
         notifications.put(ParseConstants.KEY_POST_MESSAGE_OBJECT_ID, postMessageObjectId);
+        notifications.put("opened", false);
 
 
         return notifications;

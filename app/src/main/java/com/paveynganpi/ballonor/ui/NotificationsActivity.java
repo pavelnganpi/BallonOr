@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.parse.FindCallback;
@@ -87,6 +88,7 @@ public class NotificationsActivity extends AppCompatActivity {
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery(ParseConstants.KEY_NOTIFICATIONS_CLASS);
         query.whereEqualTo(ParseConstants.KEY_RECIPIENT_ID, mCurrentUser.getObjectId());
+        query.orderByDescending(ParseConstants.KEY_CREATED_AT);
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> list, ParseException e) {
@@ -96,8 +98,7 @@ public class NotificationsActivity extends AppCompatActivity {
                         mSwipeRefreshLayout.setRefreshing(false);
                     }
 
-                    mNotificationsAdapter = new NotificationsAdapter(NotificationsActivity.this, list);
-                    mRecyclerView.setAdapter(mNotificationsAdapter);
+                    setNotificationsAdapter(list);
                 }
                 else{
                     //error
@@ -106,6 +107,29 @@ public class NotificationsActivity extends AppCompatActivity {
         });
 
     }
+
+    public void setNotificationsAdapter(List<ParseObject> list){
+        if (mRecyclerView.getAdapter() == null) {
+            mNotificationsAdapter =
+                    new NotificationsAdapter(this,list);
+            if (mNotificationsAdapter.getItemCount() == 0) {
+                mEmptyView.setVisibility(View.VISIBLE);
+            } else {
+                mEmptyView.setVisibility(View.GONE);
+            }
+            mRecyclerView.setAdapter(mNotificationsAdapter);
+        } else {
+            //if it exists, no need to recreate it,
+            //just set the data on the recyclerView
+            if (mRecyclerView.getAdapter().getItemCount() == 0) {
+                mEmptyView.setVisibility(View.VISIBLE);
+            } else {
+                mEmptyView.setVisibility(View.GONE);
+            }
+            ((NotificationsAdapter) mRecyclerView.getAdapter()).refill(list);
+        }
+    }
+
 
     protected SwipeRefreshLayout.OnRefreshListener mOnRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
         @Override

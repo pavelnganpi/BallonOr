@@ -315,6 +315,7 @@ public class PostMessageAdapter extends RecyclerView.Adapter<PostMessageAdapter.
         notifications.put(ParseConstants.KEY_POST_MESSAGE_OBJECT_ID, postMessage.getObjectId());
         notifications.put("likesPostMessage", likes);
         notifications.put(ParseConstants.KEY_POST_MESSAGE_CREATED_AT, postMessage.getCreatedAt());
+        notifications.put("opened", false);
 
 
         return notifications;

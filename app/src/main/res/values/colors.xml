@@ -14,4 +14,6 @@
     <color name="secondary_text">#727272</color>
     <color name="icons">#FFFFFF</color>
     <color name="divider">#B6B6B6</color>
+    <color name="androidWhite">@android:color/white</color>
+    <color name="colorNotificationsNotOpened">#ffebee</color>
 </resources>

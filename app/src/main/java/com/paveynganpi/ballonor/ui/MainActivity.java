@@ -15,6 +15,7 @@ import com.parse.ParseAnalytics;
 import com.parse.ParseUser;
 import com.paveynganpi.ballonor.R;
 import com.paveynganpi.ballonor.adapter.SectionsPagerAdapter;
+import com.paveynganpi.ballonor.utils.ParseConstants;
 import com.paveynganpi.ballonor.utils.SlidingTabLayout;
 
 import java.util.ArrayList;
@@ -59,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
         mToolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setIcon(R.drawable.ic_launcher);
+        getSupportActionBar().setTitle("");
 
 
         NavigationDrawerFragment navigationDrawerFragment =
@@ -122,9 +125,20 @@ public class MainActivity extends AppCompatActivity {
                 ParseUser.logOut();
                 //move to login screen
                 navigateToLogin();
+                break;
             case R.id.action_profile:
+                Bundle bundle = new Bundle();
+                ArrayList<String> likedPosts = (ArrayList<String>) mCurrentUser.get("likedPosts");
+                bundle.putStringArrayList("userLikedPostsLists", likedPosts);
                 Intent intent = new Intent(MainActivity.this, UserProfileActivity.class);
+                intent.putExtra(ParseConstants.KEY_USER_ID, mCurrentUser.getObjectId());
+                intent.putExtras(bundle);
                 startActivity(intent);
+                break;
+            case R.id.action_notification:
+                Intent notificationsItent = new Intent(this, NotificationsActivity.class);
+                startActivity(notificationsItent);
+                break;
         }
 
         //noinspection SimplifiableIfStatement

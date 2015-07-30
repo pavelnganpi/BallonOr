@@ -34,6 +34,7 @@ public class UserFavouritePostsFragment extends Fragment {
     protected   RecyclerView.LayoutManager layoutManager;
     protected ParseUser mCurrentUser;
     protected AllPostsAdapter mAllPostsAdapter;
+    protected ArrayList<String> userLikedPosts;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,6 +44,8 @@ public class UserFavouritePostsFragment extends Fragment {
         ButterKnife.inject(this, view);
 
         mCurrentUser = ParseUser.getCurrentUser();
+        Bundle bundle = getActivity().getIntent().getExtras();
+        userLikedPosts = bundle.getStringArrayList("userLikedPostsLists");
 
         mSwipeRefreshLayout.setOnRefreshListener(mOnRefreshListener);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary,
@@ -67,7 +70,7 @@ public class UserFavouritePostsFragment extends Fragment {
 
         ArrayList<String> likedPosts = (ArrayList<String>) mCurrentUser.get("likedPosts");
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Teams");
-        query.whereContainedIn(ParseConstants.KEY_OBJECT_ID, likedPosts);
+        query.whereContainedIn(ParseConstants.KEY_OBJECT_ID, userLikedPosts);
         query.addDescendingOrder(ParseConstants.KEY_CREATED_AT);
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override

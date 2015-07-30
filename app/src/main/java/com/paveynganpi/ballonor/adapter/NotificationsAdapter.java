@@ -70,7 +70,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
             String screenName = notification.getString(ParseConstants.KEY_SENDER_SCREEN_NAME);
             String notificationType = map.get(notification.getString(ParseConstants.KEY_NOTIFICATION_TYPE));
             String notificationDescription = "<b>" +  screenName + "</b>" +" " + notificationType + " your post " +
-                    notification.getString(ParseConstants.KEY_POST_MESSAGE_COLUMN);
+                    "\"" + notification.getString(ParseConstants.KEY_POST_MESSAGE_COLUMN) + ".\"";
             mNotificationsDescriptionLable.setText(Html.fromHtml(String.valueOf(notificationDescription)));
 
             Picasso.with(mContext)

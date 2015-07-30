@@ -2,6 +2,7 @@ package com.paveynganpi.ballonor.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,20 +55,23 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
         protected ImageView mNotificationsImageView;
         protected TextView mNotificationsDescriptionLable;
         private TextView mNotificationsTimeLabel;
+        protected ImageView mNotificationsIconImageView;
 
         public NotificationsViewHolder(View itemView) {
             super(itemView);
             mNotificationsImageView = (ImageView) itemView.findViewById(R.id.notificationsProfileImageView);
             mNotificationsDescriptionLable = (TextView) itemView.findViewById(R.id.notificationsDescriptionLable);
             mNotificationsTimeLabel = (TextView) itemView.findViewById(R.id.notificationsTimeLabel);
+            mNotificationsIconImageView = (ImageView) itemView.findViewById(R.id.notificationIconImageView);
 
         }
 
         public void bindNotifications(ParseObject notification){
             String screenName = notification.getString(ParseConstants.KEY_SENDER_SCREEN_NAME);
             String notificationType = map.get(notification.getString(ParseConstants.KEY_NOTIFICATION_TYPE));
-            String notificationDescription = screenName + " " + notificationType + " your post " + notification.getString(ParseConstants.KEY_POST_MESSAGE_COLUMN);
-            mNotificationsDescriptionLable.setText(notificationDescription);
+            String notificationDescription = "<b>" +  screenName + "</b>" +" " + notificationType + " your post " +
+                    notification.getString(ParseConstants.KEY_POST_MESSAGE_COLUMN);
+            mNotificationsDescriptionLable.setText(Html.fromHtml(String.valueOf(notificationDescription)));
 
             Picasso.with(mContext)
                     .load(notification.getString(ParseConstants.KEY_SENDER_PROFILE_IMAGE_URL))
@@ -79,6 +83,13 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
             String convertedDate = DateUtils.getRelativeTimeSpanString(
                     createdAt.getTime(), now, DateUtils.SECOND_IN_MILLIS).toString();
             mNotificationsTimeLabel.setText(convertedDate); //sets the converted date into the message_item.xml view
+
+            if(notificationType.equals(map.get("comment"))){
+                mNotificationsIconImageView.setImageResource(R.drawable.ic_comment);
+            }
+            else if(notificationType.equals(map.get("like"))){
+                mNotificationsIconImageView.setImageResource(R.drawable.ic_thumb_up_18dp);
+            }
         }
 
         @Override

@@ -1,6 +1,7 @@
 package com.paveynganpi.ballonor.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.format.DateUtils;
@@ -15,6 +16,7 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.SaveCallback;
 import com.paveynganpi.ballonor.R;
+import com.paveynganpi.ballonor.ui.PostDetailsActivity;
 import com.paveynganpi.ballonor.utils.ParseConstants;
 import com.squareup.picasso.Picasso;
 
@@ -117,6 +119,20 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
         @Override
         public void onClick(final View v) {
             ParseObject notification = mNotifications.get(mPosition);
+            Date createdAt = notification.getDate(ParseConstants.KEY_POST_MESSAGE_CREATED_AT);
+            long now = new Date().getTime();//get current date
+            String convertedDate = DateUtils.getRelativeTimeSpanString(
+                    createdAt.getTime(), now, DateUtils.SECOND_IN_MILLIS).toString();
+
+            Intent intent = new Intent(mContext, PostDetailsActivity.class);
+            intent.putExtra(ParseConstants.KEY_POST_MESSAGE_OBJECT_ID, notification.getString(ParseConstants.KEY_POST_MESSAGE_OBJECT_ID));
+            intent.putExtra(ParseConstants.KEY_SENDER_PROFILE_IMAGE_URL, notification.getString(ParseConstants.KEY_SENDER_PROFILE_IMAGE_URL));
+            intent.putExtra(ParseConstants.KEY_SCREEN_NAME_COLUMN, notification.getString(ParseConstants.KEY_SENDER_SCREEN_NAME));
+            intent.putExtra(ParseConstants.KEY_POST_MESSAGE_COLUMN, notification.getString(ParseConstants.KEY_POST_MESSAGE_COLUMN));
+            intent.putExtra(ParseConstants.KEY_POST_MESSAGE_CREATED_AT, convertedDate);
+
+            mContext.startActivity(intent);
+
             Log.d("checkingopen", mPosition +"");
             notification.put("opened", true);
             notification.saveInBackground(new SaveCallback() {

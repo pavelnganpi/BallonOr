@@ -56,6 +56,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
         protected TextView mNotificationsDescriptionLable;
         private TextView mNotificationsTimeLabel;
         protected ImageView mNotificationsIconImageView;
+        protected String formattedNotificationMessage;
 
         public NotificationsViewHolder(View itemView) {
             super(itemView);
@@ -69,8 +70,11 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
         public void bindNotifications(ParseObject notification){
             String screenName = notification.getString(ParseConstants.KEY_SENDER_SCREEN_NAME);
             String notificationType = map.get(notification.getString(ParseConstants.KEY_NOTIFICATION_TYPE));
+            String notificationMessage = notification.getString(ParseConstants.KEY_POST_MESSAGE_COLUMN);
+            formattedNotificationMessage = (notificationMessage.length() < 40) ? notificationMessage : notificationMessage.substring(0, 40) + "...";
+
             String notificationDescription = "<b>" +  screenName + "</b>" +" " + notificationType + " your post " +
-                    "\"" + notification.getString(ParseConstants.KEY_POST_MESSAGE_COLUMN) + ".\"";
+                    "\"" + formattedNotificationMessage + ".\"";
             mNotificationsDescriptionLable.setText(Html.fromHtml(String.valueOf(notificationDescription)));
 
             Picasso.with(mContext)

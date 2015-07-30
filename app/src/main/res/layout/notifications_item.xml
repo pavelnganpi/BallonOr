@@ -41,7 +41,6 @@
         android:layout_toRightOf="@+id/notificationIconImageView"
         android:layout_toEndOf="@+id/notificationIconImageView"
         android:paddingLeft="4dp"
-        android:paddingStart="4dp"
         android:paddingTop="5dp"
         android:textColor="#9E9E9E"/>
 

@@ -52,14 +52,10 @@ public class NotificationsActivity extends AppCompatActivity {
                 R.color.colorPrimaryLight,
                 R.color.colorPrimary);
 
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
         mLayoutManager = new LinearLayoutManager(NotificationsActivity.this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         retrieveNotifications();
+
     }
 
     @Override

@@ -16,15 +16,14 @@ import android.widget.TextView;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseInstallation;
 import com.parse.ParseObject;
-import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.ParseTwitterUtils;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.parse.twitter.Twitter;
 import com.paveynganpi.ballonor.R;
+import com.paveynganpi.ballonor.pojo.Notifications;
 import com.paveynganpi.ballonor.ui.PostDetailsActivity;
 import com.paveynganpi.ballonor.ui.PostMessageCommentsActivity;
 import com.paveynganpi.ballonor.utils.ParseConstants;
@@ -200,7 +199,7 @@ public class PostMessageAdapter extends RecyclerView.Adapter<PostMessageAdapter.
 
                         //add post objectId to likedPosts table
                         mCurrentUser.add("likedPosts", message.getObjectId());
-                        sendPushNotifications(message);
+                        Notifications.sendPushNotifications(message);
                     }
                     else if (mPostMessageLikeLabel.isSelected()){
                         Log.d("like buttob", mPostMessageLikeLabel.isSelected() + "");
@@ -286,52 +285,6 @@ public class PostMessageAdapter extends RecyclerView.Adapter<PostMessageAdapter.
             mContext.startActivity(intent);
 
         }
-
-        protected void sendPushNotifications(ParseObject liker) {
-            final ParseObject notifications = saveToNotifications(liker);
-
-            ParseQuery<ParseInstallation> query = ParseInstallation.getQuery();
-            query.whereEqualTo(ParseConstants.KEY_USER_ID, liker.getString(ParseConstants.KEY_SENDER_ID));
-
-            //send push notification
-            final ParsePush push = new ParsePush();
-            push.setQuery(query);
-            push.setMessage(liker.getString(ParseConstants.KEY_SCREEN_NAME_COLUMN) + " liked your post");
-
-            notifications.saveInBackground(new SaveCallback() {
-                @Override
-                public void done(ParseException e) {
-                    if (e == null) {
-                        //success
-                        push.sendInBackground();
-
-                    } else {
-                        //error
-                    }
-                }
-            });
-
-        }
-    }
-
-    public ParseObject saveToNotifications(ParseObject postMessage){
-
-        Map<String, Object> likes = ((postMessage.getMap("likes") != null) ? postMessage.getMap("likes") : new HashMap<String, Object>());
-        ParseObject notifications = new ParseObject(ParseConstants.KEY_NOTIFICATIONS_CLASS);
-        notifications.put(ParseConstants.KEY_SENDER_ID, mCurrentUser.getObjectId());
-        notifications.put(ParseConstants.KEY_SENDER_FULL_NAME, postMessage.getString(ParseConstants.KEY_SCREEN_NAME_COLUMN));
-        notifications.put(ParseConstants.KEY_SENDER_SCREEN_NAME, postMessage.getString(ParseConstants.KEY_SCREEN_NAME_COLUMN));
-        notifications.put(ParseConstants.KEY_SENDER_PROFILE_IMAGE_URL, postMessage.getString(ParseConstants.KEY_SENDER_PROFILE_IMAGE_URL));
-        notifications.put(ParseConstants.KEY_RECIPIENT_ID, postMessage.getString(ParseConstants.KEY_SENDER_ID));
-        notifications.put(ParseConstants.KEY_NOTIFICATION_TYPE, "like");
-        notifications.put(ParseConstants.KEY_POST_MESSAGE_COLUMN, postMessage.getString(ParseConstants.KEY_POST_MESSAGE_COLUMN));
-        notifications.put(ParseConstants.KEY_POST_MESSAGE_OBJECT_ID, postMessage.getObjectId());
-        notifications.put("likesPostMessage", likes);
-        notifications.put(ParseConstants.KEY_POST_MESSAGE_CREATED_AT, postMessage.getCreatedAt());
-        notifications.put("opened", false);
-
-
-        return notifications;
     }
 
 }

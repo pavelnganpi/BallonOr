@@ -23,6 +23,7 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.parse.twitter.Twitter;
 import com.paveynganpi.ballonor.R;
+import com.paveynganpi.ballonor.pojo.Notifications;
 import com.paveynganpi.ballonor.ui.PostDetailsActivity;
 import com.paveynganpi.ballonor.ui.PostMessageCommentsActivity;
 import com.paveynganpi.ballonor.utils.ParseConstants;
@@ -193,6 +194,7 @@ public class AllPostsAdapter extends RecyclerView.Adapter<AllPostsAdapter.AllPos
                         post.put("likes", mPostMessageLikesMap);
                         post.put(ParseConstants.KEY_POST_MESSAGE_LIKES_COUNT, mPostMessageLikesMap.size());
                         mAllPostsMessageLikeLabel.setSelected(true);
+                        Notifications.sendPushNotifications(post);
                     } else if (mAllPostsMessageLikeLabel.isSelected()) {
                         Log.d("like buttob", mAllPostsMessageLikeLabel.isSelected() + "");
                         mPostMessageLikesMap.remove(mCurrentUser.getObjectId());

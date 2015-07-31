@@ -21,6 +21,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.paveynganpi.ballonor.R;
+import com.paveynganpi.ballonor.pojo.Notifications;
 import com.paveynganpi.ballonor.utils.ParseConstants;
 import com.squareup.picasso.Picasso;
 
@@ -149,9 +150,11 @@ public class PostDetailsActivity extends AppCompatActivity {
                     mPostDetailsLikesCounter.setText(mPostMessageLikes.size() +"");
                     if(mPostMessageLikes.containsKey(mCurrentUser.getObjectId())){
                         mPostDetailsLikeLabel.setSelected(true);
+                        mPostDetailsLikeLabel.setText("LIKED");
                     }
                     else{
                         mPostDetailsLikeLabel.setSelected(false);
+                        mPostDetailsLikeLabel.setText("LIKE");
                     };
                     setPostDetailsLikeLabel(list.get(0));
                     setPostDetailsCommentLabel();
@@ -176,10 +179,12 @@ public class PostDetailsActivity extends AppCompatActivity {
                     teamsObject.put("likes", mPostMessageLikes);
                     teamsObject.put(ParseConstants.KEY_POST_MESSAGE_LIKES_COUNT, mPostMessageLikes.size());
                     mPostDetailsLikeLabel.setSelected(true);
+                    mPostDetailsLikeLabel.setText("LIKED");
 
                     //add post objectId to likedPosts table
                     mCurrentUser.add("likedPosts", teamsObject.getObjectId());
-                    sendPushNotifications(teamsObject);
+                    Notifications.sendPushNotifications(teamsObject);
+                    //sendPushNotifications(teamsObject);
                 } else if (mPostDetailsLikeLabel.isSelected()) {
                     mPostMessageLikes.remove(mCurrentUser.getObjectId());
                     int likes = mPostMessageLikes.size();
@@ -187,6 +192,7 @@ public class PostDetailsActivity extends AppCompatActivity {
                     teamsObject.put("likes", mPostMessageLikes);
                     teamsObject.put(ParseConstants.KEY_POST_MESSAGE_LIKES_COUNT, mPostMessageLikes.size());
                     mPostDetailsLikeLabel.setSelected(false);
+                    mPostDetailsLikeLabel.setText("LIKE");
 
                     //remove post objectId from likedPosts table
                     ArrayList<String> likedPosts = (ArrayList<String>) mCurrentUser.get("likedPosts");

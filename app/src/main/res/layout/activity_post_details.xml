@@ -60,11 +60,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="COMMENT"
+            android:layout_marginLeft="18dp"
+            android:layout_marginStart="18dp"
             android:layout_alignTop="@+id/postDetailsCommentsCounter"
-            android:layout_toRightOf="@+id/postDetailsLikesCounter"
-            android:layout_toEndOf="@+id/postDetailsLikesCounter"
-            android:layout_marginLeft="24dp"
-            android:layout_marginStart="24dp"/>
+            android:layout_toRightOf="@+id/postDetailsProfileNameLable"
+            android:layout_toEndOf="@+id/postDetailsProfileNameLable"/>
 
         <TextView
             android:id="@+id/postDetailsLikeLabel"
@@ -74,7 +74,8 @@
             android:text="LIKE"
             android:textColor="@drawable/post_message_like_label"
             android:layout_alignTop="@+id/postDetailsCommentLabel"
-            android:layout_centerHorizontal="true"/>
+            android:layout_toRightOf="@+id/postDetailsScreenNameLabel"
+            android:layout_toEndOf="@+id/postDetailsScreenNameLabel"/>
 
         <TextView
             android:id="@+id/postDetailsTimeLabel"
@@ -94,10 +95,10 @@
             tools:text="1"
             android:textColor="@color/colorPrimary"
             android:layout_marginTop="33dp"
-            android:paddingRight="8dp"
+            android:paddingLeft="4dp"
             android:layout_below="@+id/postDetailsMessageLabel"
-            android:layout_toLeftOf="@+id/postDetailsTimeLabel"
-            android:layout_toStartOf="@+id/postDetailsTimeLabel"/>
+            android:layout_toRightOf="@+id/postDetailsCommentLabel"
+            android:layout_toEndOf="@+id/postDetailsCommentLabel"/>
 
         <TextView
             android:id="@+id/postDetailsLikesCounter"
@@ -105,9 +106,10 @@
             android:layout_height="wrap_content"
             tools:text="1"
             android:textColor="@color/colorPrimary"
+            android:paddingLeft="5dp"
             android:layout_alignTop="@+id/postDetailsLikeLabel"
-            android:layout_alignRight="@+id/postDetailsProfileNameLable"
-            android:layout_alignEnd="@+id/postDetailsProfileNameLable"/>
+            android:layout_toRightOf="@+id/postDetailsLikeLabel"
+            android:layout_toEndOf="@+id/postDetailsLikeLabel"/>
 
 
 </RelativeLayout>

@@ -23,6 +23,7 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.parse.twitter.Twitter;
 import com.paveynganpi.ballonor.R;
+import com.paveynganpi.ballonor.ui.PostDetailsActivity;
 import com.paveynganpi.ballonor.ui.PostMessageCommentsActivity;
 import com.paveynganpi.ballonor.utils.ParseConstants;
 import com.squareup.picasso.Picasso;
@@ -59,7 +60,7 @@ public class AllPostsAdapter extends RecyclerView.Adapter<AllPostsAdapter.AllPos
 
     @Override
     public void onBindViewHolder(AllPostsViewHolder allPostsViewHolder, int position) {
-        allPostsViewHolder.bindAllPosts(mAllPosts.get(position));
+        allPostsViewHolder.bindAllPosts(mAllPosts.get(position), position);
     }
 
     @Override
@@ -86,6 +87,7 @@ public class AllPostsAdapter extends RecyclerView.Adapter<AllPostsAdapter.AllPos
         protected TextView mAllPostsMessageTimeLabel;
         protected TextView mAllPostsCommentsCounter;
         protected TextView mAllPostsMessagelikesCounter;
+        protected int mPosition;
 
         public AllPostsViewHolder(View itemView) {
             super(itemView);
@@ -103,7 +105,8 @@ public class AllPostsAdapter extends RecyclerView.Adapter<AllPostsAdapter.AllPos
             itemView.setOnClickListener(this);
         }
 
-        public void bindAllPosts(final ParseObject post){
+        public void bindAllPosts(final ParseObject post, int position){
+            mPosition = position;
 
             mScreenNameLabel.setText(mCurrentTwitterUser.getScreenName());
             mProfileNameLable.setText(mCurrentUserFullName);
@@ -235,6 +238,19 @@ public class AllPostsAdapter extends RecyclerView.Adapter<AllPostsAdapter.AllPos
 
         @Override
         public void onClick(View v) {
+            ParseObject message = mAllPosts.get(mPosition);
+            Date createdAt = message.getCreatedAt();
+            long now = new Date().getTime();//get current date
+            String convertedDate = DateUtils.getRelativeTimeSpanString(
+                    createdAt.getTime(), now, DateUtils.SECOND_IN_MILLIS).toString();
+
+            Intent intent = new Intent(mContext, PostDetailsActivity.class);
+            intent.putExtra(ParseConstants.KEY_POST_MESSAGE_OBJECT_ID, message.getObjectId());
+            intent.putExtra(ParseConstants.KEY_SENDER_PROFILE_IMAGE_URL, message.getString(ParseConstants.KEY_SENDER_PROFILE_IMAGE_URL));
+            intent.putExtra(ParseConstants.KEY_SCREEN_NAME_COLUMN, message.getString(ParseConstants.KEY_SCREEN_NAME_COLUMN));
+            intent.putExtra(ParseConstants.KEY_POST_MESSAGE_COLUMN, message.getString(ParseConstants.KEY_POST_MESSAGE_COLUMN));
+            intent.putExtra(ParseConstants.KEY_POST_MESSAGE_CREATED_AT, convertedDate);
+            mContext.startActivity(intent);
 
         }
     }

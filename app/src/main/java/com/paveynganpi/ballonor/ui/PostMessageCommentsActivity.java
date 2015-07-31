@@ -70,7 +70,7 @@ public class PostMessageCommentsActivity extends AppCompatActivity {
         postMessageObjectId  = getIntent().getStringExtra(ParseConstants.KEY_POST_MESSAGE_OBJECT_ID);
         mTeam = getIntent().getStringExtra("TeamName");
         postMessageCreatorId = getIntent().getStringExtra(ParseConstants.KEY_SENDER_ID);
-        mScreenName = getIntent().getStringExtra(ParseConstants.KEY_SCREEN_NAME_COLUMN);
+        //mScreenName = getIntent().getStringExtra(ParseConstants.KEY_SCREEN_NAME_COLUMN);
         layoutManager = new LinearLayoutManager(PostMessageCommentsActivity.this);
 
         fab = (FloatingActionButton)findViewById(R.id.PostMessageCommentsFloatingButton);
@@ -109,7 +109,7 @@ public class PostMessageCommentsActivity extends AppCompatActivity {
                                 public void done(ParseException e) {
                                     if (e == null) {
                                         Toast.makeText(PostMessageCommentsActivity.this, "Comment Success", Toast.LENGTH_LONG).show();
-                                        sendPushNotifications(mScreenName, postMessageCreatorId, input.getText().toString().trim());
+                                        sendPushNotifications(mCurrentUser.getUsername(), postMessageCreatorId, input.getText().toString().trim());
                                     } else {
                                         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(PostMessageCommentsActivity.this);
                                         builder.setMessage("Sorry, an error occured, Please try again")

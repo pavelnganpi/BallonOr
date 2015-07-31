@@ -54,8 +54,13 @@ public class NotificationsActivity extends AppCompatActivity {
 
         mLayoutManager = new LinearLayoutManager(NotificationsActivity.this);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        retrieveNotifications();
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        retrieveNotifications();
     }
 
     @Override

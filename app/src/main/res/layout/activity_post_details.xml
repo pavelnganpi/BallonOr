@@ -1,16 +1,115 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout android:id="@+id/root"
+                xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin"
-                android:paddingTop="@dimen/activity_vertical_margin"
-                android:paddingBottom="@dimen/activity_vertical_margin"
-                tools:context="com.paveynganpi.ballonor.ui.PostDetailsActivity">
+                android:background="@android:color/white"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp">
 
-    <TextView
-        android:text="@string/hello_world"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+
+        <ImageView
+            android:id="@+id/postDetailsProfileImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="3dp"
+            android:src="@drawable/ic_action_content_new"/>
+
+        <TextView
+            android:id="@+id/postDetailsScreenNameLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="9dp"
+            android:layout_marginStart="9dp"
+            android:layout_toEndOf="@+id/postDetailsProfileImageView"
+            android:layout_toRightOf="@+id/postDetailsProfileImageView"
+            android:textStyle="bold"
+            tools:text="screen name"/>
+
+        <TextView
+            android:id="@+id/postDetailsProfileNameLable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/postDetailsScreenNameLabel"
+            android:layout_toRightOf="@+id/postDetailsScreenNameLabel"
+            android:paddingLeft="4dp"
+            android:textColor="#D3D3D3"
+            tools:text="profile name"/>
+
+        <TextView
+            android:id="@+id/postDetailsMessageLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/postDetailsScreenNameLabel"
+            android:layout_alignStart="@+id/postDetailsScreenNameLabel"
+            android:layout_below="@+id/postDetailsScreenNameLabel"
+            android:layout_centerVertical="true"
+            android:fontFamily="Helvetica Neue"
+            android:lineSpacingExtra="3.5sp"
+            android:textSize="15sp"
+            tools:text="Note that, if you specify exact dimensions for the CardView, because of the shadows, its content area will be different between platforms before L and after L. By using api version specific resource values, you can avoid these changes."/>
+
+        <TextView
+            android:id="@+id/postDetailsCommentLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="COMMENT"
+            android:layout_marginLeft="18dp"
+            android:layout_marginStart="18dp"
+            android:layout_alignTop="@+id/postDetailsCommentsCounter"
+            android:layout_toRightOf="@+id/postDetailsProfileNameLable"
+            android:layout_toEndOf="@+id/postDetailsProfileNameLable"/>
+
+        <TextView
+            android:id="@+id/postDetailsLikeLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:text="LIKE"
+            android:textColor="@drawable/post_message_like_label"
+            android:layout_alignTop="@+id/postDetailsCommentLabel"
+            android:layout_toRightOf="@+id/postDetailsScreenNameLabel"
+            android:layout_toEndOf="@+id/postDetailsScreenNameLabel"/>
+
+        <TextView
+            android:id="@+id/postDetailsTimeLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="false"
+            android:layout_marginRight="3dp"
+            android:text="9hrs"
+            android:textColor="#9E9E9E"/>
+
+        <TextView
+            android:id="@+id/postDetailsCommentsCounter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="1"
+            android:textColor="@color/colorPrimary"
+            android:layout_marginTop="33dp"
+            android:paddingLeft="4dp"
+            android:layout_below="@+id/postDetailsMessageLabel"
+            android:layout_toRightOf="@+id/postDetailsCommentLabel"
+            android:layout_toEndOf="@+id/postDetailsCommentLabel"/>
+
+        <TextView
+            android:id="@+id/postDetailsLikesCounter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="1"
+            android:textColor="@color/colorPrimary"
+            android:paddingLeft="5dp"
+            android:layout_alignTop="@+id/postDetailsLikeLabel"
+            android:layout_toRightOf="@+id/postDetailsLikeLabel"
+            android:layout_toEndOf="@+id/postDetailsLikeLabel"/>
+
 
 </RelativeLayout>

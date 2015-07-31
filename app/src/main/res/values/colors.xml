@@ -15,5 +15,5 @@
     <color name="icons">#FFFFFF</color>
     <color name="divider">#B6B6B6</color>
     <color name="androidWhite">@android:color/white</color>
-    <color name="colorNotificationsNotOpened">#ffebee</color>
+    <color name="colorNotificationsNotOpened">#E1F5FE</color>
 </resources>

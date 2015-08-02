@@ -32,6 +32,7 @@ public class LoginActivityTest extends ActivityInstrumentationTestCase2<LoginAct
         mSolo.clickOnButton(mSolo.getString(R.string.login_twitter));
         mSolo.waitForActivity(MainActivity.class);
         mSolo.assertCurrentActivity("current actitity is Main activity", MainActivity.class);
+        
 
         //test for loging out
         mSolo.clickOnMenuItem(mSolo.getString(R.string.menu_logout_lable));

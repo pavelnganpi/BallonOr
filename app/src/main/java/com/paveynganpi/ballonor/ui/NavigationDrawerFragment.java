@@ -61,6 +61,7 @@ public class NavigationDrawerFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mUserLearnedDrawer = Boolean.valueOf(readFromSharedPreferences(getActivity(), KEY_USER_LEARNED_DRAWER, "false"));
+        mCurrentUser = ParseUser.getCurrentUser();
 
         if (savedInstanceState != null) {
             mFromSavedInstanceState = true;
@@ -75,8 +76,6 @@ public class NavigationDrawerFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
         mTeamsListView = (ListView) view.findViewById(R.id.teamsListView);
         ButterKnife.inject(this, view);
-
-        mCurrentUser = ParseUser.getCurrentUser();
 
         mAddTeamButton.setOnClickListener(new View.OnClickListener() {
             @Override

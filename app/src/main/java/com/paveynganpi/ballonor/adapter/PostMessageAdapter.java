@@ -50,14 +50,14 @@ public class PostMessageAdapter extends RecyclerView.Adapter<PostMessageAdapter.
         this.mContext = context;
         this.messages = messages;
         mTeam = team;
+        mCurrentUser = ParseUser.getCurrentUser();
+        mCurrentTwitterUser = ParseTwitterUtils.getTwitter();
     }
 
     @Override
     public PostMessageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.posts_item, parent, false);
-        mCurrentUser = ParseUser.getCurrentUser();
         mCurrentUserFullName = mCurrentUser.getString(ParseConstants.KEY_TWITTER_FULL_NAME);
-        mCurrentTwitterUser = ParseTwitterUtils.getTwitter();
         PostMessageViewHolder postMessageViewHolder = new PostMessageViewHolder(view);
         return postMessageViewHolder;
     }
@@ -112,7 +112,7 @@ public class PostMessageAdapter extends RecyclerView.Adapter<PostMessageAdapter.
 
         public void bindPostMessages(final ParseObject message, int position) {
             mPosition = position;
-            mScreenNameLabel.setText(mCurrentTwitterUser.getScreenName().toString());
+            mScreenNameLabel.setText(mCurrentTwitterUser.getScreenName());
             mProfileNameLable.setText(mCurrentUserFullName);
             mPostMessageLabel.setText(message.getString(ParseConstants.KEY_POST_MESSAGE_COLUMN));
 

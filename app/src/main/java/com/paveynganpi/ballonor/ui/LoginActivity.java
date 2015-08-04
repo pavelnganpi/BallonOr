@@ -64,12 +64,14 @@ public class LoginActivity extends ActionBarActivity {
                             AlertDialog dialog = builder.create();//create a dialog
                             dialog.show();//show the dialog
                         } else if (user.isNew()) {
+                            mParseCurrentUser = ParseUser.getCurrentUser();
                             BallonDorApplication.updateParseInstallation(mParseCurrentUser);
 
                             GetTwitterUserDataTask getTwitterUserDataTask = new GetTwitterUserDataTask();
                             getTwitterUserDataTask.execute();
 
                             user.setUsername(ParseTwitterUtils.getTwitter().getScreenName());
+                            Log.d("loginactivity", "user twitter screen name is "+ ParseTwitterUtils.getTwitter().getScreenName());
                             user.saveInBackground(new SaveCallback() {
                                 @Override
                                 public void done(ParseException e) {
@@ -103,10 +105,11 @@ public class LoginActivity extends ActionBarActivity {
     }
 
     public void startMainActivity() {
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
+        Log.d("ranfirst", "startActivity in loginActivity is ran first " + ParseUser.getCurrentUser().getUsername());
     }
 
     private void navigateToLogin() {
@@ -162,8 +165,7 @@ public class LoginActivity extends ActionBarActivity {
             mParseCurrentUser.put(ParseConstants.KEY_TWITTER_FULL_NAME, twitterUserpojo.getName());
             String profileImageUrlNormalSize  = twitterUserpojo.getProfileImageUrl();
 
-            String profileImageUrl = !twitterUserpojo.getDefaulProfileImage()
-                    ? profileImageUrlNormalSize.substring(0, profileImageUrlNormalSize.length() - 12) + ".jpeg" : "http://pbs.twimg.com/profile_images/2284174872/7df3h38zabcvjylnyfe3.png";
+            String profileImageUrl = getRealImage(profileImageUrlNormalSize);
             mParseCurrentUser.put(ParseConstants.KEY_PROFILE_IMAGE_URL, profileImageUrl);
             mParseCurrentUser.saveInBackground(new SaveCallback() {
                 @Override
@@ -201,4 +203,13 @@ public class LoginActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    public String getRealImage(String profileImageUrl){
+        String removeString = "_normal";
+        int removeStringSize = removeString.length();
+        int index = profileImageUrl.indexOf(removeString);
+        return profileImageUrl.substring(0, index) + profileImageUrl.substring(index + removeStringSize, profileImageUrl.length());
+
+    }
+
 }

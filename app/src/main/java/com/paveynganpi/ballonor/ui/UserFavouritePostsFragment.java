@@ -68,7 +68,6 @@ public class UserFavouritePostsFragment extends Fragment {
 
     public void retrievePosts() {
 
-        ArrayList<String> likedPosts = (ArrayList<String>) mCurrentUser.get("likedPosts");
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Teams");
         query.whereContainedIn(ParseConstants.KEY_OBJECT_ID, userLikedPosts);
         query.addDescendingOrder(ParseConstants.KEY_CREATED_AT);

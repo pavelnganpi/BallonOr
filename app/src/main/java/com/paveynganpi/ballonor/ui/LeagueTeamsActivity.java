@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,6 +36,7 @@ public class LeagueTeamsActivity extends AppCompatActivity {
     protected MenuItem mDone;
     protected String[] mLeagueTeams;
     protected ParseUser mCurrentUser;
+    protected ArrayList<String> mFavouriteTeams;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,12 +49,16 @@ public class LeagueTeamsActivity extends AppCompatActivity {
 
         mLeageName = getIntent().getStringExtra("LeagueName");
         mLeagueTeams = TeamsConstants.getTeam(mLeageName);
+        Log.d("leagueteamsactivity", "leagues teams size is "+mLeagueTeams.length);
 
         mCurrentUser = ParseUser.getCurrentUser();
+        mFavouriteTeams =  (ArrayList<String>) mCurrentUser.get(ParseConstants.KEY_FAVOURITE_TEAMS);
 
         LeagueTeamsAdapter leaguesAdapter = new LeagueTeamsAdapter(LeagueTeamsActivity.this, mLeageName);
         mListView.setAdapter(leaguesAdapter);
-        addTeamsCheckMarks();
+        if(mFavouriteTeams!=null) {
+            addTeamsCheckMarks(mFavouriteTeams);
+        }
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -73,11 +79,13 @@ public class LeagueTeamsActivity extends AppCompatActivity {
 
     }
 
-    public void addTeamsCheckMarks(){
+    public void addTeamsCheckMarks(ArrayList<String> favouriteTeams){
 
-        ArrayList<String> favouriteTeams =  (ArrayList<String>) mCurrentUser.get(ParseConstants.KEY_FAVOURITE_TEAMS);
         CheckBox checkBox = (CheckBox)findViewById(R.id.leagueTeamsCheckbox);
-        for(int i = 0; i< mListView.getCount(); i++){
+        for(int i = 0; i< mLeagueTeams.length; i++){
+            Log.d("leagueteamsactivity", favouriteTeams +"");
+            Log.d("leagueteamsactivity", mLeagueTeams[i] +"");
+
 
             if(favouriteTeams.contains(mLeagueTeams[i])){
                 mListView.setItemChecked(i, true);

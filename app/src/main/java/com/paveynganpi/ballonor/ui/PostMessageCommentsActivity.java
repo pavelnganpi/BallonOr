@@ -247,7 +247,7 @@ public class PostMessageCommentsActivity extends AppCompatActivity {
         ParseObject notifications = new ParseObject(ParseConstants.KEY_NOTIFICATIONS_CLASS);
         notifications.put(ParseConstants.KEY_SENDER_ID, mCurrentUser.getObjectId());
         notifications.put(ParseConstants.KEY_SENDER_FULL_NAME, mCurrentUser.getString(ParseConstants.KEY_TWITTER_FULL_NAME));
-        notifications.put(ParseConstants.KEY_SENDER_SCREEN_NAME, mCurrentUser.getString(ParseConstants.KEY_TWITTER_FULL_NAME));
+        notifications.put(ParseConstants.KEY_SENDER_SCREEN_NAME, mCurrentUser.getString(ParseConstants.KEY_USERNAME));
         notifications.put(ParseConstants.KEY_SENDER_PROFILE_IMAGE_URL, mCurrentUser.getString(ParseConstants.KEY_PROFILE_IMAGE_URL));
         notifications.put(ParseConstants.KEY_RECIPIENT_ID, postMessageCreatorId);
         notifications.put(ParseConstants.KEY_NOTIFICATION_TYPE, "comment");

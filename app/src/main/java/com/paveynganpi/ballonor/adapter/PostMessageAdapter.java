@@ -112,8 +112,8 @@ public class PostMessageAdapter extends RecyclerView.Adapter<PostMessageAdapter.
 
         public void bindPostMessages(final ParseObject message, int position) {
             mPosition = position;
-            mScreenNameLabel.setText(mCurrentTwitterUser.getScreenName());
-            mProfileNameLable.setText(mCurrentUserFullName);
+            mScreenNameLabel.setText(message.getString(ParseConstants.KEY_SCREEN_NAME_COLUMN));
+            mProfileNameLable.setText(message.getString(ParseConstants.KEY_FULL_NAME));
             mPostMessageLabel.setText(message.getString(ParseConstants.KEY_POST_MESSAGE_COLUMN));
 
             //number oflikes
@@ -199,7 +199,7 @@ public class PostMessageAdapter extends RecyclerView.Adapter<PostMessageAdapter.
 
                         //add post objectId to likedPosts table
                         mCurrentUser.add("likedPosts", message.getObjectId());
-                        Notifications.sendPushNotifications(message);
+                        Notifications.sendPushNotifications(message, mCurrentUser);
                     }
                     else if (mPostMessageLikeLabel.isSelected()){
                         Log.d("like buttob", mPostMessageLikeLabel.isSelected() + "");

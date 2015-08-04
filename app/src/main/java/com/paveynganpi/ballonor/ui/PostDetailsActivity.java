@@ -72,14 +72,15 @@ public class PostDetailsActivity extends AppCompatActivity {
         mScreenName = getIntent().getStringExtra(ParseConstants.KEY_SCREEN_NAME_COLUMN);
         mpostMessage = getIntent().getStringExtra(ParseConstants.KEY_POST_MESSAGE_COLUMN);
         mPostCreatedAt = getIntent().getStringExtra(ParseConstants.KEY_POST_MESSAGE_CREATED_AT);
+        String profileImageUrl = mCurrentUser.getString(ParseConstants.KEY_PROFILE_IMAGE_URL);
 
         Picasso.with(PostDetailsActivity.this)
-                .load(mSenderProfileImageView)
+                .load(profileImageUrl)
                 .resize(180, 180)
                 .into(mPostDetailsProfileImageView);
 
-        mPostDetailsScreenNameLabel.setText(mScreenName);
-        mPostDetailsProfileNameLable.setText(mScreenName);
+        mPostDetailsScreenNameLabel.setText(mCurrentUser.getUsername());
+        mPostDetailsProfileNameLable.setText(mCurrentUser.getString(ParseConstants.KEY_TWITTER_FULL_NAME));
         mPostDetailsMessageLabel.setText(mpostMessage);
         mPostDetailsTimeLabel.setText(mPostCreatedAt);
 
@@ -183,7 +184,7 @@ public class PostDetailsActivity extends AppCompatActivity {
 
                     //add post objectId to likedPosts table
                     mCurrentUser.add("likedPosts", teamsObject.getObjectId());
-                    Notifications.sendPushNotifications(teamsObject);
+                    Notifications.sendPushNotifications(teamsObject, mCurrentUser);
                     //sendPushNotifications(teamsObject);
                 } else if (mPostDetailsLikeLabel.isSelected()) {
                     mPostMessageLikes.remove(mCurrentUser.getObjectId());

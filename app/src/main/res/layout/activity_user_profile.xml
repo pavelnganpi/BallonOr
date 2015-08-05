@@ -40,10 +40,83 @@
         app:border_width="2dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="8dp"
-        app:border_color="#FF000000"/>
+        tools:src="@drawable/ic_action_content_new"
+        app:border_color="@color/colorPrimary"
+        android:layout_marginBottom="5dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="PaveyN"
+        android:layout_below="@id/profile_image"
+        android:layout_marginLeft="110dp"
+        android:layout_marginStart="110dp"
+        android:id="@+id/userProfileScreenName"
+        android:textColor="@color/androidWhite"
+        android:layout_marginBottom="5dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Pavey Nganpi"
+        android:layout_alignTop="@+id/userProfileScreenName"
+        android:layout_below="@id/profile_image"
+        android:layout_marginLeft="180dp"
+        android:layout_marginStart="180dp"
+        android:id="@+id/userProfileFullName"
+        android:textColor="@color/androidWhite"
+        android:layout_marginBottom="5dp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="29"
+        android:layout_below="@id/userProfileScreenName"
+        android:layout_marginLeft="110dp"
+        android:layout_marginStart="110dp"
+        android:id="@+id/followersCount"
+        android:textColor="@color/androidWhite"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Followers"
+        android:layout_toRightOf="@id/followersCount"
+        android:layout_toEndOf="@+id/followersCount"
+        android:layout_below="@id/userProfileScreenName"
+        android:layout_marginLeft="4dp"
+        android:layout_marginStart="4dp"
+        android:id="@+id/followersLable"
+        android:textColor="@color/androidWhite"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="12"
+        android:layout_below="@id/userProfileScreenName"
+        android:layout_marginLeft="200dp"
+        android:layout_marginStart="200dp"
+        android:id="@+id/followingCount"
+        android:textColor="@color/androidWhite"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Following"
+        android:layout_toRightOf="@id/followingCount"
+        android:layout_toEndOf="@+id/followingCount"
+        android:layout_below="@id/userProfileScreenName"
+        android:layout_marginLeft="4dp"
+        android:layout_marginStart="4dp"
+        android:id="@+id/followingLable"
+        android:textColor="@color/androidWhite"
+        />
+
 </RelativeLayout>
 
     <!--android:paddingLeft="@dimen/activity_horizontal_margin"-->
-    <!--android:paddingRight="@dimen/activity_horizontal_margin"-->
+    <!--android:paddingRightntal_margin"-->
     <!--android:paddingTop="@dimen/activity_vertical_margin"-->
     <!--android:paddingBottom="@dimen/activity_vertical_margin"-->

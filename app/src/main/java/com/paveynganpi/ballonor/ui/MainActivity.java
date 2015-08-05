@@ -141,6 +141,7 @@ public class MainActivity extends AppCompatActivity {
                 bundle.putStringArrayList("userLikedPostsLists", likedPosts);
                 Intent intent = new Intent(MainActivity.this, UserProfileActivity.class);
                 intent.putExtra(ParseConstants.KEY_USER_ID, mCurrentUser.getObjectId());
+                intent.putExtra(ParseConstants.KEY_PROFILE_IMAGE_URL, mCurrentUser.getString(ParseConstants.KEY_PROFILE_IMAGE_URL));
                 intent.putExtras(bundle);
                 startActivity(intent);
                 break;

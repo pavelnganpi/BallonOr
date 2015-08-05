@@ -38,7 +38,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
         mUserProfilePager.setAdapter(new UserProfileSectionsPagerAdapter(this, getSupportFragmentManager()));
         mUserProfileTabs.setViewPager(mUserProfilePager);
-        String profileImageUrl = mCurrentUser.getString(ParseConstants.KEY_PROFILE_IMAGE_URL);
+        String profileImageUrl = getIntent().getStringExtra(ParseConstants.KEY_PROFILE_IMAGE_URL);
 
         Picasso.with(this)
                 .load(profileImageUrl)

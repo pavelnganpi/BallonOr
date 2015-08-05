@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -51,12 +52,14 @@ public class PostDetailsActivity extends AppCompatActivity {
     protected String mPostMessageCreatorId;
     protected Map<String, Object> mPostMessageLikes;
     protected String mTeam;
-    protected String mSenderProfileImageView;
+    protected String mSenderProfileImageUrl;
     protected String mScreenName;
     protected String mpostMessage;
     protected String mPostCreatedAt;
     protected ParseUser mCurrentUser;
     private Context mContext;
+    protected String mUserId;
+    protected String mFullName;
 
 
     @Override
@@ -68,21 +71,52 @@ public class PostDetailsActivity extends AppCompatActivity {
         mContext = PostDetailsActivity.this;
         mCurrentUser = ParseUser.getCurrentUser();
         mPostMessageObjectId = getIntent().getStringExtra(ParseConstants.KEY_POST_MESSAGE_OBJECT_ID);
-        mSenderProfileImageView = getIntent().getStringExtra(ParseConstants.KEY_SENDER_PROFILE_IMAGE_URL);
+        mSenderProfileImageUrl = getIntent().getStringExtra(ParseConstants.KEY_SENDER_PROFILE_IMAGE_URL);
         mScreenName = getIntent().getStringExtra(ParseConstants.KEY_SCREEN_NAME_COLUMN);
         mpostMessage = getIntent().getStringExtra(ParseConstants.KEY_POST_MESSAGE_COLUMN);
         mPostCreatedAt = getIntent().getStringExtra(ParseConstants.KEY_POST_MESSAGE_CREATED_AT);
-        String profileImageUrl = mCurrentUser.getString(ParseConstants.KEY_PROFILE_IMAGE_URL);
+        mUserId = getIntent().getStringExtra(ParseConstants.KEY_USER_ID);
+        mFullName = getIntent().getStringExtra(ParseConstants.KEY_FULL_NAME);
 
         Picasso.with(PostDetailsActivity.this)
-                .load(profileImageUrl)
+                .load(mSenderProfileImageUrl)
                 .resize(180, 180)
                 .into(mPostDetailsProfileImageView);
 
-        mPostDetailsScreenNameLabel.setText(mCurrentUser.getUsername());
-        mPostDetailsProfileNameLable.setText(mCurrentUser.getString(ParseConstants.KEY_TWITTER_FULL_NAME));
+        mPostDetailsScreenNameLabel.setText(mScreenName);
+        mPostDetailsProfileNameLable.setText(mFullName);
         mPostDetailsMessageLabel.setText(mpostMessage);
         mPostDetailsTimeLabel.setText(mPostCreatedAt);
+
+        mPostDetailsProfileImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ParseQuery<ParseUser> query = ParseQuery.getQuery("_User");
+                query.whereEqualTo(ParseConstants.KEY_OBJECT_ID, mUserId);
+                query.findInBackground(new FindCallback<ParseUser>() {
+                    @Override
+                    public void done(List<ParseUser> list, ParseException e) {
+                        if (e == null) {
+                            //success
+                            Bundle bundle = new Bundle();
+                            ParseUser user = list.get(0);
+                            ArrayList<String> likedPosts = user.get("likedPosts") != null
+                                    ? (ArrayList<String>) user.get("likedPosts") : new ArrayList<String>();
+                            bundle.putStringArrayList("userLikedPostsLists", likedPosts);
+                            Intent intent = new Intent(mContext, UserProfileActivity.class);
+                            intent.putExtra(ParseConstants.KEY_USER_ID, user.getObjectId());
+                            intent.putExtra(ParseConstants.KEY_PROFILE_IMAGE_URL, mSenderProfileImageUrl);
+                            intent.putExtras(bundle);
+                            startActivity(intent);
+                        } else {
+                            //failure
+                            Log.d("userquery", e.getMessage());
+                        }
+                    }
+                });
+
+            }
+        });
 
 
     }

@@ -11,7 +11,7 @@
     <Button
         android:id="@+id/loginButton"
 
-        android:text="Login with Twitter"
+        android:text="@string/login_twitter"
         android:textColor="#ffffff"
         android:textSize="30sp"
         android:background="#55acee"

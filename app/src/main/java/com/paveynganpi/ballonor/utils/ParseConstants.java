@@ -22,6 +22,8 @@ public final class ParseConstants {
     public static final String KEY_CREATED_AT = "createdAt";
     public static final String KEY_TWITTER_ID = "twitterId";
     public static final String KEY_TWITTER_FULL_NAME = "twitterFullName";
+    public static final String KEY_FULL_NAME = "fullName";
+
     public static final String KEY_PARSE_USER_ID = "parseUserId";
     public static final String KEY_PROFILE_IMAGE_URL = "profileImageUrl";
     public static final String KEY_SENDER_PROFILE_IMAGE_URL = "senderProfileImageUrl";

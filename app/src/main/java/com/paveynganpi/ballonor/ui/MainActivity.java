@@ -53,47 +53,55 @@ public class MainActivity extends AppCompatActivity {
 //        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
         mCurrentUser = ParseUser.getCurrentUser();
-        if (mCurrentUser == null) {
+        if (ParseUser.getCurrentUser() == null) {
             navigateToLogin();
-        }
-
-        mToolbar = (Toolbar) findViewById(R.id.app_bar);
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setIcon(R.drawable.ic_launcher);
-        getSupportActionBar().setTitle("");
-
-
-        NavigationDrawerFragment navigationDrawerFragment =
-                (NavigationDrawerFragment) getSupportFragmentManager()
-                        .findFragmentById(R.id.fragment_navigation_drawer);
-
-        navigationDrawerFragment.setUpDrawer(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
-        navigationDrawerFragment.addDrawerTeams();
-        favouriteTeams = navigationDrawerFragment.getFavouriteTeams();
-
-
-        mViewPager = (ViewPager) findViewById(R.id.pager);
-        if(mDrawerItemTeam == null){
-            Log.d("drawerItemTeam", "mDrawerItemTeam is null");
-            if(favouriteTeams.isEmpty())
-                mViewPager.setAdapter(new SectionsPagerAdapter(this, getSupportFragmentManager(), "Chelseafc"));
-            else
-                mViewPager.setAdapter(new SectionsPagerAdapter(this, getSupportFragmentManager(), favouriteTeams.get(0)));
+            Log.d("ranfirst", "navigatelogin is called" + mCurrentUser);
         }
         else{
-            Log.d("drawerItemTeam", "mDrawerItemTeam is "+ mDrawerItemTeam);
-            mViewPager.setAdapter(new SectionsPagerAdapter(this, getSupportFragmentManager(), mDrawerItemTeam));
-        }
-        mTabs = (SlidingTabLayout) findViewById(R.id.tabs);
-        mTabs.setViewPager(mViewPager);
+            mToolbar = (Toolbar) findViewById(R.id.app_bar);
+            setSupportActionBar(mToolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setIcon(R.drawable.ic_launcher);
+            getSupportActionBar().setTitle("");
 
-        ParseAnalytics.trackAppOpened(getIntent());
+
+            NavigationDrawerFragment navigationDrawerFragment =
+                    (NavigationDrawerFragment) getSupportFragmentManager()
+                            .findFragmentById(R.id.fragment_navigation_drawer);
+            Log.d("ranfirst", "mainActivity in oncreate is ran first " + mCurrentUser);
+
+            navigationDrawerFragment.setUpDrawer(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
+            navigationDrawerFragment.addDrawerTeams();
+            favouriteTeams = navigationDrawerFragment.getFavouriteTeams();
+
+
+            mViewPager = (ViewPager) findViewById(R.id.pager);
+            if(mDrawerItemTeam == null){
+                Log.d("drawerItemTeam", "mDrawerItemTeam is null");
+                if(favouriteTeams.isEmpty())
+                    mViewPager.setAdapter(new SectionsPagerAdapter(this, getSupportFragmentManager(), "Chelseafc"));
+                else
+                    mViewPager.setAdapter(new SectionsPagerAdapter(this, getSupportFragmentManager(), favouriteTeams.get(0)));
+            }
+            else{
+                Log.d("drawerItemTeam", "mDrawerItemTeam is "+ mDrawerItemTeam);
+                mViewPager.setAdapter(new SectionsPagerAdapter(this, getSupportFragmentManager(), mDrawerItemTeam));
+            }
+            mTabs = (SlidingTabLayout) findViewById(R.id.tabs);
+            mTabs.setViewPager(mViewPager);
+
+            ParseAnalytics.trackAppOpened(getIntent());
+        }
 
     }
 
     private void navigateToLogin() {
+        //start the loginActivity
         Intent intent = new Intent(this, LoginActivity.class);
+
+        //add the loginActivity to the top of stack, and clear the inbox page
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);//add the loginActivity task
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);//clear the previous task
         startActivity(intent);
     }
 
@@ -128,7 +136,8 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.action_profile:
                 Bundle bundle = new Bundle();
-                ArrayList<String> likedPosts = (ArrayList<String>) mCurrentUser.get("likedPosts");
+                ArrayList<String> likedPosts = mCurrentUser.get("likedPosts") != null
+                        ? (ArrayList<String>) mCurrentUser.get("likedPosts") : new ArrayList<String>();
                 bundle.putStringArrayList("userLikedPostsLists", likedPosts);
                 Intent intent = new Intent(MainActivity.this, UserProfileActivity.class);
                 intent.putExtra(ParseConstants.KEY_USER_ID, mCurrentUser.getObjectId());

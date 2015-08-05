@@ -21,10 +21,8 @@ import android.widget.ListView;
 import com.parse.ParseUser;
 import com.paveynganpi.ballonor.R;
 import com.paveynganpi.ballonor.utils.ParseConstants;
-import com.paveynganpi.ballonor.utils.TeamsConstants;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 
@@ -61,7 +59,7 @@ public class NavigationDrawerFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mUserLearnedDrawer = Boolean.valueOf(readFromSharedPreferences(getActivity(), KEY_USER_LEARNED_DRAWER, "false"));
-
+        mCurrentUser = ParseUser.getCurrentUser();
         if (savedInstanceState != null) {
             mFromSavedInstanceState = true;
         }
@@ -75,8 +73,6 @@ public class NavigationDrawerFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
         mTeamsListView = (ListView) view.findViewById(R.id.teamsListView);
         ButterKnife.inject(this, view);
-
-        mCurrentUser = ParseUser.getCurrentUser();
 
         mAddTeamButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,17 +140,17 @@ public class NavigationDrawerFragment extends Fragment {
 
     public void addDrawerTeams() {
 
-        mTeams = new ArrayList<>();
-
-        Arrays.sort(TeamsConstants.eplTeams);
-        Arrays.sort(TeamsConstants.laLigaTeams);
-
-        for (int i = 0; i < TeamsConstants.eplTeams.length; i++) {
-            mTeams.add(TeamsConstants.eplTeams[i]);
-        }
-        for (int i = 0; i < TeamsConstants.laLigaTeams.length; i++) {
-            mTeams.add(TeamsConstants.laLigaTeams[i]);
-        }
+//        mTeams = new ArrayList<>();
+//
+//        Arrays.sort(TeamsConstants.eplTeams);
+//        Arrays.sort(TeamsConstants.laLigaTeams);
+//
+//        for (int i = 0; i < TeamsConstants.eplTeams.length; i++) {
+//            mTeams.add(TeamsConstants.eplTeams[i]);
+//        }
+//        for (int i = 0; i < TeamsConstants.laLigaTeams.length; i++) {
+//            mTeams.add(TeamsConstants.laLigaTeams[i]);
+//        }
 
         mTeams = getFavouriteTeams();
         //sort teams

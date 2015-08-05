@@ -194,7 +194,7 @@ public class AllPostsAdapter extends RecyclerView.Adapter<AllPostsAdapter.AllPos
                         post.put("likes", mPostMessageLikesMap);
                         post.put(ParseConstants.KEY_POST_MESSAGE_LIKES_COUNT, mPostMessageLikesMap.size());
                         mAllPostsMessageLikeLabel.setSelected(true);
-                        Notifications.sendPushNotifications(post);
+                        Notifications.sendPushNotifications(post, mCurrentUser);
                     } else if (mAllPostsMessageLikeLabel.isSelected()) {
                         Log.d("like buttob", mAllPostsMessageLikeLabel.isSelected() + "");
                         mPostMessageLikesMap.remove(mCurrentUser.getObjectId());

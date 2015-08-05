@@ -1,5 +1,7 @@
 package com.paveynganpi.ballonor.pojo;
 
+import android.util.Log;
+
 import com.parse.ParseException;
 import com.parse.ParseInstallation;
 import com.parse.ParseObject;
@@ -17,16 +19,16 @@ import java.util.Map;
  */
 public class Notifications {
 
-    public static void sendPushNotifications(ParseObject liker) {
-        final ParseObject notifications = saveToNotifications(liker);
+    public static void sendPushNotifications(ParseObject message, ParseUser liker) {
+        final ParseObject notifications = saveToNotifications(message, liker);
 
         ParseQuery<ParseInstallation> query = ParseInstallation.getQuery();
-        query.whereEqualTo(ParseConstants.KEY_USER_ID, liker.getString(ParseConstants.KEY_SENDER_ID));
+        query.whereEqualTo(ParseConstants.KEY_USER_ID, message.getString(ParseConstants.KEY_SENDER_ID));
 
         //send push notification
         final ParsePush push = new ParsePush();
         push.setQuery(query);
-        push.setMessage(liker.getString(ParseConstants.KEY_SCREEN_NAME_COLUMN) + " liked your post");
+        push.setMessage(message.getString(ParseConstants.KEY_SCREEN_NAME_COLUMN) + " liked your post");
 
         notifications.saveInBackground(new SaveCallback() {
             @Override
@@ -37,20 +39,21 @@ public class Notifications {
 
                 } else {
                     //error
+                    Log.d("notificationserror", e.getMessage());
                 }
             }
         });
 
     }
 
-    public static ParseObject saveToNotifications(ParseObject postMessage){
+    public static ParseObject saveToNotifications(ParseObject postMessage, ParseUser liker){
 
         Map<String, Object> likes = ((postMessage.getMap("likes") != null) ? postMessage.getMap("likes") : new HashMap<String, Object>());
         ParseObject notifications = new ParseObject(ParseConstants.KEY_NOTIFICATIONS_CLASS);
         notifications.put(ParseConstants.KEY_SENDER_ID, ParseUser.getCurrentUser().getObjectId());
-        notifications.put(ParseConstants.KEY_SENDER_FULL_NAME, postMessage.getString(ParseConstants.KEY_SCREEN_NAME_COLUMN));
-        notifications.put(ParseConstants.KEY_SENDER_SCREEN_NAME, postMessage.getString(ParseConstants.KEY_SCREEN_NAME_COLUMN));
-        notifications.put(ParseConstants.KEY_SENDER_PROFILE_IMAGE_URL, postMessage.getString(ParseConstants.KEY_SENDER_PROFILE_IMAGE_URL));
+        notifications.put(ParseConstants.KEY_SENDER_FULL_NAME, liker.getString(ParseConstants.KEY_TWITTER_FULL_NAME));
+        notifications.put(ParseConstants.KEY_SENDER_SCREEN_NAME, liker.getUsername());
+        notifications.put(ParseConstants.KEY_SENDER_PROFILE_IMAGE_URL, liker.getString(ParseConstants.KEY_PROFILE_IMAGE_URL));
         notifications.put(ParseConstants.KEY_RECIPIENT_ID, postMessage.getString(ParseConstants.KEY_SENDER_ID));
         notifications.put(ParseConstants.KEY_NOTIFICATION_TYPE, "like");
         notifications.put(ParseConstants.KEY_POST_MESSAGE_COLUMN, postMessage.getString(ParseConstants.KEY_POST_MESSAGE_COLUMN));

@@ -7,8 +7,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.parse.ParseUser;
 import com.paveynganpi.ballonor.R;
 import com.paveynganpi.ballonor.adapter.UserProfileSectionsPagerAdapter;
+import com.paveynganpi.ballonor.utils.ParseConstants;
 import com.paveynganpi.ballonor.utils.SlidingTabLayout;
 import com.squareup.picasso.Picasso;
 
@@ -21,6 +23,7 @@ public class UserProfileActivity extends AppCompatActivity {
     @InjectView(R.id.userProfileTabs) SlidingTabLayout mUserProfileTabs;
     @InjectView(R.id.userProfilePager) ViewPager mUserProfilePager;
     private Toolbar mToolbar;
+    protected ParseUser mCurrentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,15 +31,17 @@ public class UserProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user_profile);
         ButterKnife.inject(this);
 
+        mCurrentUser = ParseUser.getCurrentUser();
         mToolbar = (Toolbar) findViewById(R.id.app_bar_user_profile);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         mUserProfilePager.setAdapter(new UserProfileSectionsPagerAdapter(this, getSupportFragmentManager()));
         mUserProfileTabs.setViewPager(mUserProfilePager);
+        String profileImageUrl = mCurrentUser.getString(ParseConstants.KEY_PROFILE_IMAGE_URL);
 
         Picasso.with(this)
-                .load("https://pbs.twimg.com/profile_images/549803794217717760/iw-iWs1s.jpeg")
+                .load(profileImageUrl)
                 .into(mProfileImage);
     }
 

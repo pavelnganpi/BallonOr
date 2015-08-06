@@ -44,6 +44,24 @@
         app:border_color="@color/colorPrimary"
         android:layout_marginBottom="5dp"/>
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/profile_image_edit_view"
+        android:layout_marginLeft="250dp"
+        android:layout_marginStart="250dp"
+        android:layout_marginTop="40dp"
+        android:src="@drawable/ic_mode_edit_white_24dp"/>
+    <ImageButton
+        android:layout_width="60dp"
+        android:layout_height="30dp"
+        android:src="@drawable/ic_account_plus"
+        android:background="@drawable/account_button_plus_shape"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="40dp"
+        android:id="@+id/followImageButton"
+        />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

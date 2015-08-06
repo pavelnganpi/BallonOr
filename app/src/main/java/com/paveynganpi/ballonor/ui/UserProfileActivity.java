@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,12 +15,18 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.paveynganpi.ballonor.R;
 import com.paveynganpi.ballonor.adapter.UserProfileSectionsPagerAdapter;
 import com.paveynganpi.ballonor.utils.ParseConstants;
 import com.paveynganpi.ballonor.utils.SlidingTabLayout;
 import com.squareup.picasso.Picasso;
+
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -50,6 +57,9 @@ public class UserProfileActivity extends AppCompatActivity {
     ImageButton mFollowImageButton;
     private Toolbar mToolbar;
     protected ParseUser mCurrentUser;
+    protected ParseObject mFollowRelation;
+    protected String mUserId;
+    protected ParseUser mProfileUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +69,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
         mCurrentUser = ParseUser.getCurrentUser();
         mToolbar = (Toolbar) findViewById(R.id.app_bar_user_profile);
+        mUserId = UserProfileActivity.this.getIntent().getStringExtra(ParseConstants.KEY_USER_ID);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
@@ -66,48 +77,40 @@ public class UserProfileActivity extends AppCompatActivity {
         mUserProfileTabs.setViewPager(mUserProfilePager);
         String profileImageUrl = getIntent().getStringExtra(ParseConstants.KEY_PROFILE_IMAGE_URL);
 
+        //get ParseUser object for mUserId
+        setVisitingUser();
+
         Picasso.with(this)
                 .load(profileImageUrl)
                 .into(mProfileImage);
 
-        mProfileImageEditView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(UserProfileActivity.this);
-                builder.setItems(R.array.camera_choices, mDialogListener);
-                AlertDialog dialog = builder.create();
-                dialog.show();
-
-            }
-        });
-
+        mProfileImageEditView.setOnClickListener(mProfileImageEditViewListener);
         mFollowImageButton.setOnClickListener(mFollowImageButtonListener);
     }
-    
-    protected AdapterView.OnClickListener mFollowImageButtonListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            if(!mFollowImageButton.isSelected()){
-                mFollowImageButton.setSelected(true);
-                mFollowImageButton.setImageResource(R.drawable.ic_account_check);
-                mFollowImageButton.setBackgroundResource(R.drawable.account_checked_button_shape);
 
+    private void setVisitingUser() {
+        ParseQuery<ParseUser> query = ParseQuery.getQuery("_User");
+        query.whereEqualTo(ParseConstants.KEY_OBJECT_ID, mUserId);
+        query.findInBackground(new FindCallback<ParseUser>() {
+            @Override
+            public void done(List<ParseUser> list, ParseException e) {
+                if(e == null){
+                    //success
+                    mProfileUser = list.get(0);
+                }
+                else{
+                    //error
+                }
             }
-            else if (mFollowImageButton.isSelected()){
-                mFollowImageButton.setSelected(false);
-                mFollowImageButton.setImageResource(R.drawable.ic_account_plus);
-                mFollowImageButton.setBackgroundResource(R.drawable.account_button_plus_shape);
-            }
-        }
-    };
+        });
+    }
 
-    protected DialogInterface.OnClickListener mDialogListener = new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(DialogInterface dialog, int which) {
+    //set the follow button based on if the current
+    //user is following the profile user
+    public void setFollowImageButton(){
 
+    }
 
-        }
-    };
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -130,4 +133,69 @@ public class UserProfileActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    protected View.OnClickListener mProfileImageEditViewListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(UserProfileActivity.this);
+            builder.setItems(R.array.camera_choices, mDialogListener);
+            AlertDialog dialog = builder.create();
+            dialog.show();
+
+        }
+    };
+
+    protected AdapterView.OnClickListener mFollowImageButtonListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (!mFollowImageButton.isSelected()) {
+                mFollowImageButton.setSelected(true);
+                mFollowImageButton.setImageResource(R.drawable.ic_account_check);
+                mFollowImageButton.setBackgroundResource(R.drawable.account_checked_button_shape);
+
+                //add visiting user as a user you are following
+                mFollowRelation = new ParseObject(ParseConstants.KEY_FOLLOW_CLASS);
+                mFollowRelation.put("from", mCurrentUser);
+                mFollowRelation.put("to", mProfileUser);
+                mFollowRelation.saveEventually();
+
+
+            } else if (mFollowImageButton.isSelected()) {
+                mFollowImageButton.setSelected(false);
+                mFollowImageButton.setImageResource(R.drawable.ic_account_plus);
+                mFollowImageButton.setBackgroundResource(R.drawable.account_button_plus_shape);
+
+                //remove visiting user as user you are following
+                ParseQuery<ParseObject> query = ParseQuery.getQuery(ParseConstants.KEY_FOLLOW_CLASS);
+                query.whereEqualTo("from", ParseUser.getCurrentUser());
+                query.whereEqualTo("to", mProfileUser);
+                query.findInBackground(new FindCallback<ParseObject>() {
+                    @Override
+                    public void done(List<ParseObject> list, ParseException e) {
+                        if(e == null){
+                            //success
+                            Log.d("followwork", "woked");
+                            list.get(0).deleteEventually();
+                        }
+                        else{
+                            //error
+                            Log.d("followwork", "error");
+                        }
+                    }
+                });
+
+
+            }
+        }
+    };
+
+    protected DialogInterface.OnClickListener mDialogListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+
+
+        }
+    };
+
+
 }

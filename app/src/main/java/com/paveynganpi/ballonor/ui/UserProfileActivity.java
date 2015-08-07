@@ -78,7 +78,7 @@ public class UserProfileActivity extends AppCompatActivity {
         String profileImageUrl = getIntent().getStringExtra(ParseConstants.KEY_PROFILE_IMAGE_URL);
 
         //get ParseUser object for mUserId
-        setVisitingUser();
+        setProfileUser();
 
         Picasso.with(this)
                 .load(profileImageUrl)
@@ -88,26 +88,59 @@ public class UserProfileActivity extends AppCompatActivity {
         mFollowImageButton.setOnClickListener(mFollowImageButtonListener);
     }
 
-    private void setVisitingUser() {
+    private void setProfileUser() {
         ParseQuery<ParseUser> query = ParseQuery.getQuery("_User");
         query.whereEqualTo(ParseConstants.KEY_OBJECT_ID, mUserId);
         query.findInBackground(new FindCallback<ParseUser>() {
             @Override
             public void done(List<ParseUser> list, ParseException e) {
-                if(e == null){
+                if (e == null) {
                     //success
                     mProfileUser = list.get(0);
-                }
-                else{
+                    setFollowImageButton();
+                } else {
                     //error
                 }
             }
         });
+        Log.d("followimage", "reached");
     }
 
     //set the follow button based on if the current
     //user is following the profile user
     public void setFollowImageButton(){
+
+        //if current user is checking his/her profile,
+        //hide the follow button
+        Log.d("followimage", "setFollowImageBUtton is reached");
+        if(mUserId.equals(mCurrentUser.getObjectId())){
+            mFollowImageButton.setVisibility(View.INVISIBLE);
+            Log.d("followimage", "current user is same");
+        }
+        else{
+            Log.d("followimage", "else block reached");
+            ParseQuery<ParseObject> query = ParseQuery.getQuery(ParseConstants.KEY_FOLLOW_CLASS);
+            query.whereEqualTo("from", mCurrentUser);
+            query.whereEqualTo("to", mProfileUser);
+            query.findInBackground(new FindCallback<ParseObject>() {
+                @Override
+                public void done(List<ParseObject> list, ParseException e) {
+                    if(e == null){
+                        //success
+                        if(list.size() != 0){
+                            mFollowImageButton.setSelected(true);
+                            mFollowImageButton.setImageResource(R.drawable.ic_account_check);
+                            mFollowImageButton.setBackgroundResource(R.drawable.account_checked_button_shape);
+                        }
+                    }
+                    else{
+                        //error
+                        Log.d("followwork", "error");
+                    }
+                }
+            });
+
+        }
 
     }
 
@@ -167,7 +200,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
                 //remove visiting user as user you are following
                 ParseQuery<ParseObject> query = ParseQuery.getQuery(ParseConstants.KEY_FOLLOW_CLASS);
-                query.whereEqualTo("from", ParseUser.getCurrentUser());
+                query.whereEqualTo("from", mCurrentUser);
                 query.whereEqualTo("to", mProfileUser);
                 query.findInBackground(new FindCallback<ParseObject>() {
                     @Override

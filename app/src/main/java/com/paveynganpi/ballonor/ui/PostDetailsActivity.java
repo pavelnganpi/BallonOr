@@ -106,6 +106,8 @@ public class PostDetailsActivity extends AppCompatActivity {
                             Intent intent = new Intent(mContext, UserProfileActivity.class);
                             intent.putExtra(ParseConstants.KEY_USER_ID, user.getObjectId());
                             intent.putExtra(ParseConstants.KEY_PROFILE_IMAGE_URL, mSenderProfileImageUrl);
+                            intent.putExtra(ParseConstants.KEY_SCREEN_NAME_COLUMN, mScreenName);
+                            intent.putExtra(ParseConstants.KEY_FULL_NAME, mFullName);
                             intent.putExtras(bundle);
                             startActivity(intent);
                         } else {

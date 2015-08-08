@@ -60,6 +60,9 @@ public class UserProfileActivity extends AppCompatActivity {
     protected ParseObject mFollowRelation;
     protected String mUserId;
     protected ParseUser mProfileUser;
+    protected String mScreenName;
+    protected String mFullName;
+    protected String mProfileImageUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,25 +70,46 @@ public class UserProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user_profile);
         ButterKnife.inject(this);
 
+//        setSupportActionBar(mToolbar);
+//        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
         mCurrentUser = ParseUser.getCurrentUser();
         mToolbar = (Toolbar) findViewById(R.id.app_bar_user_profile);
-        mUserId = UserProfileActivity.this.getIntent().getStringExtra(ParseConstants.KEY_USER_ID);
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        mUserId = getIntent().getStringExtra(ParseConstants.KEY_USER_ID);
+        mScreenName = getIntent().getStringExtra(ParseConstants.KEY_SCREEN_NAME_COLUMN);
+        mFullName = getIntent().getStringExtra(ParseConstants.KEY_FULL_NAME);
+        mProfileImageUrl = getIntent().getStringExtra(ParseConstants.KEY_PROFILE_IMAGE_URL);
+
+        mUserProfileScreenName.setText(mScreenName);
+        mUserProfileFullName.setText(mFullName);
 
         mUserProfilePager.setAdapter(new UserProfileSectionsPagerAdapter(this, getSupportFragmentManager()));
         mUserProfileTabs.setViewPager(mUserProfilePager);
-        String profileImageUrl = getIntent().getStringExtra(ParseConstants.KEY_PROFILE_IMAGE_URL);
+
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
 
         //get ParseUser object for mUserId
         setProfileUser();
 
+        try {
+            setFollowersCount();
+            setFollowingCount();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         Picasso.with(this)
-                .load(profileImageUrl)
+                .load(mProfileImageUrl)
                 .into(mProfileImage);
 
         mProfileImageEditView.setOnClickListener(mProfileImageEditViewListener);
         mFollowImageButton.setOnClickListener(mFollowImageButtonListener);
+
     }
 
     private void setProfileUser() {
@@ -104,6 +128,22 @@ public class UserProfileActivity extends AppCompatActivity {
             }
         });
         Log.d("followimage", "reached");
+    }
+
+    public void setFollowersCount () throws ParseException {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery(ParseConstants.KEY_FOLLOW_CLASS);
+        query.whereEqualTo(ParseConstants.KEY_TO_USER_ID, mUserId);
+        int count = query.count();
+        mFollowersCount.setText(count+"");
+
+    }
+
+    public void setFollowingCount () throws ParseException {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery(ParseConstants.KEY_FOLLOW_CLASS);
+        query.whereEqualTo(ParseConstants.KEY_FROM_USER_ID, mUserId);
+        int count = query.count();
+        mFollowingCount.setText(count+"");
+
     }
 
     //set the follow button based on if the current
@@ -188,8 +228,10 @@ public class UserProfileActivity extends AppCompatActivity {
 
                 //add visiting user as a user you are following
                 mFollowRelation = new ParseObject(ParseConstants.KEY_FOLLOW_CLASS);
-                mFollowRelation.put("from", mCurrentUser);
-                mFollowRelation.put("to", mProfileUser);
+                mFollowRelation.put(ParseConstants.KEY_FROM, mCurrentUser);
+                mFollowRelation.put(ParseConstants.KEY_TO, mProfileUser);
+                mFollowRelation.put(ParseConstants.KEY_FROM_USER_ID, mCurrentUser.getObjectId());
+                mFollowRelation.put(ParseConstants.KEY_TO_USER_ID, mProfileUser.getObjectId());
                 mFollowRelation.saveEventually();
 
 
@@ -207,7 +249,6 @@ public class UserProfileActivity extends AppCompatActivity {
                     public void done(List<ParseObject> list, ParseException e) {
                         if(e == null){
                             //success
-                            Log.d("followwork", "woked");
                             list.get(0).deleteEventually();
                         }
                         else{

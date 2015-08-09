@@ -108,14 +108,18 @@ public class AllPostsAdapter extends RecyclerView.Adapter<AllPostsAdapter.AllPos
 
         public void bindAllPosts(final ParseObject post, int position){
             mPosition = position;
+            String screenName = post.getString(ParseConstants.KEY_SCREEN_NAME_COLUMN);
+            String fullName = post.getString(ParseConstants.KEY_FULL_NAME);
 
-            mScreenNameLabel.setText(mCurrentTwitterUser.getScreenName());
-            mProfileNameLable.setText(mCurrentUserFullName);
+            mScreenNameLabel.setText(screenName);
+            mProfileNameLable.setText(fullName);
             mAllPostsMessageLabel.setText(post.getString(ParseConstants.KEY_POST_MESSAGE_COLUMN));
 
             //number oflikes
             mPostMessageLikesMap =  ((post.getMap("likes") != null) ? post.getMap("likes") : new HashMap<String, Object>());
             mAllPostsMessagelikesCounter.setText(mPostMessageLikesMap.size() + "");
+
+            //show the current user if they liked this post or not
             if(mPostMessageLikesMap.containsKey(mCurrentUser.getObjectId())){
                 mAllPostsMessageLikeLabel.setSelected(true);
             }
@@ -130,12 +134,10 @@ public class AllPostsAdapter extends RecyclerView.Adapter<AllPostsAdapter.AllPos
             query.findInBackground(new FindCallback<ParseObject>() {
                 @Override
                 public void done(List<ParseObject> comments, ParseException e) {
-                    Log.d("AllPostsMessageComment", comments.size() +"");
                     if (e == null) {
                         mPostMessageComments = (comments != null) ? comments : new ArrayList<ParseObject>();
                         mAllPostsCommentsCounter.setText(mPostMessageComments.size() + "");
                     } else {
-                        Log.d("AllPostsMessageComment", "error querying comments");
                     }
 
                 }
@@ -250,8 +252,10 @@ public class AllPostsAdapter extends RecyclerView.Adapter<AllPostsAdapter.AllPos
             intent.putExtra(ParseConstants.KEY_POST_MESSAGE_OBJECT_ID, message.getObjectId());
             intent.putExtra(ParseConstants.KEY_SENDER_PROFILE_IMAGE_URL, message.getString(ParseConstants.KEY_SENDER_PROFILE_IMAGE_URL));
             intent.putExtra(ParseConstants.KEY_SCREEN_NAME_COLUMN, message.getString(ParseConstants.KEY_SCREEN_NAME_COLUMN));
+            intent.putExtra(ParseConstants.KEY_FULL_NAME, message.getString(ParseConstants.KEY_FULL_NAME));
             intent.putExtra(ParseConstants.KEY_POST_MESSAGE_COLUMN, message.getString(ParseConstants.KEY_POST_MESSAGE_COLUMN));
             intent.putExtra(ParseConstants.KEY_POST_MESSAGE_CREATED_AT, convertedDate);
+            intent.putExtra(ParseConstants.KEY_USER_ID, message.getString(ParseConstants.KEY_SENDER_ID));
             mContext.startActivity(intent);
 
         }

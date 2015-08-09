@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:id="@+id/root"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/white">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/followProfileImageView"
+        tools:src="@drawable/ic_action_content_new"
+        android:contentDescription="@string/post_creator_profile_image_description"
+        android:layout_marginLeft="12dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="3dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/followScreenNameLabel"
+        tools:text="screen name"
+        android:textStyle="bold"
+        android:layout_marginLeft="9dp"
+        android:layout_marginStart="9dp"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/followProfileImageView"
+        android:layout_toEndOf="@+id/followProfileImageView"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="profile name"
+        android:id="@+id/followProfileNameLable"
+        android:layout_below="@+id/followScreenNameLabel"
+        android:layout_alignLeft="@+id/followScreenNameLabel"/>
+</RelativeLayout>

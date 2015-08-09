@@ -48,6 +48,15 @@ public final class ParseConstants {
     public static final String KEY_OBJECT_ID = "objectId";
     public static final String KEY_FAVOURITE_TEAMS = "favouriteTeams";
     public static final String KEY_SCREEN_NAME_COLUMN = "screenName";
+    public static final String KEY_FOLLOW_CLASS = "Follow";
+
+    public static final String KEY_FOLLOW_TYPE_FOLLOWING = "following";
+    public static final String KEY_FOLLOW_TYPE_FOLLOWERS = "followers";
+
+    public static final String KEY_FROM = "from";
+    public static final String KEY_TO = "to";
+    public static final String KEY_FROM_USER_ID = "fromUserId";
+    public static final String KEY_TO_USER_ID = "toUserId";
 
     public static final String TYPE_IMAGE = "image";
     public static final String TYPE_VIDEO = "video";

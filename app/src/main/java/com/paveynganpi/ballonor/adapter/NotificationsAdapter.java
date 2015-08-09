@@ -128,8 +128,10 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
             intent.putExtra(ParseConstants.KEY_POST_MESSAGE_OBJECT_ID, notification.getString(ParseConstants.KEY_POST_MESSAGE_OBJECT_ID));
             intent.putExtra(ParseConstants.KEY_SENDER_PROFILE_IMAGE_URL, notification.getString(ParseConstants.KEY_SENDER_PROFILE_IMAGE_URL));
             intent.putExtra(ParseConstants.KEY_SCREEN_NAME_COLUMN, notification.getString(ParseConstants.KEY_SENDER_SCREEN_NAME));
+            intent.putExtra(ParseConstants.KEY_FULL_NAME, notification.getString(ParseConstants.KEY_SENDER_FULL_NAME));
             intent.putExtra(ParseConstants.KEY_POST_MESSAGE_COLUMN, notification.getString(ParseConstants.KEY_POST_MESSAGE_COLUMN));
             intent.putExtra(ParseConstants.KEY_POST_MESSAGE_CREATED_AT, convertedDate);
+            intent.putExtra(ParseConstants.KEY_USER_ID, notification.getString(ParseConstants.KEY_RECIPIENT_ID));
 
             mContext.startActivity(intent);
 

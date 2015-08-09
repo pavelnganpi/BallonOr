@@ -280,8 +280,10 @@ public class PostMessageAdapter extends RecyclerView.Adapter<PostMessageAdapter.
             intent.putExtra(ParseConstants.KEY_POST_MESSAGE_OBJECT_ID, message.getObjectId());
             intent.putExtra(ParseConstants.KEY_SENDER_PROFILE_IMAGE_URL, message.getString(ParseConstants.KEY_SENDER_PROFILE_IMAGE_URL));
             intent.putExtra(ParseConstants.KEY_SCREEN_NAME_COLUMN, message.getString(ParseConstants.KEY_SCREEN_NAME_COLUMN));
+            intent.putExtra(ParseConstants.KEY_FULL_NAME, message.getString(ParseConstants.KEY_FULL_NAME));
             intent.putExtra(ParseConstants.KEY_POST_MESSAGE_COLUMN, message.getString(ParseConstants.KEY_POST_MESSAGE_COLUMN));
             intent.putExtra(ParseConstants.KEY_POST_MESSAGE_CREATED_AT, convertedDate);
+            intent.putExtra(ParseConstants.KEY_USER_ID, message.getString(ParseConstants.KEY_SENDER_ID));
             mContext.startActivity(intent);
 
         }

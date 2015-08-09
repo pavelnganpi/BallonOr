@@ -141,6 +141,9 @@ public class MainActivity extends AppCompatActivity {
                 bundle.putStringArrayList("userLikedPostsLists", likedPosts);
                 Intent intent = new Intent(MainActivity.this, UserProfileActivity.class);
                 intent.putExtra(ParseConstants.KEY_USER_ID, mCurrentUser.getObjectId());
+                intent.putExtra(ParseConstants.KEY_PROFILE_IMAGE_URL, mCurrentUser.getString(ParseConstants.KEY_PROFILE_IMAGE_URL));
+                intent.putExtra(ParseConstants.KEY_SCREEN_NAME_COLUMN, mCurrentUser.getUsername());
+                intent.putExtra(ParseConstants.KEY_FULL_NAME, mCurrentUser.getString(ParseConstants.KEY_TWITTER_FULL_NAME));
                 intent.putExtras(bundle);
                 startActivity(intent);
                 break;

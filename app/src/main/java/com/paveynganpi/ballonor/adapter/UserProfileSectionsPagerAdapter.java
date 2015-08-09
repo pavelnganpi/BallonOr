@@ -5,6 +5,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+import com.paveynganpi.ballonor.ui.FollowersFragments;
+import com.paveynganpi.ballonor.ui.FollowingFragment;
 import com.paveynganpi.ballonor.ui.UserAllPostsFragment;
 import com.paveynganpi.ballonor.ui.UserFavouritePostsFragment;
 
@@ -28,6 +30,10 @@ public class UserProfileSectionsPagerAdapter extends FragmentStatePagerAdapter {
                 return new UserAllPostsFragment();
             case 1:
                 return new UserFavouritePostsFragment();
+            case 2:
+                return new FollowersFragments();
+            case 3:
+                return new FollowingFragment();
         }
 
         return null;
@@ -35,7 +41,7 @@ public class UserProfileSectionsPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
-        return 2;
+        return 4;
     }
 
     @Override
@@ -46,6 +52,10 @@ public class UserProfileSectionsPagerAdapter extends FragmentStatePagerAdapter {
                 return "Posts".toUpperCase(l);
             case 1:
                 return "Favourites".toUpperCase(l);
+            case 2:
+                return "Followers".toUpperCase(l);
+            case 3:
+                return "Following".toUpperCase(l);
         }
         return null;
     }

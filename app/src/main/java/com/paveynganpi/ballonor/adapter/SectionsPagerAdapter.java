@@ -6,7 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.paveynganpi.ballonor.ui.ArsenalfcFragment;
+import com.paveynganpi.ballonor.ui.FeedFragment;
 import com.paveynganpi.ballonor.ui.ChelseafcFragment;
 import com.paveynganpi.ballonor.ui.TeamFragment;
 
@@ -38,6 +38,9 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
         TeamFragment teamFragment = new TeamFragment();
         teamFragment.setArguments(args);
 
+        FeedFragment feedFragment = new FeedFragment();
+        feedFragment.setArguments(args);
+
         switch (position){
             case 0:
                 if(team.equals("chelseafc"))
@@ -45,7 +48,7 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
                 else
                     return teamFragment;
             case 1:
-                return new ArsenalfcFragment();
+                return feedFragment;
         }
         return null;
     }
@@ -63,7 +66,7 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
             case 0:
                 return mTeam.toUpperCase(l);
             case 1:
-                return "News".toUpperCase(l);
+                return "Feed".toUpperCase(l);
         }
         return mTeam.toUpperCase(l);
     }

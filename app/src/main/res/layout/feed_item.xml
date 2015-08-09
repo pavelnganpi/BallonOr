@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:id="@+id/root"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/white">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/feedProfileImageView"
+        tools:src="@drawable/ic_action_content_new"
+        android:contentDescription="@string/post_creator_profile_image_description"
+        android:layout_marginLeft="12dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="3dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/feedScreenNameLabel"
+        tools:text="screen name"
+        android:textStyle="bold"
+        android:layout_marginLeft="9dp"
+        android:layout_marginStart="9dp"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/feedProfileImageView"
+        android:layout_toEndOf="@+id/feedProfileImageView"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="profile name"
+        android:id="@+id/feedProfileNameLable"
+        android:paddingLeft="4dp"
+        android:textColor="#D3D3D3"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/feedScreenNameLabel"
+        android:layout_toEndOf="@+id/feedScreenNameLabel"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Note that, if you specify exact dimensions for the CardView, because of the shadows, its content area will be different between platforms before L and after L. By using api version specific resource values, you can avoid these changes."
+        android:id="@+id/feedMessageDescription"
+        android:layout_centerVertical="true"
+        android:textSize="15sp"
+        android:fontFamily="Helvetica Neue"
+        android:lineSpacingExtra="3.5sp"
+        android:layout_below="@+id/feedScreenNameLabel"
+        android:layout_alignLeft="@+id/feedScreenNameLabel"
+        android:layout_alignStart="@+id/feedScreenNameLabel"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="COMMENT"
+        android:id="@+id/feedCommentLabel"
+        android:layout_alignTop="@+id/feedlikesCounter"
+        android:layout_toRightOf="@+id/feedProfileNameLable"
+        android:layout_toEndOf="@+id/feedProfileNameLable"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="LIKE"
+        android:id="@+id/feedLikeLabel"
+        android:clickable="true"
+        android:layout_marginTop="25dp"
+        android:textColor="@drawable/post_message_like_label"
+        android:layout_below="@+id/feedMessageDescription"
+        android:layout_toRightOf="@+id/feedScreenNameLabel"
+        android:layout_toEndOf="@+id/feedScreenNameLabel"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="9hrs"
+        android:id="@+id/feedTimeLabel"
+        android:layout_marginRight="3dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="false"
+        android:textColor="#9E9E9E"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/feedCommentsCounter"
+        android:layout_alignTop="@+id/feedCommentLabel"
+        android:layout_toRightOf="@+id/feedCommentLabel"
+        android:layout_marginLeft="5dp"
+        android:textColor="@color/colorPrimary"
+
+        android:layout_toEndOf="@+id/feedCommentLabel"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/feedlikesCounter"
+        android:textColor="@color/colorPrimary"
+        android:layout_alignTop="@+id/feedLikeLabel"
+        android:layout_toRightOf="@id/feedLikeLabel"
+        android:layout_marginLeft="5dp"
+        android:layout_centerHorizontal="true"/>
+</RelativeLayout>

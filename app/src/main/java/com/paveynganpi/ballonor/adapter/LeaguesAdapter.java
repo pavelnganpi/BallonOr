@@ -12,7 +12,6 @@ import android.widget.TextView;
 import com.paveynganpi.ballonor.R;
 import com.paveynganpi.ballonor.ui.LeagueTeamsActivity;
 import com.paveynganpi.ballonor.utils.LeaguesConstants;
-import com.squareup.picasso.Picasso;
 
 /**
  * Created by paveynganpi on 7/19/15.
@@ -59,12 +58,6 @@ public class LeaguesAdapter extends RecyclerView.Adapter<LeaguesAdapter.LeaguesV
 
         public void bindLeagues(String leagueName, int postion){
             mLeaguesTextView.setText(leagueName);
-            mPosition = postion;
-            Picasso.with(mContext)
-                    .load(LeaguesConstants.getLeagueImageUrls()[0])
-                    .resize(110, 110)
-                    .into(mLeaguesImageView);
-
         }
 
         @Override

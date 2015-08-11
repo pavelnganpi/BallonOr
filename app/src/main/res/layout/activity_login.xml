@@ -6,26 +6,53 @@
                 android:paddingRight="@dimen/activity_horizontal_margin"
                 android:paddingTop="@dimen/activity_vertical_margin"
                 android:paddingBottom="@dimen/activity_vertical_margin"
-                tools:context="com.paveynganpi.ballonor.ui.LoginActivity">
+                tools:context="com.paveynganpi.ballonor.ui.LoginActivity"
+                android:background="@color/colorPrimary">
 
     <Button
         android:id="@+id/loginButton"
-
         android:text="@string/login_twitter"
         android:textColor="#ffffff"
         android:textSize="30sp"
         android:background="#55acee"
         android:layout_width="250dp"
         android:layout_height="53dp"
-        android:shadowColor="#54A862"
-        android:shadowDx="0"
-        android:shadowDy="0"
-        android:shadowRadius="0"
+        android:layout_marginBottom="65dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="166dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"/>
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:id="@+id/logoImageView"
+        android:layout_marginTop="29dp"
+        android:src="@drawable/ic_launcher"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:id="@+id/authTitle"
+        android:layout_below="@+id/logoImageView"
+        android:layout_centerHorizontal="true"
+        android:textSize="60sp"
+        android:textStyle="bold"
+        android:textColor="@color/androidWhite"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="A place to connect with fellow soccer lovers"
+        android:id="@+id/authSubTitle"
+        android:layout_marginTop="5dp"
+        android:textColor="@color/androidWhite"
+        android:layout_below="@+id/authTitle"
+        android:layout_centerHorizontal="true"
+        android:textSize="13sp"/>
 
 </RelativeLayout>

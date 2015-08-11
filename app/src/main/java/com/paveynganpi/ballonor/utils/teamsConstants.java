@@ -56,7 +56,4 @@ public class TeamsConstants {
         return null;
     }
 
-    public static String getTeamImageUrl() {
-        return "http://pbs.twimg.com/profile_images/532484112821415938/HGleGRL5_normal.jpeg";
-    }
 }

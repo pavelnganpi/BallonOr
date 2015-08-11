@@ -6,6 +6,7 @@ import com.parse.Parse;
 import com.parse.ParseInstallation;
 import com.parse.ParseTwitterUtils;
 import com.parse.ParseUser;
+import com.paveynganpi.ballonor.utils.ParseConfig;
 import com.paveynganpi.ballonor.utils.ParseConstants;
 
 /**
@@ -18,13 +19,13 @@ public class BallonDorApplication extends Application {
         super.onCreate(); //doing since overing from the parent, so we want o inherit from the base class too
         // Enable Local Datastore.
         Parse.enableLocalDatastore(this);
-        Parse.initialize(this, "Skm8cEztx4rcXdhIGrHPjic7mVVS3xrhMr6Jhuvy", "4FBSGsODwvCMXq9XmGBcbdggfShPaUPAxVPxp5uM");
+        Parse.initialize(this, ParseConfig.ParseApplicationId, ParseConfig.ParseClientKey);
         ParseInstallation.getCurrentInstallation().saveInBackground();
         //facebook initialization
         //ParseFacebookUtils.initialize(this);
 
         //twitter initialization
-        ParseTwitterUtils.initialize("rwzNdxb3SZ6UZBpuWq2HkyUu6", "bhP9OAvAnkyc13FLSrdrs7ixfcIYIeMeD1v0TqO8a7hJtmjvcp");
+        ParseTwitterUtils.initialize(ParseConfig.TwitterConsumerKey, ParseConfig.ConsumerSecret);
     }
     public static void updateParseInstallation(ParseUser parseUser){
         ParseInstallation parseInstallation = ParseInstallation.getCurrentInstallation();

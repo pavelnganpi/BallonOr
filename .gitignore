@@ -1,4 +1,6 @@
 .gradle
+/src/main/java/com/paveynganpi/ballonor/utils/ParseConfig.java
+.utils
 /local.properties
 /.idea/workspace.xml
 /.idea/libraries

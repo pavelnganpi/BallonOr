@@ -18,6 +18,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.paveynganpi.ballonor.R;
 import com.paveynganpi.ballonor.adapter.FollowAdapter;
+import com.paveynganpi.ballonor.utils.ConnectionDetector;
 import com.paveynganpi.ballonor.utils.DividerItemDecoration;
 import com.paveynganpi.ballonor.utils.ParseConstants;
 
@@ -40,6 +41,7 @@ public class FollowersFragments extends Fragment {
     TextView mEmptyView;
     String mUserId;
     protected ProgressDialog progress;
+    protected ConnectionDetector mConnectionDetector;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -62,11 +64,18 @@ public class FollowersFragments extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        layoutManager = new LinearLayoutManager(getActivity());
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), null));
-        mRecyclerView.setLayoutManager(layoutManager);
+        mConnectionDetector = new ConnectionDetector(getActivity(), getActivity());
+        Boolean isInternetPresent = mConnectionDetector.isConnectingToInternet(); // true or false
+        if(isInternetPresent){
+            layoutManager = new LinearLayoutManager(getActivity());
+            mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), null));
+            mRecyclerView.setLayoutManager(layoutManager);
 
-        retrieveFollows();
+            retrieveFollows();
+        }
+        else {
+            mConnectionDetector.showAlertDialog();
+        }
     }
 
     protected SwipeRefreshLayout.OnRefreshListener mOnRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {

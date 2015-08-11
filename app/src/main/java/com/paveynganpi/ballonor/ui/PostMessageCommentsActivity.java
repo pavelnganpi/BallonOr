@@ -30,6 +30,7 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.paveynganpi.ballonor.R;
 import com.paveynganpi.ballonor.adapter.PostMessageCommentsAdapter;
+import com.paveynganpi.ballonor.utils.ConnectionDetector;
 import com.paveynganpi.ballonor.utils.ParseConstants;
 
 import java.util.HashMap;
@@ -56,6 +57,7 @@ public class PostMessageCommentsActivity extends AppCompatActivity {
     protected String postMessageCreatorId;
     protected String mScreenName;
     protected ProgressDialog progress;
+    protected ConnectionDetector mConnectionDetector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,8 +154,15 @@ public class PostMessageCommentsActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mRecyclerView.setLayoutManager(layoutManager);
-        retrieveComments();
+        mConnectionDetector = new ConnectionDetector(this, this);
+        Boolean isInternetPresent = mConnectionDetector.isConnectingToInternet(); // true or false
+        if(isInternetPresent){
+            mRecyclerView.setLayoutManager(layoutManager);
+            retrieveComments();
+        }
+        else {
+            mConnectionDetector.showAlertDialog();
+        }
     }
 
     public void retrieveComments(){

@@ -9,7 +9,7 @@
       <item
           android:id="@+id/action_profile"
           android:title="@string/menu_profile_description"
-          android:icon="@drawable/ic_user_profile"
+          android:icon="@drawable/ic_person_white_24dp"
           app:showAsAction="always"
           />
 

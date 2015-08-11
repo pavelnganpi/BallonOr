@@ -19,6 +19,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.paveynganpi.ballonor.R;
 import com.paveynganpi.ballonor.adapter.PostMessageAdapter;
+import com.paveynganpi.ballonor.utils.ConnectionDetector;
 import com.paveynganpi.ballonor.utils.DividerItemDecoration;
 import com.paveynganpi.ballonor.utils.ParseConstants;
 
@@ -40,6 +41,7 @@ public class TeamFragment extends android.support.v4.app.Fragment {
     private static String mTeam;
     protected PostMessageAdapter postMessageAdapter;
     protected ProgressDialog progress;
+    protected ConnectionDetector mConnectionDetector;
 
 
     @Override
@@ -88,10 +90,18 @@ public class TeamFragment extends android.support.v4.app.Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        layoutManager = new LinearLayoutManager(getActivity());
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), null));
-        mRecyclerView.setLayoutManager(layoutManager);
-        retrievePosts();
+        mConnectionDetector = new ConnectionDetector(getActivity(), getActivity());
+        Boolean isInternetPresent = mConnectionDetector.isConnectingToInternet(); // true or false
+        if(isInternetPresent){
+            layoutManager = new LinearLayoutManager(getActivity());
+            mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), null));
+            mRecyclerView.setLayoutManager(layoutManager);
+
+            retrievePosts();
+        }
+        else {
+            mConnectionDetector.showAlertDialog();
+        }
     }
 
     public void retrievePosts() {

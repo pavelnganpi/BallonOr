@@ -18,6 +18,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.paveynganpi.ballonor.R;
 import com.paveynganpi.ballonor.adapter.AllPostsAdapter;
+import com.paveynganpi.ballonor.utils.ConnectionDetector;
 import com.paveynganpi.ballonor.utils.DividerItemDecoration;
 import com.paveynganpi.ballonor.utils.ParseConstants;
 
@@ -37,6 +38,7 @@ public class UserFavouritePostsFragment extends Fragment {
     protected AllPostsAdapter mAllPostsAdapter;
     protected ArrayList<String> userLikedPosts;
     protected ProgressDialog progress;
+    protected ConnectionDetector mConnectionDetector;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -61,11 +63,18 @@ public class UserFavouritePostsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        layoutManager = new LinearLayoutManager(getActivity());
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), null));
-        mRecyclerView.setLayoutManager(layoutManager);
+        mConnectionDetector = new ConnectionDetector(getActivity(), getActivity());
+        Boolean isInternetPresent = mConnectionDetector.isConnectingToInternet(); // true or false
+        if(isInternetPresent){
+            layoutManager = new LinearLayoutManager(getActivity());
+            mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), null));
+            mRecyclerView.setLayoutManager(layoutManager);
 
-        retrievePosts();
+            retrievePosts();
+        }
+        else {
+            mConnectionDetector.showAlertDialog();
+        }
     }
 
     public void retrievePosts() {

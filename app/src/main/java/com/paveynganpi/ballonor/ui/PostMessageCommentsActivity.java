@@ -1,5 +1,6 @@
 package com.paveynganpi.ballonor.ui;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -54,6 +55,7 @@ public class PostMessageCommentsActivity extends AppCompatActivity {
     protected String mTeam;
     protected String postMessageCreatorId;
     protected String mScreenName;
+    protected ProgressDialog progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -156,6 +158,8 @@ public class PostMessageCommentsActivity extends AppCompatActivity {
 
     public void retrieveComments(){
 
+        progress = ProgressDialog.show(this, "Loading...",
+                "Please wait...", true);
         ParseQuery<ParseObject> query = ParseQuery.getQuery(ParseConstants.KEY_COMMENTS_CLASS);
         query.whereEqualTo(ParseConstants.KEY_POST_MESSAGE_OBJECT_ID, postMessageObjectId);
         query.whereEqualTo(ParseConstants.KEY_TEAM_COLUMN, mTeam);
@@ -163,8 +167,8 @@ public class PostMessageCommentsActivity extends AppCompatActivity {
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> comments, ParseException e) {
+                progress.dismiss();
                 if (e == null) {
-
                     if (mSwipeRefreshLayout.isRefreshing()) {
                         mSwipeRefreshLayout.setRefreshing(false);
                     }

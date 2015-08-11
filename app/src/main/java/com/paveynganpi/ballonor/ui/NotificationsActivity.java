@@ -1,5 +1,6 @@
 package com.paveynganpi.ballonor.ui;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -34,6 +35,7 @@ public class NotificationsActivity extends AppCompatActivity {
     protected RecyclerView.LayoutManager mLayoutManager;
     protected ParseUser mCurrentUser;
     protected NotificationsAdapter mNotificationsAdapter;
+    protected ProgressDialog progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,12 +89,15 @@ public class NotificationsActivity extends AppCompatActivity {
 
     public void retrieveNotifications(){
 
+        progress = ProgressDialog.show(this, "Loading...",
+                "Please wait...", true);
         ParseQuery<ParseObject> query = ParseQuery.getQuery(ParseConstants.KEY_NOTIFICATIONS_CLASS);
         query.whereEqualTo(ParseConstants.KEY_RECIPIENT_ID, mCurrentUser.getObjectId());
         query.orderByDescending(ParseConstants.KEY_CREATED_AT);
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> list, ParseException e) {
+                progress.dismiss();
                 if(e == null){
                     //success
                     if (mSwipeRefreshLayout.isRefreshing()) {

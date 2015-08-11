@@ -1,5 +1,6 @@
 package com.paveynganpi.ballonor.ui;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -45,7 +46,7 @@ public class FeedFragment extends Fragment{
     public static final String TAG = FeedFragment.class.getSimpleName();
     private ParseUser mCurrentUser;
     protected List<String> followersIds;
-
+    protected ProgressDialog progress;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -77,6 +78,8 @@ public class FeedFragment extends Fragment{
 
     public void retrievePosts() {
 
+        progress = ProgressDialog.show(getActivity(), "Loading...",
+                "Please wait...", true);
         ParseQuery<ParseObject> followQuery = ParseQuery.getQuery(ParseConstants.KEY_FOLLOW_CLASS);
         followQuery.whereEqualTo(ParseConstants.KEY_TO, mCurrentUser);
         try {
@@ -93,6 +96,7 @@ public class FeedFragment extends Fragment{
                 @Override
                 public void done(List<ParseObject> list, ParseException e) {
 
+                    progress.dismiss();
                     if (mSwipeRefreshLayout.isRefreshing()) {
                         mSwipeRefreshLayout.setRefreshing(false);
                     }

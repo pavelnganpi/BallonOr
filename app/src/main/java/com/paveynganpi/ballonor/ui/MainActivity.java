@@ -48,10 +48,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Set up the action bar.
-//        final ActionBar actionBar = getSupportActionBar();
-//        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-
         mCurrentUser = ParseUser.getCurrentUser();
         if (ParseUser.getCurrentUser() == null) {
             navigateToLogin();

@@ -83,8 +83,8 @@ public class UserAllPostsFragment extends android.support.v4.app.Fragment {
 
     public void retrievePosts() {
 
-        progress = ProgressDialog.show(getActivity(), "Loading...",
-                "Please wait...", true);
+//        progress = ProgressDialog.show(getActivity(), "Loading...",
+//                "Please wait...", true);
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Teams");
         query.whereEqualTo(ParseConstants.KEY_SENDER_ID, mUserId);
         query.addDescendingOrder(ParseConstants.KEY_CREATED_AT);
@@ -92,7 +92,7 @@ public class UserAllPostsFragment extends android.support.v4.app.Fragment {
             @Override
             public void done(List<ParseObject> list, ParseException e) {
 
-                progress.dismiss();
+                //progress.dismiss();
                 if (mSwipeRefreshLayout.isRefreshing()) {
                     mSwipeRefreshLayout.setRefreshing(false);
                 }

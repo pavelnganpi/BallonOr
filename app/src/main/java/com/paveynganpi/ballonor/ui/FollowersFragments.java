@@ -87,14 +87,14 @@ public class FollowersFragments extends Fragment {
 
     private void retrieveFollows() {
 
-        progress = ProgressDialog.show(getActivity(), "Loading...",
-                "Please wait...", true);
+//        progress = ProgressDialog.show(getActivity(), "Loading...",
+//                "Please wait...", true);
         ParseQuery<ParseObject> query = ParseQuery.getQuery(ParseConstants.KEY_FOLLOW_CLASS);
         query.whereEqualTo(ParseConstants.KEY_TO_USER_ID, mUserId);
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> list, ParseException e) {
-                progress.dismiss();
+                //progress.dismiss();
                 if (mSwipeRefreshLayout.isRefreshing()) {
                     mSwipeRefreshLayout.setRefreshing(false);
                 }

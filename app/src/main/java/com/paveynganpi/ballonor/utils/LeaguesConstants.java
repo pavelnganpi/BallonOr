@@ -5,12 +5,10 @@ package com.paveynganpi.ballonor.utils;
  */
 public class LeaguesConstants {
 
-    public static String[] leagueNames = {"English Premier League", "Bundesliga", "Serie A", "Ligue 1", "Primera División / La Liga",
-                            "Eredivisie", "Major League Soccer", "Süper Lig - Turkey"};
-
+    public static String[] leagueNames = {"English League", "German League", "Italian League", "French League", "Spanish Liga", "USA League"};
 
     public static String[] getLeagueNames() {
         return leagueNames;
     }
-    
+
 }

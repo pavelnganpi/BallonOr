@@ -79,15 +79,15 @@ public class UserFavouritePostsFragment extends Fragment {
 
     public void retrievePosts() {
 
-        progress = ProgressDialog.show(getActivity(), "Loading...",
-                "Please wait...", true);
+//        progress = ProgressDialog.show(getActivity(), "Loading...",
+//                "Please wait...", true);
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Teams");
         query.whereContainedIn(ParseConstants.KEY_OBJECT_ID, userLikedPosts);
         query.addDescendingOrder(ParseConstants.KEY_CREATED_AT);
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> list, ParseException e) {
-                progress.dismiss();
+                //progress.dismiss();
                 if (mSwipeRefreshLayout.isRefreshing()) {
                     mSwipeRefreshLayout.setRefreshing(false);
                 }

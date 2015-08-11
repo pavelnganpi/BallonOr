@@ -119,9 +119,4 @@ public class FollowingFragment extends Fragment {
         }
     }
 
-//    @Override
-//    public void onDestroyView() {
-//        super.onDestroyView();
-//        ButterKnife.reset(this);
-//    }
 }

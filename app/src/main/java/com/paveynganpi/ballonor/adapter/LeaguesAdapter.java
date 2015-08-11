@@ -3,7 +3,6 @@ package com.paveynganpi.ballonor.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,7 +69,6 @@ public class LeaguesAdapter extends RecyclerView.Adapter<LeaguesAdapter.LeaguesV
 
         @Override
         public void onClick(View v) {
-            Log.d("buttonpressed", "buttonpressed");
             Intent intent = new Intent(mContext, LeagueTeamsActivity.class);
             intent.putExtra("LeagueName", mLeageNames[mPosition]);
             mContext.startActivity(intent);

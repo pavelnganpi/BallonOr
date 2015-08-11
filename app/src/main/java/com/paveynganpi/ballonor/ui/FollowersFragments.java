@@ -119,10 +119,4 @@ public class FollowersFragments extends Fragment {
         }
     }
 
-
-//    @Override
-//    public void onDestroyView() {
-//        super.onDestroyView();
-//        ButterKnife.reset(this);
-//    }
 }

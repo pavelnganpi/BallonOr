@@ -153,13 +153,6 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
 
-        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_logout) {
-//            ParseUser.logOut();
-//            //move to login screen
-//            navigateToLogin();
-//        }
-
         return super.onOptionsItemSelected(item);
     }
 

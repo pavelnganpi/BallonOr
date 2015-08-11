@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -135,7 +134,6 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
 
             mContext.startActivity(intent);
 
-            Log.d("checkingopen", mPosition +"");
             notification.put("opened", true);
             notification.saveInBackground(new SaveCallback() {
                 @Override

@@ -39,6 +39,7 @@
         </activity>
         <activity
             android:name=".ui.CreatePostActivity"
+            android:windowSoftInputMode="stateVisible"
             android:label="@string/title_activity_create_post"
             android:parentActivityName=".ui.MainActivity"
             android:screenOrientation="portrait" >

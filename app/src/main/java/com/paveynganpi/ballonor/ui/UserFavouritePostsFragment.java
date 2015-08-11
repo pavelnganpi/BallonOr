@@ -119,10 +119,4 @@ public class UserFavouritePostsFragment extends Fragment {
             ((AllPostsAdapter) mRecyclerView.getAdapter()).refill(list);
         }
     }
-
-//    @Override
-//    public void onDestroyView() {
-//        super.onDestroyView();
-//        ButterKnife.reset(this);
-//    }
 }

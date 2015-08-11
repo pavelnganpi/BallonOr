@@ -7,7 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.paveynganpi.ballonor.ui.FeedFragment;
-import com.paveynganpi.ballonor.ui.ChelseafcFragment;
+import com.paveynganpi.ballonor.ui.NoTeamsFragment;
 import com.paveynganpi.ballonor.ui.TeamFragment;
 
 import java.util.Locale;
@@ -31,7 +31,6 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         // getItem is called to instantiate the fragment for the given page.
         // Return a PlaceholderFragment (defined as a static inner class below).
-        android.support.v4.app.Fragment fragment = new ChelseafcFragment();
         String team = toCamelCase(mTeam);
         Bundle args = new Bundle();
         args.putString("TeamName", team);
@@ -44,7 +43,7 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
         switch (position){
             case 0:
                 if(team.equals("chelseafc"))
-                    return new ChelseafcFragment();
+                    return new NoTeamsFragment();
                 else
                     return teamFragment;
             case 1:

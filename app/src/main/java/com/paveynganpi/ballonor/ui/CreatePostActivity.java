@@ -3,7 +3,6 @@ package com.paveynganpi.ballonor.ui;
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -51,8 +50,6 @@ public class CreatePostActivity extends AppCompatActivity {
             mCreatePostButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.d("dialog test", mCreatePostTextField.getText().toString());
-                    //Log.d("dialog test",TAG.substring(TAG.length()-8));
                     if(mCreatePostTextField.getText().toString().isEmpty()){
                         Toast.makeText(CreatePostActivity.this,"You have to post something", Toast.LENGTH_LONG).show();
                     }

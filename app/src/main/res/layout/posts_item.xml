@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/allPostsProfileImageView"
         tools:src="@drawable/ic_action_content_new"
-        android:contentDescription="@string/post_creator_profile_image_description"
+        android:contentDescription="post creator profile image"
         android:layout_marginLeft="12dp"
         android:layout_marginStart="12dp"
         android:layout_marginTop="3dp"
@@ -63,7 +63,10 @@
         android:text="COMMENT"
         android:id="@+id/allPostsMessageCommentLabel"
         android:layout_alignTop="@+id/allPostsMessagelikesCounter"
-        android:layout_toRightOf="@+id/profileNameLable"
+        android:layout_toRightOf="@+id/allPostsMessageLikeLabel"
+        android:layout_below="@+id/allPostsMessageLabel"
+        android:layout_marginLeft="50dp"
+        android:layout_marginStart="50dp"
         android:layout_toEndOf="@+id/profileNameLable"/>
 
     <TextView
@@ -72,11 +75,13 @@
         android:text="LIKE"
         android:id="@+id/allPostsMessageLikeLabel"
         android:clickable="true"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginStart="50dp"
         android:textColor="@drawable/post_message_like_label"
         android:layout_below="@+id/allPostsMessageLabel"
-        android:layout_toRightOf="@+id/screenNameLabel"
-        android:layout_toEndOf="@+id/screenNameLabel"/>
+        android:layout_alignLeft="@+id/allPostsMessageLabel"
+        />
 
     <TextView
         android:layout_width="wrap_content"
@@ -97,6 +102,7 @@
         android:layout_alignTop="@+id/allPostsMessageCommentLabel"
         android:layout_toRightOf="@+id/allPostsMessageCommentLabel"
         android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
         android:textColor="@color/colorPrimary"
         android:layout_toEndOf="@+id/allPostsMessageCommentLabel"
         tools:text="0"/>
@@ -109,6 +115,7 @@
         android:layout_alignTop="@+id/allPostsMessageLikeLabel"
         android:layout_toRightOf="@id/allPostsMessageLikeLabel"
         android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
         android:layout_centerHorizontal="true"
         tools:text="0"/>
 </RelativeLayout>

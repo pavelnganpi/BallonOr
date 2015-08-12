@@ -61,7 +61,10 @@
         android:text="COMMENT"
         android:id="@+id/allPostsMessageCommentLabel"
         android:layout_alignTop="@+id/allPostsMessagelikesCounter"
-        android:layout_toRightOf="@+id/profileNameLable"
+        android:layout_toRightOf="@+id/allPostsMessageLikeLabel"
+        android:layout_below="@+id/allPostsMessageLabel"
+        android:layout_marginLeft="50dp"
+        android:layout_marginStart="50dp"
         android:layout_toEndOf="@+id/profileNameLable"/>
 
     <TextView
@@ -70,11 +73,12 @@
         android:text="LIKE"
         android:id="@+id/allPostsMessageLikeLabel"
         android:clickable="true"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginStart="50dp"
         android:textColor="@drawable/post_message_like_label"
         android:layout_below="@+id/allPostsMessageLabel"
-        android:layout_toRightOf="@+id/screenNameLabel"
-        android:layout_toEndOf="@+id/screenNameLabel"/>
+        android:layout_alignLeft="@+id/allPostsMessageLabel"/>
 
     <TextView
         android:layout_width="wrap_content"

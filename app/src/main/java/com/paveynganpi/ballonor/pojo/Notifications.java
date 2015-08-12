@@ -20,30 +20,32 @@ import java.util.Map;
 public class Notifications {
 
     public static void sendPushNotifications(ParseObject message, ParseUser liker) {
-        final ParseObject notifications = saveToNotifications(message, liker);
+        if(!liker.getObjectId().equals(message.getString(ParseConstants.KEY_SENDER_ID))){
+            final ParseObject notifications = saveToNotifications(message, liker);
 
-        ParseQuery<ParseInstallation> query = ParseInstallation.getQuery();
-        query.whereEqualTo(ParseConstants.KEY_USER_ID, message.getString(ParseConstants.KEY_SENDER_ID));
+            ParseQuery<ParseInstallation> query = ParseInstallation.getQuery();
+            query.whereEqualTo(ParseConstants.KEY_USER_ID, message.getString(ParseConstants.KEY_SENDER_ID));
 
-        //send push notification
-        final ParsePush push = new ParsePush();
-        push.setQuery(query);
-        push.setMessage(liker.getUsername() + " liked your post");
+            //send push notification
+            final ParsePush push = new ParsePush();
+            push.setQuery(query);
+            push.setMessage(liker.getUsername() + " liked your post");
 
-        notifications.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if (e == null) {
-                    //success
-                    push.sendInBackground();
+            notifications.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if (e == null) {
+                        //success
+                        push.sendInBackground();
 
-                } else {
-                    //error
-                    Log.d("notificationserror", e.getMessage());
+                    } else {
+                        //error
+                        Log.d("notificationserror", e.getMessage());
+                    }
                 }
-            }
-        });
+            });
 
+        }
     }
 
     public static ParseObject saveToNotifications(ParseObject postMessage, ParseUser liker){

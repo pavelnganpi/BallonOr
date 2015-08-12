@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import com.paveynganpi.ballonor.R;
 import com.paveynganpi.ballonor.utils.TeamsConstants;
-import com.squareup.picasso.Picasso;
 
 import java.util.Arrays;
 
@@ -50,10 +49,6 @@ public class LeagueTeamsAdapter extends ArrayAdapter<String> {
         String team = mLeagueTeamsNames[position];
 
         viewHolder.mLeagueTeamsTextView.setText(team);
-        Picasso.with(mContext)
-                .load(TeamsConstants.getTeamImageUrl())
-                .resize(110, 110)
-                .into(viewHolder.mLeagueTeamsImageView);
 
         ListView listView = (ListView)parent;
         if(listView.isItemChecked(position)){

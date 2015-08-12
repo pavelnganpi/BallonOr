@@ -8,19 +8,15 @@
             app:showAsAction="never"/>
       <item
           android:id="@+id/action_profile"
-          android:title="profile"
+          android:title="@string/menu_profile_description"
+          android:icon="@drawable/ic_person_white_24dp"
+          app:showAsAction="always"
           />
 
     <item
         android:id="@+id/action_notification"
-        android:title="notifications"
+        android:title="@string/menu_notifications_description"
         android:icon="@drawable/ic_notifications"
-        app:showAsAction="always"
-        />
-    <item
-        android:id="@+id/action_person_add"
-        android:title="addPerson"
-        android:icon="@drawable/ic_person_add"
         app:showAsAction="always"
         />
 </menu>

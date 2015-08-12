@@ -1,5 +1,6 @@
 package com.paveynganpi.ballonor.ui;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -18,6 +19,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.paveynganpi.ballonor.R;
 import com.paveynganpi.ballonor.adapter.PostMessageAdapter;
+import com.paveynganpi.ballonor.utils.ConnectionDetector;
 import com.paveynganpi.ballonor.utils.DividerItemDecoration;
 import com.paveynganpi.ballonor.utils.ParseConstants;
 
@@ -38,6 +40,8 @@ public class TeamFragment extends android.support.v4.app.Fragment {
     protected TextView mPostMessageLikeLabel;
     private static String mTeam;
     protected PostMessageAdapter postMessageAdapter;
+    protected ProgressDialog progress;
+    protected ConnectionDetector mConnectionDetector;
 
 
     @Override
@@ -86,21 +90,27 @@ public class TeamFragment extends android.support.v4.app.Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        layoutManager = new LinearLayoutManager(getActivity());
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), null));
-        mRecyclerView.setLayoutManager(layoutManager);
-        retrievePosts();
+        mConnectionDetector = new ConnectionDetector(getActivity(), getActivity());
+        Boolean isInternetPresent = mConnectionDetector.isConnectingToInternet(); // true or false
+        if(isInternetPresent){
+            layoutManager = new LinearLayoutManager(getActivity());
+            mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), null));
+            mRecyclerView.setLayoutManager(layoutManager);
+
+            retrievePosts();
+        }
+        else {
+            mConnectionDetector.showAlertDialog();
+        }
     }
 
     public void retrievePosts() {
-
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Teams");
         query.whereEqualTo(ParseConstants.KEY_TEAM_COLUMN, mTeam);
         query.addDescendingOrder(ParseConstants.KEY_CREATED_AT);
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> list, ParseException e) {
-
                 if (mSwipeRefreshLayout.isRefreshing()) {
                     mSwipeRefreshLayout.setRefreshing(false);
                 }

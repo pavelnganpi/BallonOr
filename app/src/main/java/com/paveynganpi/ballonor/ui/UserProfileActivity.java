@@ -1,7 +1,5 @@
 package com.paveynganpi.ballonor.ui;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -12,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.parse.FindCallback;
@@ -51,8 +48,6 @@ public class UserProfileActivity extends AppCompatActivity {
     TextView mFollowingCount;
     @InjectView(R.id.followingLable)
     TextView mFollowingLable;
-    @InjectView(R.id.profile_image_edit_view)
-    ImageView mProfileImageEditView;
     @InjectView(R.id.followImageButton)
     ImageButton mFollowImageButton;
     private Toolbar mToolbar;
@@ -107,7 +102,6 @@ public class UserProfileActivity extends AppCompatActivity {
                 .load(mProfileImageUrl)
                 .into(mProfileImage);
 
-        mProfileImageEditView.setOnClickListener(mProfileImageEditViewListener);
         mFollowImageButton.setOnClickListener(mFollowImageButtonListener);
 
     }
@@ -207,17 +201,6 @@ public class UserProfileActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    protected View.OnClickListener mProfileImageEditViewListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(UserProfileActivity.this);
-            builder.setItems(R.array.camera_choices, mDialogListener);
-            AlertDialog dialog = builder.create();
-            dialog.show();
-
-        }
-    };
-
     protected AdapterView.OnClickListener mFollowImageButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -262,14 +245,4 @@ public class UserProfileActivity extends AppCompatActivity {
             }
         }
     };
-
-    protected DialogInterface.OnClickListener mDialogListener = new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(DialogInterface dialog, int which) {
-
-
-        }
-    };
-
-
 }

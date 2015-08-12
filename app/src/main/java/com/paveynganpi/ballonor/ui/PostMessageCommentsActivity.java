@@ -1,5 +1,6 @@
 package com.paveynganpi.ballonor.ui;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -27,6 +28,7 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.paveynganpi.ballonor.R;
 import com.paveynganpi.ballonor.adapter.PostMessageCommentsAdapter;
+import com.paveynganpi.ballonor.utils.ConnectionDetector;
 import com.paveynganpi.ballonor.utils.ParseConstants;
 
 import java.util.HashMap;
@@ -52,6 +54,8 @@ public class PostMessageCommentsActivity extends AppCompatActivity {
     protected String mTeam;
     protected String postMessageCreatorId;
     protected String mScreenName;
+    protected ProgressDialog progress;
+    protected ConnectionDetector mConnectionDetector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +91,12 @@ public class PostMessageCommentsActivity extends AppCompatActivity {
                 // Set an EditText view to get user input
                 final EditText input = new EditText(PostMessageCommentsActivity.this);
                 alert.setView(input);
+                input.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                    }
+                });
 
                 alert.setPositiveButton("Comment", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
@@ -146,12 +156,21 @@ public class PostMessageCommentsActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mRecyclerView.setLayoutManager(layoutManager);
-        retrieveComments();
+        mConnectionDetector = new ConnectionDetector(this, this);
+        Boolean isInternetPresent = mConnectionDetector.isConnectingToInternet(); // true or false
+        if(isInternetPresent){
+            mRecyclerView.setLayoutManager(layoutManager);
+            retrieveComments();
+        }
+        else {
+            mConnectionDetector.showAlertDialog();
+        }
     }
 
     public void retrieveComments(){
 
+        progress = ProgressDialog.show(this, "Loading...",
+                "Please wait...", true);
         ParseQuery<ParseObject> query = ParseQuery.getQuery(ParseConstants.KEY_COMMENTS_CLASS);
         query.whereEqualTo(ParseConstants.KEY_POST_MESSAGE_OBJECT_ID, postMessageObjectId);
         query.whereEqualTo(ParseConstants.KEY_TEAM_COLUMN, mTeam);
@@ -159,8 +178,8 @@ public class PostMessageCommentsActivity extends AppCompatActivity {
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> comments, ParseException e) {
+                progress.dismiss();
                 if (e == null) {
-
                     if (mSwipeRefreshLayout.isRefreshing()) {
                         mSwipeRefreshLayout.setRefreshing(false);
                     }

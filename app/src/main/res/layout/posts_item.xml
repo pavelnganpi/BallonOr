@@ -39,7 +39,7 @@
         tools:text="profile name"
         android:id="@+id/profileNameLable"
         android:paddingLeft="4dp"
-        android:textColor="#D3D3D3"
+        android:textColor="#9E9E9E"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/screenNameLabel"
         android:layout_toEndOf="@+id/screenNameLabel"/>
@@ -51,11 +51,11 @@
         android:id="@+id/allPostsMessageLabel"
         android:layout_centerVertical="true"
         android:textSize="15sp"
-        android:fontFamily="Helvetica Neue"
         android:lineSpacingExtra="3.5sp"
         android:layout_below="@+id/screenNameLabel"
         android:layout_alignLeft="@+id/screenNameLabel"
-        android:layout_alignStart="@+id/screenNameLabel"/>
+        android:layout_alignStart="@+id/screenNameLabel"
+        android:layout_marginRight="4dp"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -84,6 +84,7 @@
         android:text="9hrs"
         android:id="@+id/allPostsMessageTimeLabel"
         android:layout_marginRight="3dp"
+        android:layout_marginEnd="3dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="false"
@@ -97,8 +98,8 @@
         android:layout_toRightOf="@+id/allPostsMessageCommentLabel"
         android:layout_marginLeft="5dp"
         android:textColor="@color/colorPrimary"
-
-        android:layout_toEndOf="@+id/allPostsMessageCommentLabel"/>
+        android:layout_toEndOf="@+id/allPostsMessageCommentLabel"
+        tools:text="0"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -108,5 +109,6 @@
         android:layout_alignTop="@+id/allPostsMessageLikeLabel"
         android:layout_toRightOf="@id/allPostsMessageLikeLabel"
         android:layout_marginLeft="5dp"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"
+        tools:text="0"/>
 </RelativeLayout>

@@ -79,7 +79,6 @@ public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.FollowAdap
             mPosition = position;
             user = mFollowType.equals(ParseConstants.KEY_FOLLOW_TYPE_FOLLOWERS) ?
                     (ParseUser) follow.get(ParseConstants.KEY_FROM) : (ParseUser) follow.get(ParseConstants.KEY_TO);
-            //Log.d("followuser", "user twitter name is " + user.getString(ParseConstants.KEY_TWITTER_FULL_NAME));
 
             query = ParseQuery.getQuery("_User");
             query.whereEqualTo(ParseConstants.KEY_OBJECT_ID, user.getObjectId());

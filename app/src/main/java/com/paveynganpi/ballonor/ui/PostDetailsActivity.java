@@ -15,9 +15,7 @@ import android.widget.TextView;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseInstallation;
 import com.parse.ParseObject;
-import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -88,40 +86,46 @@ public class PostDetailsActivity extends AppCompatActivity {
         mPostDetailsMessageLabel.setText(mpostMessage);
         mPostDetailsTimeLabel.setText(mPostCreatedAt);
 
-        mPostDetailsProfileImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ParseQuery<ParseUser> query = ParseQuery.getQuery("_User");
-                query.whereEqualTo(ParseConstants.KEY_OBJECT_ID, mUserId);
-                query.findInBackground(new FindCallback<ParseUser>() {
-                    @Override
-                    public void done(List<ParseUser> list, ParseException e) {
-                        if (e == null) {
-                            //success
-                            Bundle bundle = new Bundle();
-                            ParseUser user = list.get(0);
-                            ArrayList<String> likedPosts = user.get("likedPosts") != null
-                                    ? (ArrayList<String>) user.get("likedPosts") : new ArrayList<String>();
-                            bundle.putStringArrayList("userLikedPostsLists", likedPosts);
-                            Intent intent = new Intent(mContext, UserProfileActivity.class);
-                            intent.putExtra(ParseConstants.KEY_USER_ID, user.getObjectId());
-                            intent.putExtra(ParseConstants.KEY_PROFILE_IMAGE_URL, mSenderProfileImageUrl);
-                            intent.putExtra(ParseConstants.KEY_SCREEN_NAME_COLUMN, mScreenName);
-                            intent.putExtra(ParseConstants.KEY_FULL_NAME, mFullName);
-                            intent.putExtras(bundle);
-                            startActivity(intent);
-                        } else {
-                            //failure
-                            Log.d("userquery", e.getMessage());
-                        }
-                    }
-                });
+        mPostDetailsProfileImageView.setOnClickListener(mPostDetailsListener);
+        mPostDetailsScreenNameLabel.setOnClickListener(mPostDetailsListener);
+        mPostDetailsProfileNameLable.setOnClickListener(mPostDetailsListener);
 
-            }
-        });
 
 
     }
+
+    protected View.OnClickListener mPostDetailsListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            ParseQuery<ParseUser> query = ParseQuery.getQuery("_User");
+            query.whereEqualTo(ParseConstants.KEY_OBJECT_ID, mUserId);
+            query.findInBackground(new FindCallback<ParseUser>() {
+                @Override
+                public void done(List<ParseUser> list, ParseException e) {
+                    if (e == null) {
+                        //success
+                        Bundle bundle = new Bundle();
+                        ParseUser user = list.get(0);
+                        ArrayList<String> likedPosts = user.get("likedPosts") != null
+                                ? (ArrayList<String>) user.get("likedPosts") : new ArrayList<String>();
+                        bundle.putStringArrayList("userLikedPostsLists", likedPosts);
+                        Intent intent = new Intent(mContext, UserProfileActivity.class);
+                        intent.putExtra(ParseConstants.KEY_USER_ID, user.getObjectId());
+                        intent.putExtra(ParseConstants.KEY_PROFILE_IMAGE_URL, mSenderProfileImageUrl);
+                        intent.putExtra(ParseConstants.KEY_SCREEN_NAME_COLUMN, mScreenName);
+                        intent.putExtra(ParseConstants.KEY_FULL_NAME, mFullName);
+                        intent.putExtras(bundle);
+                        startActivity(intent);
+                    } else {
+                        //failure
+                        Log.d("userquery", e.getMessage());
+                    }
+                }
+            });
+
+        }
+    };
+
 
     @Override
     protected void onResume() {
@@ -179,25 +183,24 @@ public class PostDetailsActivity extends AppCompatActivity {
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> list, ParseException e) {
-                if(e == null){
+                if (e == null) {
                     //success
                     mPostMessageLikes = ((list.get(0).getMap("likes") != null) ? list.get(0).getMap("likes") : new HashMap<String, Object>());
                     mTeam = list.get(0).getString(ParseConstants.KEY_TEAM_COLUMN);
                     mPostMessageCreatorId = list.get(0).getString(ParseConstants.KEY_SENDER_ID);
-                    mPostDetailsLikesCounter.setText(mPostMessageLikes.size() +"");
-                    if(mPostMessageLikes.containsKey(mCurrentUser.getObjectId())){
+                    mPostDetailsLikesCounter.setText(mPostMessageLikes.size() + "");
+                    if (mPostMessageLikes.containsKey(mCurrentUser.getObjectId())) {
                         mPostDetailsLikeLabel.setSelected(true);
                         mPostDetailsLikeLabel.setText("LIKED");
-                    }
-                    else{
+                    } else {
                         mPostDetailsLikeLabel.setSelected(false);
                         mPostDetailsLikeLabel.setText("LIKE");
-                    };
+                    }
+                    ;
                     setPostDetailsLikeLabel(list.get(0));
                     setPostDetailsCommentLabel();
 
-                }
-                else{
+                } else {
                     //error
                 }
             }
@@ -285,19 +288,6 @@ public class PostDetailsActivity extends AppCompatActivity {
                 mContext.startActivity(intent);
             }
         });
-    }
-
-    protected void sendPushNotifications(ParseObject liker) {
-
-        ParseQuery<ParseInstallation> query = ParseInstallation.getQuery();
-        query.whereEqualTo(ParseConstants.KEY_USER_ID, liker.getString(ParseConstants.KEY_SENDER_ID));
-
-        //send push notification
-        final ParsePush push = new ParsePush();
-        push.setQuery(query);
-        push.setMessage(liker.getString(ParseConstants.KEY_SCREEN_NAME_COLUMN) + " liked your post");
-        push.sendInBackground();
-
     }
 
 }

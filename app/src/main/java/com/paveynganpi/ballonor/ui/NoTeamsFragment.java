@@ -12,12 +12,12 @@ import com.paveynganpi.ballonor.R;
 /**
  * Created by paveynganpi on 6/20/15.
  */
-public class ChelseafcFragment extends ListFragment {
+public class NoTeamsFragment extends ListFragment {
     private FloatingActionButton fab;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_chelseafc, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_no_teams, container, false);
         return rootView;
     }
 

@@ -15,6 +15,7 @@ import com.parse.ParseAnalytics;
 import com.parse.ParseUser;
 import com.paveynganpi.ballonor.R;
 import com.paveynganpi.ballonor.adapter.SectionsPagerAdapter;
+import com.paveynganpi.ballonor.utils.ConnectionDetector;
 import com.paveynganpi.ballonor.utils.ParseConstants;
 import com.paveynganpi.ballonor.utils.SlidingTabLayout;
 
@@ -42,56 +43,65 @@ public class MainActivity extends AppCompatActivity {
     protected String mDrawerItemTeam;
     protected ParseUser mCurrentUser;
     protected ArrayList<String> favouriteTeams;
+    protected ConnectionDetector mConnectionDetector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Set up the action bar.
-//        final ActionBar actionBar = getSupportActionBar();
-//        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        mConnectionDetector = new ConnectionDetector(this, this);
+        Boolean isInternetPresent = mConnectionDetector.isConnectingToInternet(); // true or false
 
-        mCurrentUser = ParseUser.getCurrentUser();
-        if (ParseUser.getCurrentUser() == null) {
-            navigateToLogin();
-            Log.d("ranfirst", "navigatelogin is called" + mCurrentUser);
-        }
-        else{
-            mToolbar = (Toolbar) findViewById(R.id.app_bar);
-            setSupportActionBar(mToolbar);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setIcon(R.drawable.ic_launcher);
-            getSupportActionBar().setTitle("");
-
-
-            NavigationDrawerFragment navigationDrawerFragment =
-                    (NavigationDrawerFragment) getSupportFragmentManager()
-                            .findFragmentById(R.id.fragment_navigation_drawer);
-            Log.d("ranfirst", "mainActivity in oncreate is ran first " + mCurrentUser);
-
-            navigationDrawerFragment.setUpDrawer(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
-            navigationDrawerFragment.addDrawerTeams();
-            favouriteTeams = navigationDrawerFragment.getFavouriteTeams();
-
-
-            mViewPager = (ViewPager) findViewById(R.id.pager);
-            if(mDrawerItemTeam == null){
-                Log.d("drawerItemTeam", "mDrawerItemTeam is null");
-                if(favouriteTeams.isEmpty())
-                    mViewPager.setAdapter(new SectionsPagerAdapter(this, getSupportFragmentManager(), "Chelseafc"));
-                else
-                    mViewPager.setAdapter(new SectionsPagerAdapter(this, getSupportFragmentManager(), favouriteTeams.get(0)));
+        if(isInternetPresent){
+            mCurrentUser = ParseUser.getCurrentUser();
+            if (ParseUser.getCurrentUser() == null) {
+                navigateToLogin();
+                Log.d("ranfirst", "navigatelogin is called" + mCurrentUser);
             }
             else{
-                Log.d("drawerItemTeam", "mDrawerItemTeam is "+ mDrawerItemTeam);
-                mViewPager.setAdapter(new SectionsPagerAdapter(this, getSupportFragmentManager(), mDrawerItemTeam));
-            }
-            mTabs = (SlidingTabLayout) findViewById(R.id.tabs);
-            mTabs.setViewPager(mViewPager);
+                mToolbar = (Toolbar) findViewById(R.id.app_bar);
+                setSupportActionBar(mToolbar);
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                getSupportActionBar().setIcon(R.drawable.ic_launcher);
+                getSupportActionBar().setTitle("");
 
-            ParseAnalytics.trackAppOpened(getIntent());
+
+                NavigationDrawerFragment navigationDrawerFragment =
+                        (NavigationDrawerFragment) getSupportFragmentManager()
+                                .findFragmentById(R.id.fragment_navigation_drawer);
+                Log.d("ranfirst", "mainActivity in oncreate is ran first " + mCurrentUser);
+
+                navigationDrawerFragment.setUpDrawer(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
+                navigationDrawerFragment.addDrawerTeams();
+                favouriteTeams = navigationDrawerFragment.getFavouriteTeams();
+
+
+                mViewPager = (ViewPager) findViewById(R.id.pager);
+                if(mDrawerItemTeam == null){
+                    Log.d("drawerItemTeam", "mDrawerItemTeam is null");
+                    if(favouriteTeams.isEmpty())
+                        mViewPager.setAdapter(new SectionsPagerAdapter(this, getSupportFragmentManager(), "Chelseafc"));
+                    else
+                        mViewPager.setAdapter(new SectionsPagerAdapter(this, getSupportFragmentManager(), favouriteTeams.get(0)));
+                }
+                else{
+                    Log.d("drawerItemTeam", "mDrawerItemTeam is "+ mDrawerItemTeam);
+                    mViewPager.setAdapter(new SectionsPagerAdapter(this, getSupportFragmentManager(), mDrawerItemTeam));
+                }
+                mTabs = (SlidingTabLayout) findViewById(R.id.tabs);
+                mTabs.setViewPager(mViewPager);
+
+                ParseAnalytics.trackAppOpened(getIntent());
+            }
         }
+        else
+        {
+            mConnectionDetector.showAlertDialog();
+
+        }
+
+
 
     }
 
@@ -152,13 +162,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(notificationsItent);
                 break;
         }
-
-        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_logout) {
-//            ParseUser.logOut();
-//            //move to login screen
-//            navigateToLogin();
-//        }
 
         return super.onOptionsItemSelected(item);
     }

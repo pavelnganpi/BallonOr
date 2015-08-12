@@ -3,7 +3,6 @@ package com.paveynganpi.ballonor.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,6 @@ import android.widget.TextView;
 import com.paveynganpi.ballonor.R;
 import com.paveynganpi.ballonor.ui.LeagueTeamsActivity;
 import com.paveynganpi.ballonor.utils.LeaguesConstants;
-import com.squareup.picasso.Picasso;
 
 /**
  * Created by paveynganpi on 7/19/15.
@@ -59,18 +57,12 @@ public class LeaguesAdapter extends RecyclerView.Adapter<LeaguesAdapter.LeaguesV
         }
 
         public void bindLeagues(String leagueName, int postion){
-            mLeaguesTextView.setText(leagueName);
             mPosition = postion;
-            Picasso.with(mContext)
-                    .load(LeaguesConstants.getLeagueImageUrls()[0])
-                    .resize(110, 110)
-                    .into(mLeaguesImageView);
-
+            mLeaguesTextView.setText(leagueName);
         }
 
         @Override
         public void onClick(View v) {
-            Log.d("buttonpressed", "buttonpressed");
             Intent intent = new Intent(mContext, LeagueTeamsActivity.class);
             intent.putExtra("LeagueName", mLeageNames[mPosition]);
             mContext.startActivity(intent);

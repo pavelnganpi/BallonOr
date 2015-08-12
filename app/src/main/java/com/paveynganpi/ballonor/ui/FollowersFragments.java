@@ -1,5 +1,6 @@
 package com.paveynganpi.ballonor.ui;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -17,6 +18,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.paveynganpi.ballonor.R;
 import com.paveynganpi.ballonor.adapter.FollowAdapter;
+import com.paveynganpi.ballonor.utils.ConnectionDetector;
 import com.paveynganpi.ballonor.utils.DividerItemDecoration;
 import com.paveynganpi.ballonor.utils.ParseConstants;
 
@@ -38,6 +40,8 @@ public class FollowersFragments extends Fragment {
     @InjectView(R.id.empty_view)
     TextView mEmptyView;
     String mUserId;
+    protected ProgressDialog progress;
+    protected ConnectionDetector mConnectionDetector;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -60,11 +64,18 @@ public class FollowersFragments extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        layoutManager = new LinearLayoutManager(getActivity());
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), null));
-        mRecyclerView.setLayoutManager(layoutManager);
+        mConnectionDetector = new ConnectionDetector(getActivity(), getActivity());
+        Boolean isInternetPresent = mConnectionDetector.isConnectingToInternet(); // true or false
+        if(isInternetPresent){
+            layoutManager = new LinearLayoutManager(getActivity());
+            mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), null));
+            mRecyclerView.setLayoutManager(layoutManager);
 
-        retrieveFollows();
+            retrieveFollows();
+        }
+        else {
+            mConnectionDetector.showAlertDialog();
+        }
     }
 
     protected SwipeRefreshLayout.OnRefreshListener mOnRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
@@ -76,11 +87,14 @@ public class FollowersFragments extends Fragment {
 
     private void retrieveFollows() {
 
+//        progress = ProgressDialog.show(getActivity(), "Loading...",
+//                "Please wait...", true);
         ParseQuery<ParseObject> query = ParseQuery.getQuery(ParseConstants.KEY_FOLLOW_CLASS);
         query.whereEqualTo(ParseConstants.KEY_TO_USER_ID, mUserId);
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> list, ParseException e) {
+                //progress.dismiss();
                 if (mSwipeRefreshLayout.isRefreshing()) {
                     mSwipeRefreshLayout.setRefreshing(false);
                 }
@@ -119,10 +133,4 @@ public class FollowersFragments extends Fragment {
         }
     }
 
-
-//    @Override
-//    public void onDestroyView() {
-//        super.onDestroyView();
-//        ButterKnife.reset(this);
-//    }
 }

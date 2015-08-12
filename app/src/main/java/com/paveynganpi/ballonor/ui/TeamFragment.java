@@ -106,15 +106,15 @@ public class TeamFragment extends android.support.v4.app.Fragment {
 
     public void retrievePosts() {
 
-        progress = ProgressDialog.show(getActivity(), "Loading...",
-                "Please wait...", true);
+//        progress = ProgressDialog.show(getActivity(), "Loading...",
+//                "Please wait...", true);
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Teams");
         query.whereEqualTo(ParseConstants.KEY_TEAM_COLUMN, mTeam);
         query.addDescendingOrder(ParseConstants.KEY_CREATED_AT);
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> list, ParseException e) {
-                progress.dismiss();
+                //progress.dismiss();
                 if (mSwipeRefreshLayout.isRefreshing()) {
                     mSwipeRefreshLayout.setRefreshing(false);
                 }

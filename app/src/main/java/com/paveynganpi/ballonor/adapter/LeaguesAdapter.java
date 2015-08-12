@@ -57,6 +57,7 @@ public class LeaguesAdapter extends RecyclerView.Adapter<LeaguesAdapter.LeaguesV
         }
 
         public void bindLeagues(String leagueName, int postion){
+            mPosition = postion;
             mLeaguesTextView.setText(leagueName);
         }
 

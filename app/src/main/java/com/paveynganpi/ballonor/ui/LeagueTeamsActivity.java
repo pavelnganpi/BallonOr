@@ -1,6 +1,7 @@
 package com.paveynganpi.ballonor.ui;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -36,6 +37,7 @@ public class LeagueTeamsActivity extends AppCompatActivity {
     protected String[] mLeagueTeams;
     protected ParseUser mCurrentUser;
     protected ArrayList<String> mFavouriteTeams;
+    protected ProgressDialog progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,9 +133,12 @@ public class LeagueTeamsActivity extends AppCompatActivity {
             mCurrentUser.addAllUnique(ParseConstants.KEY_FAVOURITE_TEAMS, favouriteTeams);
 
 
+            progress = ProgressDialog.show(this, "Loading...",
+                    "Please wait...", true);
             mCurrentUser.saveInBackground(new SaveCallback() {
                 @Override
                 public void done(ParseException e) {
+                    progress.dismiss();
                     if (e == null) {
                         //success
                         Toast.makeText(LeagueTeamsActivity.this, "Successfully updated your favorites teams", Toast.LENGTH_SHORT).show();

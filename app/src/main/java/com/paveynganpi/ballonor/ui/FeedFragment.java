@@ -87,9 +87,6 @@ public class FeedFragment extends Fragment{
     }
 
     public void retrievePosts() {
-
-        progress = ProgressDialog.show(getActivity(), "Loading...",
-                "Please wait...", true);
         ParseQuery<ParseObject> followQuery = ParseQuery.getQuery(ParseConstants.KEY_FOLLOW_CLASS);
         followQuery.whereEqualTo(ParseConstants.KEY_TO, mCurrentUser);
         try {
@@ -106,7 +103,6 @@ public class FeedFragment extends Fragment{
                 @Override
                 public void done(List<ParseObject> list, ParseException e) {
 
-                    progress.dismiss();
                     if (mSwipeRefreshLayout.isRefreshing()) {
                         mSwipeRefreshLayout.setRefreshing(false);
                     }

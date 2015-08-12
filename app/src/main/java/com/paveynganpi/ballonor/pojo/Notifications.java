@@ -28,7 +28,7 @@ public class Notifications {
         //send push notification
         final ParsePush push = new ParsePush();
         push.setQuery(query);
-        push.setMessage(message.getString(ParseConstants.KEY_SCREEN_NAME_COLUMN) + " liked your post");
+        push.setMessage(liker.getUsername() + " liked your post");
 
         notifications.saveInBackground(new SaveCallback() {
             @Override

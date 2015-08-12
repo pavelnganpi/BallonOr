@@ -11,8 +11,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 import com.paveynganpi.ballonor.R;
 import com.paveynganpi.ballonor.ui.PostDetailsActivity;
@@ -117,22 +119,34 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
 
         @Override
         public void onClick(final View v) {
-            ParseObject notification = mNotifications.get(mPosition);
-            Date createdAt = notification.getDate(ParseConstants.KEY_POST_MESSAGE_CREATED_AT);
-            long now = new Date().getTime();//get current date
-            String convertedDate = DateUtils.getRelativeTimeSpanString(
-                    createdAt.getTime(), now, DateUtils.SECOND_IN_MILLIS).toString();
+            final ParseObject notification = mNotifications.get(mPosition);
+            ParseQuery<ParseObject> query = ParseQuery.getQuery(ParseConstants.KEY_TEAMS_PARSE_CLASS);
+            query.whereEqualTo(ParseConstants.KEY_OBJECT_ID, notification.getString(ParseConstants.KEY_POST_MESSAGE_OBJECT_ID));
+            query.findInBackground(new FindCallback<ParseObject>() {
+                @Override
+                public void done(List<ParseObject> list, ParseException e) {
 
-            Intent intent = new Intent(mContext, PostDetailsActivity.class);
-            intent.putExtra(ParseConstants.KEY_POST_MESSAGE_OBJECT_ID, notification.getString(ParseConstants.KEY_POST_MESSAGE_OBJECT_ID));
-            intent.putExtra(ParseConstants.KEY_SENDER_PROFILE_IMAGE_URL, notification.getString(ParseConstants.KEY_SENDER_PROFILE_IMAGE_URL));
-            intent.putExtra(ParseConstants.KEY_SCREEN_NAME_COLUMN, notification.getString(ParseConstants.KEY_SENDER_SCREEN_NAME));
-            intent.putExtra(ParseConstants.KEY_FULL_NAME, notification.getString(ParseConstants.KEY_SENDER_FULL_NAME));
-            intent.putExtra(ParseConstants.KEY_POST_MESSAGE_COLUMN, notification.getString(ParseConstants.KEY_POST_MESSAGE_COLUMN));
-            intent.putExtra(ParseConstants.KEY_POST_MESSAGE_CREATED_AT, convertedDate);
-            intent.putExtra(ParseConstants.KEY_USER_ID, notification.getString(ParseConstants.KEY_RECIPIENT_ID));
+                    ParseObject teamObject = list.get(0);
 
-            mContext.startActivity(intent);
+                    Intent intent = new Intent(mContext, PostDetailsActivity.class);
+                    intent.putExtra(ParseConstants.KEY_POST_MESSAGE_OBJECT_ID, notification.getString(ParseConstants.KEY_POST_MESSAGE_OBJECT_ID));
+                    intent.putExtra(ParseConstants.KEY_SENDER_PROFILE_IMAGE_URL, teamObject.getString(ParseConstants.KEY_SENDER_PROFILE_IMAGE_URL));
+                    intent.putExtra(ParseConstants.KEY_SCREEN_NAME_COLUMN, teamObject.getString(ParseConstants.KEY_SCREEN_NAME_COLUMN));
+                    intent.putExtra(ParseConstants.KEY_FULL_NAME, teamObject.getString(ParseConstants.KEY_FULL_NAME));
+                    intent.putExtra(ParseConstants.KEY_POST_MESSAGE_COLUMN, teamObject.getString(ParseConstants.KEY_POST_MESSAGE_COLUMN));
+                    intent.putExtra(ParseConstants.KEY_USER_ID, teamObject.getString(ParseConstants.KEY_SENDER_ID));
+
+                    Date createdAt = teamObject.getCreatedAt();
+                    long now = new Date().getTime();//get current date
+                    String convertedDate = DateUtils.getRelativeTimeSpanString(
+                            createdAt.getTime(), now, DateUtils.SECOND_IN_MILLIS).toString();
+                    intent.putExtra(ParseConstants.KEY_POST_MESSAGE_CREATED_AT, convertedDate);
+
+                    mContext.startActivity(intent);
+                }
+            });
+
+
 
             notification.put("opened", true);
             notification.saveInBackground(new SaveCallback() {

@@ -132,13 +132,9 @@ public class LeagueTeamsActivity extends AppCompatActivity {
             mCurrentUser.put(ParseConstants.KEY_FAVOURITE_TEAMS, userFavouriteTeams);
             mCurrentUser.addAllUnique(ParseConstants.KEY_FAVOURITE_TEAMS, favouriteTeams);
 
-
-            progress = ProgressDialog.show(this, "Loading...",
-                    "Please wait...", true);
             mCurrentUser.saveInBackground(new SaveCallback() {
                 @Override
                 public void done(ParseException e) {
-                    progress.dismiss();
                     if (e == null) {
                         //success
                         Toast.makeText(LeagueTeamsActivity.this, "Successfully updated your favorites teams", Toast.LENGTH_SHORT).show();

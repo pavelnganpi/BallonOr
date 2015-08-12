@@ -32,4 +32,5 @@
     <string name="post_creator_profile_image_description">post creator profile image</string>
     <string name="menu_notifications_description">notifications</string>
     <string name="menu_profile_description">profile</string>
+    <string name="title_activity_notifications_icon">NotificationsIconActivity</string>
 </resources>

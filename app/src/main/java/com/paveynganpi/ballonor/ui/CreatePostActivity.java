@@ -3,11 +3,14 @@ package com.paveynganpi.ballonor.ui;
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.ParseException;
@@ -23,11 +26,15 @@ import butterknife.InjectView;
 
 public class CreatePostActivity extends AppCompatActivity {
 
-    @InjectView(R.id.createPostTextField) EditText mCreatePostTextField;
-    @InjectView(R.id.createPostButton) Button mCreatePostButton;
+    @InjectView(R.id.createPostTextField)
+    EditText mCreatePostTextField;
+    @InjectView(R.id.createPostButton)
+    Button mCreatePostButton;
     public static final String TAG = CreatePostActivity.class.getSimpleName();
     public static String teamName;
     protected ParseUser mCurrentUser;
+    @InjectView(R.id.createPostCounterTextView)
+    TextView mCreatePostCounterTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +44,7 @@ public class CreatePostActivity extends AppCompatActivity {
 
         mCurrentUser = ParseUser.getCurrentUser();
 
-        teamName  = getIntent().getStringExtra("teamName");
+        teamName = getIntent().getStringExtra("teamName");
     }
 
     @Override
@@ -47,21 +54,21 @@ public class CreatePostActivity extends AppCompatActivity {
 //        if(mCreatePostTextField.getText().toString().isEmpty()){
 //            mCreatePostButton.setEnabled(false);
 //        }
-            mCreatePostButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(mCreatePostTextField.getText().toString().isEmpty()){
-                        Toast.makeText(CreatePostActivity.this,"You have to post something", Toast.LENGTH_LONG).show();
-                    }
-                    else {
-                        send(createPost(mCreatePostTextField));
-                        finish();
-                    }
+        mCreatePostTextField.addTextChangedListener(mTextEditorWatcher);
+        mCreatePostButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mCreatePostTextField.getText().toString().isEmpty()) {
+                    Toast.makeText(CreatePostActivity.this, "You have to post something", Toast.LENGTH_LONG).show();
+                } else {
+                    send(createPost(mCreatePostTextField));
+                    finish();
                 }
-            });
+            }
+        });
     }
 
-    public ParseObject createPost(EditText postMessage){
+    public ParseObject createPost(EditText postMessage) {
         String objectId = mCurrentUser.getObjectId();
         ParseObject teams = new ParseObject("Teams");
         teams.put(ParseConstants.KEY_TEAM_COLUMN, teamName);
@@ -74,16 +81,15 @@ public class CreatePostActivity extends AppCompatActivity {
         return teams;
     }
 
-    public void send(ParseObject teams){
+    public void send(ParseObject teams) {
 
         teams.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
-                if(e == null){
-                //success
-                    Toast.makeText(CreatePostActivity.this,"Message sent", Toast.LENGTH_LONG).show();
-                }
-                else{
+                if (e == null) {
+                    //success
+                    Toast.makeText(CreatePostActivity.this, "Message sent", Toast.LENGTH_LONG).show();
+                } else {
                     //error
                     AlertDialog.Builder builder = new AlertDialog.Builder(CreatePostActivity.this);
                     builder.setMessage("Sorry, an error occured, Please try again")
@@ -96,6 +102,20 @@ public class CreatePostActivity extends AppCompatActivity {
         });
 
     }
+
+
+    private final TextWatcher mTextEditorWatcher = new TextWatcher() {
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            //This sets a textview to the current length
+            mCreatePostCounterTextView.setText(String.valueOf(140 - s.length()));
+        }
+
+        public void afterTextChanged(Editable s) {
+        }
+    };
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

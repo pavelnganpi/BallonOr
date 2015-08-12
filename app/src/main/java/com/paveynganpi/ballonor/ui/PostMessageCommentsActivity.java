@@ -1,7 +1,6 @@
 package com.paveynganpi.ballonor.ui;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -14,7 +13,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -93,8 +91,12 @@ public class PostMessageCommentsActivity extends AppCompatActivity {
                 // Set an EditText view to get user input
                 final EditText input = new EditText(PostMessageCommentsActivity.this);
                 alert.setView(input);
-                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+                input.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                    }
+                });
 
                 alert.setPositiveButton("Comment", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {

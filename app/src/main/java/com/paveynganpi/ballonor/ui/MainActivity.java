@@ -57,7 +57,6 @@ public class MainActivity extends AppCompatActivity {
             mCurrentUser = ParseUser.getCurrentUser();
             if (ParseUser.getCurrentUser() == null) {
                 navigateToLogin();
-                Log.d("ranfirst", "navigatelogin is called" + mCurrentUser);
             }
             else{
                 mToolbar = (Toolbar) findViewById(R.id.app_bar);
@@ -70,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
                 NavigationDrawerFragment navigationDrawerFragment =
                         (NavigationDrawerFragment) getSupportFragmentManager()
                                 .findFragmentById(R.id.fragment_navigation_drawer);
-                Log.d("ranfirst", "mainActivity in oncreate is ran first " + mCurrentUser);
 
                 navigationDrawerFragment.setUpDrawer(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
                 navigationDrawerFragment.addDrawerTeams();
@@ -79,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
 
                 mViewPager = (ViewPager) findViewById(R.id.pager);
                 if(mDrawerItemTeam == null){
-                    Log.d("drawerItemTeam", "mDrawerItemTeam is null");
                     if(favouriteTeams.isEmpty())
                         mViewPager.setAdapter(new SectionsPagerAdapter(this, getSupportFragmentManager(), "Chelseafc"));
                     else

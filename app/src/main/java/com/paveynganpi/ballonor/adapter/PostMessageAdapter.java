@@ -202,7 +202,6 @@ public class PostMessageAdapter extends RecyclerView.Adapter<PostMessageAdapter.
                         Notifications.sendPushNotifications(message, mCurrentUser);
                     }
                     else if (mPostMessageLikeLabel.isSelected()){
-                        Log.d("like buttob", mPostMessageLikeLabel.isSelected() + "");
                         mPostMessageLikesMap.remove(mCurrentUser.getObjectId());
                         int likes = mPostMessageLikesMap.size();
                         mPostMessagelikesCounter.setText((likes) + "");

@@ -102,14 +102,17 @@
 
         <activity
             android:name=".ui.NotificationsActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_notifications" >
         </activity>
         <activity
             android:name=".ui.PostDetailsActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_post_details" >
         </activity>
         <activity
             android:name=".ui.NotificationsIconActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_notifications_icon" >
         </activity>
     </application>

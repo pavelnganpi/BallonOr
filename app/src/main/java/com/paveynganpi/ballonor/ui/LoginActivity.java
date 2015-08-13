@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -41,6 +40,10 @@ public class LoginActivity extends ActionBarActivity {
     @InjectView(R.id.loginButton) Button mLoginButton;
     protected ParseUser mParseCurrentUser;
     protected String TWITTER_USERS_SHOW_URL ="https://api.twitter.com/1.1/users/show.json?screen_name=";
+    public StringBuilder sb = new StringBuilder();
+    public Twitter currentTwitterUser;
+    public TwitterUserPojo twitterUserpojo;
+    public HttpGet verifyGet;
 
 
     @Override
@@ -52,6 +55,7 @@ public class LoginActivity extends ActionBarActivity {
         mLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 ParseTwitterUtils.logIn(LoginActivity.this, new LogInCallback() {
                     @Override
                     public void done(ParseUser user, ParseException err) {
@@ -63,36 +67,14 @@ public class LoginActivity extends ActionBarActivity {
 
                             AlertDialog dialog = builder.create();//create a dialog
                             dialog.show();//show the dialog
+                            navigateToLogin();
                         } else if (user.isNew()) {
-                            mParseCurrentUser = ParseUser.getCurrentUser();
-                            BallonDorApplication.updateParseInstallation(mParseCurrentUser);
+                               mParseCurrentUser = ParseUser.getCurrentUser();
+                               currentTwitterUser = ParseTwitterUtils.getTwitter();
+                               BallonDorApplication.updateParseInstallation(mParseCurrentUser);
 
-                            GetTwitterUserDataTask getTwitterUserDataTask = new GetTwitterUserDataTask();
-                            getTwitterUserDataTask.execute();
-
-                            user.setUsername(ParseTwitterUtils.getTwitter().getScreenName());
-                            Log.d("loginactivity", "user twitter screen name is "+ ParseTwitterUtils.getTwitter().getScreenName());
-                            user.saveInBackground(new SaveCallback() {
-                                @Override
-                                public void done(ParseException e) {
-                                    if (e == null) {
-                                        //great
-
-                                    } else {
-                                        //error
-                                        Log.d("Twitter Login error", e.getMessage());
-                                        AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-                                        builder.setMessage("Sorry, Please try logging in again");//creates a dialog with this message
-                                        builder.setTitle("Opps , error loging in with twitter");
-                                        builder.setPositiveButton(android.R.string.ok, null);//creates a button to dismiss the dialog
-                                        navigateToLogin();
-                                    }
-                                }
-                            });
-
-                            //move to mainActicvity on successfull signup
-                            BallonDorApplication.updateParseInstallation(mParseCurrentUser);
-                            startMainActivity();
+                               GetTwitterUserDataTask getTwitterUserDataTask = new GetTwitterUserDataTask();
+                               getTwitterUserDataTask.execute();
                         } else {
                             BallonDorApplication.updateParseInstallation(ParseUser.getCurrentUser());
                             startMainActivity();
@@ -109,7 +91,6 @@ public class LoginActivity extends ActionBarActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
-        Log.d("ranfirst", "startActivity in loginActivity is ran first " + ParseUser.getCurrentUser().getUsername());
     }
 
     private void navigateToLogin() {
@@ -124,14 +105,12 @@ public class LoginActivity extends ActionBarActivity {
 
     public class GetTwitterUserDataTask extends AsyncTask<Object, Void, TwitterUserPojo> {
 
-        public StringBuilder sb = new StringBuilder();
-        private Twitter currentTwitterUser = ParseTwitterUtils.getTwitter();
-        public TwitterUserPojo twitterUserpojo;
+
 
         @Override
         protected TwitterUserPojo doInBackground(Object... arg0) {
             HttpClient client = new DefaultHttpClient();
-            HttpGet verifyGet = new HttpGet(
+            verifyGet = new HttpGet(
                     TWITTER_USERS_SHOW_URL + currentTwitterUser.getScreenName());
             currentTwitterUser.signRequest(verifyGet);
             try {
@@ -154,6 +133,9 @@ public class LoginActivity extends ActionBarActivity {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            finally {
+                verifyGet.abort();
+            }
             return twitterUserpojo;
         }
 
@@ -161,8 +143,8 @@ public class LoginActivity extends ActionBarActivity {
         protected void onPostExecute(final TwitterUserPojo twitterUserpojo) {
             super.onPostExecute(twitterUserpojo);
 
-            mParseCurrentUser.put(ParseConstants.KEY_TWITTER_ID, currentTwitterUser.getUserId());
             mParseCurrentUser.put(ParseConstants.KEY_TWITTER_FULL_NAME, twitterUserpojo.getName());
+            mParseCurrentUser.setUsername(currentTwitterUser.getScreenName());
             String profileImageUrlNormalSize  = twitterUserpojo.getProfileImageUrl();
 
             String profileImageUrl = getRealImage(profileImageUrlNormalSize);
@@ -171,10 +153,14 @@ public class LoginActivity extends ActionBarActivity {
                 @Override
                 public void done(ParseException e) {
                     if (e == null) {
-                        Log.d("post execute", "successfully saved user in parse");
+                        startMainActivity();
 
                     } else {
-                        Log.d("post execute", "error saving user in parse " + e.getMessage());
+                        AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+                        builder.setMessage("Sorry, Please try logging in again");//creates a dialog with this message
+                        builder.setTitle("Opps , error loging in with twitter");
+                        builder.setPositiveButton(android.R.string.ok, null);//creates a button to dismiss the dialog
+                        navigateToLogin();
                     }
                 }
             });
